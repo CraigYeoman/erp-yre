@@ -7,7 +7,6 @@ const LaborSchema = new Schema({
   price: { type: Number, required: true },
 });
 
-// Virtual for this genre instance URL.
 LaborSchema.virtual("url").get(function () {
   return "/erp/labor/" + this._id;
 });

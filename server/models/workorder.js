@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { DateTime } = require("luxon");
 
 const Schema = mongoose.Schema;
 
@@ -8,11 +9,11 @@ const workOrderSchema = new Schema({
     ref: "Customer",
     required: [true, "Customer name must be provided"],
   },
-  dateReceived: {
+  date_received: {
     type: Date,
     default: Date.now(),
   },
-  dateDue: {
+  date_due: {
     type: Date,
     required: [true, "Due date must be provided"],
   },
@@ -63,6 +64,18 @@ const workOrderSchema = new Schema({
 
 workOrderSchema.virtual("url").get(function () {
   return `/erp/workorder/${this._id}`;
+});
+
+workOrderSchema.virtual("date_received").get(function () {
+  return this.date_received
+    ? DateTime.fromJSDate(this.date_received).toLocaleString(DateTime.DATE_MED)
+    : "";
+});
+
+workOrderSchema.virtual("date_due_formatted").get(function () {
+  return this.date_due
+    ? DateTime.fromJSDate(this.date_due).toLocaleString(DateTime.DATE_MED)
+    : "";
 });
 
 module.exports = mongoose.model("WorkOrder", workOrderSchema);

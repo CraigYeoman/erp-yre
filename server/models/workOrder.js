@@ -60,6 +60,10 @@ const workOrderSchema = new Schema({
     type: String,
     required: [true, "Workorder description must be provided"],
   },
+  worder_number: {
+    type: Number,
+    require: true,
+  },
 });
 
 workOrderSchema.virtual("url").get(function () {

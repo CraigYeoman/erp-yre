@@ -1,46 +1,33 @@
 const mongoose = require("mongoose");
 
-const workOrderSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "customer name must be provided"],
+const Schema = mongoose.Schema;
+
+const workOrderSchema = new Schema({
+  customer: {
+    type: Schema.Types.ObjectId,
+    ref: "Customer",
+    required: [true, "Customer name must be provided"],
   },
-  phoneNumber: {
-    type: Number,
-    required: [true, "customer phone number must be provided"],
-  },
-  address: {
-    type: String,
-    required: [true, "customer address must be provided"],
-  },
-  createdAt: {
+  dateReceived: {
     type: Date,
     default: Date.now(),
   },
-  dueDate: {
+  dateDue: {
     type: Date,
-    required: [true, "due date must be provided"],
+    required: [true, "Due date must be provided"],
   },
   estimatedPrice: {
     type: Number,
-    required: [true, "workorder price must be provided"],
+    required: [true, "Workorder price must be provided"],
   },
   complete: {
     type: Boolean,
     default: false,
   },
   jobType: {
-    type: String,
-    enum: {
-      values: [
-        "Refreshen Race Motor",
-        "New Race Motor",
-        "Machine Work",
-        "In-Out",
-        "Walk-In",
-      ],
-      message: "{VALUE} is not supported",
-    },
+    type: Schema.Types.ObjectId,
+    ref: "Customer",
+    required: [true, "Job type must be provided"],
   },
   accessories: {
     type: String,
@@ -53,11 +40,29 @@ const workOrderSchema = new mongoose.Schema({
         "distributor wires",
         "power steering pump",
         "engine stand",
+        "flywheel",
+        "spud",
       ],
       message: "{VALUE} is not supported",
     },
     required: [true, "accessories must be provided"],
   },
+  parts: {
+    type: Schema.Types.ObjectId,
+    ref: "Parts",
+  },
+  labor: {
+    type: Schema.Types.ObjectId,
+    ref: "Labor",
+  },
+  notes: {
+    type: String,
+    required: [true, "Workorder description must be provided"],
+  },
+});
+
+workOrderSchema.virtual("url").get(function () {
+  return `/erp/workorder/${this._id}`;
 });
 
 module.exports = mongoose.model("WorkOrder", workOrderSchema);

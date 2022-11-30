@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllVendorsStatic } = require("../controllers/vendorController");
+const {
+  getAllWorkOrdersStatic,
+} = require("../controllers/workOrderController");
 
-router.route("/vendors/static").get(getAllVendorsStatic);
+router.route("/static").get(getAllWorkOrdersStatic);
 
 module.exports = router;

@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 require("dotenv").config();
 
-const workordersRouter = require("./routes/workorders");
+const vendorsRouter = require("./routes/vendors");
+const jobTypeRouter = require("./routes/jobtype");
 
 const app = express();
 
@@ -34,7 +35,8 @@ app.get("/", (req, res) => {
   res.send('<h1>Erp API</h1><a href="/api/v1/erp">erp route</a>');
 });
 
-app.use("/api/v1/", workordersRouter); // Add catalog routes to middleware chain.
+app.use("/api/v1/vendors", vendorsRouter);
+app.use("/api/v1/jobtypes", jobTypeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

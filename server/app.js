@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const vendorsRouter = require("./routes/vendors");
 const jobTypeRouter = require("./routes/jobtype");
+const customerRouter = require("./routes/customer");
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/vendors", vendorsRouter);
 app.use("/api/v1/jobtypes", jobTypeRouter);
+app.use("/api/v1/customers", customerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

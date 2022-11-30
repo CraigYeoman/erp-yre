@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Cylinder Hone",
+        "price": 100
+    },
+    {
+        "name": "Cylinder Hone -w Deck Plate",
+        "price": 200
+    },
+    {
+        "name": "Valve Job 8 Cylinder",
+        "price": 350
+    },
+    {
+        "name": "Bore 8 Cylinder",
+        "price": 350
+    },
+    {
+        "name": "Deck 8 Cylinder",
+        "price": 100
+    },
+    {
+        "name": "Assemble 8 Cylinder",
+        "price": 800
+    },
+    {
+        "name": "Refreshen USRA B-Mod",
+        "price": 3200
+    }
+]

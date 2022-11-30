@@ -1,0 +1,34 @@
+[
+    {
+        "name": "USRA B-Mod Exhaust Valve",
+        "customer_price": 350,
+        "cost": 250,
+        "part_number": "73597-Ex",
+        "vendor": "6387c3eed10c272a13c3f718",
+        "manufacture": "Manley"
+    },
+    {
+        "name": "USRA B-Mod Intake Valve",
+        "customer_price": 250,
+        "cost": 150,
+        "part_number": "73597-In",
+        "vendor": "6387c3eed10c272a13c3f718",
+        "manufacture": "Manley"
+    },
+    {
+        "name": "3/8 8740 rod bolts",
+        "customer_price": 350,
+        "cost": 250,
+        "part_number": "75782",
+        "vendor": "6387c3eed10c272a13c3f719",
+        "manufacture": "Scat"
+    },
+    {
+        "name": "Oil Filter 51061R",
+        "customer_price": 35,
+        "cost": 25,
+        "part_number": "51061R",
+        "vendor": "6387c3eed10c272a13c3f719",
+        "manufacture": "Wix"
+    }
+]

@@ -1,0 +1,25 @@
+[{
+    "name": "Manley Performance Proudcts",
+    "main_contact": "Neil Vernarelli",
+    "phone_number": 732905336,
+    "email": "sales@manleyperformance.com",
+    "address_line_1": "1960 Swarthmore Avenue",
+    "address_line_2": "",
+    "city": "Lakewood",
+    "state": "NJ",
+    "zip_code": "08701",
+    "customer_number": "2484595"
+},
+{
+    "name": "Engine Parts Warehouse",
+    "main_contact": "Don Lee",
+    "phone_number": 8006255900,
+    "email": "sales@epw.com",
+    "address_line_1": "7301 Global Dr",
+    "address_line_2": "",
+    "city": "Louisville",
+    "state": "KY",
+    "zip_code": "40258",
+    "customer_number": "785267"
+}
+]

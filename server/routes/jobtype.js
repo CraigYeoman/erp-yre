@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllJobTypesStatic } = require("../controllers/jobTypeController");
+const {
+  getAllJobTypesStatic,
+  getAllJobTypes,
+} = require("../controllers/jobTypeController");
 
+router.route("/").get(getAllJobTypes);
 router.route("/static").get(getAllJobTypesStatic);
 
 module.exports = router;

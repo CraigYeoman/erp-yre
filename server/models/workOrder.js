@@ -60,7 +60,7 @@ const workOrderSchema = new Schema({
     type: String,
     required: [true, "Workorder description must be provided"],
   },
-  worder_number: {
+  work_order_number: {
     type: Number,
     require: true,
   },
@@ -70,7 +70,7 @@ workOrderSchema.virtual("url").get(function () {
   return `/erp/workorder/${this._id}`;
 });
 
-workOrderSchema.virtual("date_received").get(function () {
+workOrderSchema.virtual("date_received_formatted").get(function () {
   return this.date_received
     ? DateTime.fromJSDate(this.date_received).toLocaleString(DateTime.DATE_MED)
     : "";

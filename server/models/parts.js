@@ -4,8 +4,11 @@ const Schema = mongoose.Schema;
 
 const PartsSchema = new Schema({
   name: { type: String, required: true, minLength: 3, maxLength: 100 },
-  customer_price: { type: Number, required: true },
-  cost: { type: Number, required: true },
+  customer_price: {
+    type: Number,
+    required: [true, "Customer price must be provided"],
+  },
+  cost: { type: Number, required: [true, "Company cost must be provided"] },
   part_number: { type: String, required: true, minLength: 3, maxLength: 100 },
   vendor: {
     type: Schema.Types.ObjectId,

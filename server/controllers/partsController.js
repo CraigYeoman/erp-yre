@@ -54,13 +54,13 @@ const getAllParts = async (req, res) => {
     });
   }
 
-  let result = Parts.find(queryObject);
+  let result = Parts.find(queryObject).populate("vendor");
   // sort
   if (sort) {
     const sortList = sort.split(",").join(" ");
     result = result.sort(sortList);
   } else {
-    result = result.sort("name");
+    result = result.sort("manufacture");
   }
 
   if (fields) {

@@ -12,10 +12,7 @@ const getAllJobTypes = async (req, res) => {
   const { name, sort, fields } = req.query;
   const queryObject = {};
   if (name) {
-    queryObject.last_name = { $regex: last_name, $options: "i" };
-  }
-  if (first_name) {
-    queryObject.first_name = { $regex: first_name, $options: "i" };
+    queryObject.name = { $regex: name, $options: "i" };
   }
 
   let result = JobType.find(queryObject);
@@ -24,7 +21,7 @@ const getAllJobTypes = async (req, res) => {
     const sortList = sort.split(",").join(" ");
     result = result.sort(sortList);
   } else {
-    result = result.sort("first_name");
+    result = result.sort("name");
   }
 
   if (fields) {

@@ -27,7 +27,7 @@ const workOrderSchema = new Schema({
   },
   jobType: {
     type: Schema.Types.ObjectId,
-    ref: "Customer",
+    ref: "JobType",
     required: [true, "Job type must be provided"],
   },
   accessories: {

@@ -18,7 +18,7 @@ const connectDB = require("./db/connect");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorMiddleware = require("./middleware/error-handler");
 // Set up mongoose connection
-const port = process.env.port || 3000;
+const port = process.env.port || 5000;
 
 const start = async () => {
   try {

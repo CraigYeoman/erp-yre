@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from "react";
+import Nav from "./components/Nav";
+import Index from "./components/Index";
+import WorkOrders from "./components/WorkOrders";
+import CustomerList from "./components/customer/CustomerList";
+import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  const [backendData, setBackEndData] = useState([{}]);
-  useEffect(() => {
-    fetch("/api/v1/workorders")
-      .then((response) => response.json())
-      .then((data) => {
-        setBackEndData(data);
-      });
-  }, []);
   return (
-    <div>
-      {typeof backendData.workOrders === "undefined" ? (
-        <p>Loading...</p>
-      ) : (
-        backendData.workOrders.map((workOrder) => (
-          <div key={workOrder._id}>
-            <p>
-              {workOrder.customer.first_name} {workOrder.customer.Last_name}
-            </p>
-            <p>{workOrder.date_received}</p>
-            <p>{workOrder.date_due}</p>
-            <p>{workOrder.estimatedPrice}</p>
-          </div>
-        ))
-      )}
+    <div className="App">
+      <Router>
+        <Nav />
+        <Routes>
+          <Route path="/index" element={<Index />}></Route>
+          <Route path="/customerlist" element={<CustomerList />}></Route>
+        </Routes>
+      </Router>
+
+      <WorkOrders />
     </div>
   );
 }

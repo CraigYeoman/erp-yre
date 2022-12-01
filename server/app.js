@@ -39,12 +39,12 @@ app.get("/", (req, res) => {
   res.send('<h1>Erp API</h1><a href="/api/v1/erp">erp route</a>');
 });
 
-app.use("/api/v1/vendors", vendorsRouter);
-app.use("/api/v1/jobtypes", jobTypeRouter);
-app.use("/api/v1/customers", customerRouter);
-app.use("/api/v1/labor", laborRouter);
-app.use("/api/v1/parts", partsRouter);
-app.use("/api/v1/workorders", workOrdersRouter);
+app.use("/api/v1/erp/vendors", vendorsRouter);
+app.use("/api/v1/erp/jobtypes", jobTypeRouter);
+app.use("/api/v1/erp/customers", customerRouter);
+app.use("/api/v1/erp/labor", laborRouter);
+app.use("/api/v1/erp/parts", partsRouter);
+app.use("/api/v1/erp/workorders", workOrdersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

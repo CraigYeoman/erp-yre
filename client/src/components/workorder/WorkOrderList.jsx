@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function WorkOrderList() {
+const WorkOrderList = () => {
   const [workOrdersList, setworkOrdersList] = useState([{}]);
   useEffect(() => {
     fetch("/api/v1/erp/workorders")
@@ -40,6 +40,6 @@ function WorkOrderList() {
       )}
     </div>
   );
-}
+};
 
 export default WorkOrderList;

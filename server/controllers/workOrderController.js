@@ -81,7 +81,39 @@ const getAllWorkOrders = async (req, res) => {
   res.status(200).json({ workOrders, nbHits: workOrders.length });
 };
 
+// Display workorder create form on GET
+const work_order_create_post = (req, res, next) => {
+  async.parallel(
+    {
+      customer(callback) {
+        Customer.find(callback);
+      },
+      jobType(callback) {
+        JobType.find(callback);
+      },
+      parts(callback) {
+        Parts.find(callback);
+      },
+      labor(callback) {
+        Labor.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.status(200).json({
+        customers: results.customer,
+        jobtypes: results.jobType,
+        parts: results.parts,
+        labors: results.labor,
+      });
+    }
+  );
+};
+
 module.exports = {
   getAllWorkOrdersStatic,
   getAllWorkOrders,
+  work_order_create_post,
 };

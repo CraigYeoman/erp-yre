@@ -1,5 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const Vendor = require("../models/vendor");
+const Parts = require("../models/parts");
 const async = require("async");
 
 // Display list of all Vendors.
@@ -40,8 +41,39 @@ const getAllVendors = async (req, res) => {
   const vendors = await result;
   res.status(200).json({ vendors, nbHits: vendors.length });
 };
+// Display detail page for a specific Vendor.
+const vendor_detail = (req, res, next) => {
+  async.parallel(
+    {
+      vendor(callback) {
+        Vendor.findById(req.params.id).exec(callback);
+      },
+      vendor_parts(callback) {
+        Parts.find({ vendor: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        // Error in API usage.
+        return next(err);
+      }
+      if (results.vendor == null) {
+        // No results.
+        const err = new Error("Customer not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      res.status(200).json({
+        vendor: results.vendor,
+        vendor_parts: results.vendor_parts,
+      });
+    }
+  );
+};
 
 module.exports = {
   getAllVendorsStatic,
   getAllVendors,
+  vendor_detail,
 };

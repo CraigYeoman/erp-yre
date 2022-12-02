@@ -6,6 +6,8 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [customerList, setCustomerList] = useState([{}]);
   const [customerDetail, setCustomerDetail] = useState([{}]);
+  const [vendorList, setVendorList] = useState([{}]);
+  const [vendorDetail, setVendorDetail] = useState([{}]);
   const [workOrdersList, setworkOrdersList] = useState([{}]);
   const [workOrderDetail, setWorkOrderDetail] = useState([{}]);
   const [loading, setLoading] = useState(false);
@@ -19,6 +21,22 @@ const AppProvider = ({ children }) => {
         setCustomerDetail(data);
       } else {
         setCustomerDetail([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
+  const fetchVendorDetail = async (idVendor) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`/api/v1/erp/vendors/${idVendor}`);
+
+      if (data.vendor) {
+        setVendorDetail(data);
+      } else {
+        setVendorDetail([]);
       }
     } catch (e) {
       console.log(e);
@@ -44,27 +62,39 @@ const AppProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const selectWorkOrderID = (id) => {
-    fetchWorkOrderDetail(id);
-  };
-
   const selectCustomerID = (id) => {
     fetchCustomerDetail(id);
   };
 
-  useEffect(() => {
-    fetch("/api/v1/erp/workorders")
-      .then((response) => response.json())
-      .then((data) => {
-        setworkOrdersList(data);
-      });
-  }, []);
+  const selectVendorID = (id) => {
+    fetchVendorDetail(id);
+  };
+
+  const selectWorkOrderID = (id) => {
+    fetchWorkOrderDetail(id);
+  };
 
   useEffect(() => {
     fetch("/api/v1/erp/customers")
       .then((response) => response.json())
       .then((data) => {
         setCustomerList(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/v1/erp/vendors")
+      .then((response) => response.json())
+      .then((data) => {
+        setVendorList(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/v1/erp/workorders")
+      .then((response) => response.json())
+      .then((data) => {
+        setworkOrdersList(data);
       });
   }, []);
 
@@ -84,6 +114,9 @@ const AppProvider = ({ children }) => {
         customerDetail,
         setCustomerDetail,
         selectCustomerID,
+        vendorList,
+        vendorDetail,
+        selectVendorID,
         loading,
         workOrderDetail,
         selectWorkOrderID,

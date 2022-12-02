@@ -11,17 +11,17 @@ const {
 
 // GET request for creating a Customer.
 router.route("/create").get(customer_create_get);
-// POST request for creating Book.
+// POST request for creating Customer.
 router.route("/create").post(customer_create_post);
 
-// GET request to delete Book.
-// POST request to delete Book.
-// GET request to update Book.
-// POST request to update Book.
+// GET request to delete Customer.
+// POST request to delete Customer.
+// GET request to update Customer.
+// POST request to update Customer.
 
-// GET request for one Book.
+// GET request for one Customer.
 router.route("/:id").get(customer_detail);
-// GET request for list of all Book items.
+// GET request for list of all Customer items.
 router.route("/").get(getAllCustomers);
 router.route("/static").get(getAllCustomersStatic);
 

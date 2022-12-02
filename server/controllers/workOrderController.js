@@ -105,7 +105,7 @@ const work_order_detail = (req, res, next) => {
         return next(err);
       }
       // Successful, so render.
-      console.log(results);
+
       res.status(200).json({
         work_order: results.work_order,
       });

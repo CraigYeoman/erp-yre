@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useGlobalContext } from "../../context";
 
 const WorkOrderList = () => {
-  const [workOrdersList, setworkOrdersList] = useState([{}]);
-  useEffect(() => {
-    fetch("/api/v1/erp/workorders")
-      .then((response) => response.json())
-      .then((data) => {
-        setworkOrdersList(data);
-      });
-  }, []);
+  const { selectWorkOrderID, selectCustomerID, workOrdersList } =
+    useGlobalContext();
+
   return (
     <div>
       {typeof workOrdersList.workOrders === "undefined" ? (
@@ -26,9 +22,21 @@ const WorkOrderList = () => {
           } = workOrder;
           return (
             <div key={_id}>
-              <p>{work_order_number}</p>
               <p>
-                {customer.first_name} {customer.last_name}
+                <Link
+                  onClick={() => selectWorkOrderID(_id)}
+                  to="/workorderdetail"
+                >
+                  {work_order_number}
+                </Link>
+              </p>
+              <p>
+                <Link
+                  onClick={() => selectCustomerID(customer._id)}
+                  to="/customerdetail"
+                >
+                  {customer.first_name} {customer.last_name}
+                </Link>
               </p>
               <p>{jobType.name}</p>
               <p>{date_received}</p>

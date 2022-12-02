@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
 const CustomerList = () => {
-  const { customerList, selectedCustomerID } = useGlobalContext();
+  const { customerList, selectCustomerID } = useGlobalContext();
 
   return (
     <div>
@@ -24,10 +24,7 @@ const CustomerList = () => {
           } = customer;
           return (
             <div key={_id}>
-              <Link
-                onClick={() => selectedCustomerID(_id)}
-                to="/customerdetail"
-              >
+              <Link onClick={() => selectCustomerID(_id)} to="/customerdetail">
                 {first_name} {last_name}
               </Link>
               <p>{phone_number}</p>

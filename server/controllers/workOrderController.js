@@ -54,7 +54,6 @@ const getAllWorkOrders = async (req, res) => {
       }
     });
   }
-
   let result = WorkOrder.find(queryObject)
     .populate("customer")
     .populate("jobType")
@@ -79,6 +78,39 @@ const getAllWorkOrders = async (req, res) => {
   result = result.skip(skip).limit(limit);
   const workOrders = await result;
   res.status(200).json({ workOrders, nbHits: workOrders.length });
+};
+
+// Display detail page for a specific Work Order.
+const work_order_detail = (req, res, next) => {
+  async.parallel(
+    {
+      work_order(callback) {
+        WorkOrder.findById(req.params.id)
+          .populate("customer")
+          .populate("jobType")
+          .populate("parts")
+          .populate("labor")
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        // Error in API usage.
+        return next(err);
+      }
+      if (results.work_order == null) {
+        // No results.
+        const err = new Error("Work Order not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      console.log(results);
+      res.status(200).json({
+        work_order: results.work_order,
+      });
+    }
+  );
 };
 
 // Display workorder create form on GET
@@ -116,4 +148,5 @@ module.exports = {
   getAllWorkOrdersStatic,
   getAllWorkOrders,
   work_order_create_post,
+  work_order_detail,
 };

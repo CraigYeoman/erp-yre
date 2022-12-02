@@ -65,7 +65,6 @@ const customer_detail = (req, res, next) => {
         return next(err);
       }
       // Successful, so render.
-      console.log(results.customer.url);
       res.status(200).json({
         customer: results.customer,
         customer_workorders: results.customer_workorders,

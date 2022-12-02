@@ -6,6 +6,8 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [customerList, setCustomerList] = useState([{}]);
   const [customerDetail, setCustomerDetail] = useState([{}]);
+  const [workOrdersList, setworkOrdersList] = useState([{}]);
+  const [workOrderDetail, setWorkOrderDetail] = useState([{}]);
   const [loading, setLoading] = useState(false);
 
   const fetchCustomerDetail = async (idCustomer) => {
@@ -15,7 +17,6 @@ const AppProvider = ({ children }) => {
 
       if (data.customer) {
         setCustomerDetail(data);
-        console.log(data);
       } else {
         setCustomerDetail([]);
       }
@@ -25,9 +26,39 @@ const AppProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const selectedCustomerID = (id) => {
+  const fetchWorkOrderDetail = async (idWorkOrder) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`api/v1/erp/workorders/${idWorkOrder}`);
+
+      if (data.work_order) {
+        setWorkOrderDetail(data);
+        console.log(data);
+        console.log(workOrderDetail);
+      } else {
+        setWorkOrderDetail([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
+  const selectWorkOrderID = (id) => {
+    fetchWorkOrderDetail(id);
+  };
+
+  const selectCustomerID = (id) => {
     fetchCustomerDetail(id);
   };
+
+  useEffect(() => {
+    fetch("/api/v1/erp/workorders")
+      .then((response) => response.json())
+      .then((data) => {
+        setworkOrdersList(data);
+      });
+  }, []);
 
   useEffect(() => {
     fetch("/api/v1/erp/customers")
@@ -52,7 +83,11 @@ const AppProvider = ({ children }) => {
         setCustomerList,
         customerDetail,
         setCustomerDetail,
-        selectedCustomerID,
+        selectCustomerID,
+        loading,
+        workOrderDetail,
+        selectWorkOrderID,
+        workOrdersList,
       }}
     >
       {children}

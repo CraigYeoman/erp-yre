@@ -1,5 +1,6 @@
 import Nav from "./components/Nav";
 import Index from "./components/Index";
+import WorkOrderDetail from "./components/workorder/WorkOrderDetail";
 import WorkOrderList from "./components/workorder/WorkOrderList";
 import WorkOrderForm from "./components/workorder/WorkOrderForm";
 import CustomerDetail from "./components/customer/CustomerDetail";
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Index />}></Route>
           <Route path="/customerdetail" element={<CustomerDetail />}></Route>
           <Route path="/customerlist" element={<CustomerList />}></Route>
+          <Route path="/workorderdetail" element={<WorkOrderDetail />}></Route>
           <Route path="/workorderlist" element={<WorkOrderList />}></Route>
           <Route path="/workorderform" element={<WorkOrderForm />}></Route>
         </Routes>

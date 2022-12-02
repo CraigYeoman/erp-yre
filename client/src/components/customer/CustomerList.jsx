@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useGlobalContext } from "../../context";
 
 const CustomerList = () => {
-  const [customerList, setCustomerList] = useState([{}]);
-  useEffect(() => {
-    fetch("/api/v1/erp/customers")
-      .then((response) => response.json())
-      .then((data) => {
-        setCustomerList(data);
-      });
-  }, []);
+  const { customerList, selectedCustomerID } = useGlobalContext();
+
   return (
     <div>
       {typeof customerList.customers === "undefined" ? (
@@ -29,10 +24,12 @@ const CustomerList = () => {
           } = customer;
           return (
             <div key={_id}>
-              <p>
+              <Link
+                onClick={() => selectedCustomerID(_id)}
+                to="/customerdetail"
+              >
                 {first_name} {last_name}
-              </p>
-
+              </Link>
               <p>{phone_number}</p>
               <p>{email}</p>
               <p>{address_line_1}</p>

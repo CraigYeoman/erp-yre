@@ -17,6 +17,9 @@ const workOrderSchema = new Schema({
     type: Date,
     required: [true, "Due date must be provided"],
   },
+  date_finished: {
+    type: Date,
+  },
   estimatedPrice: {
     type: Number,
     required: [true, "Workorder price must be provided"],
@@ -67,7 +70,7 @@ const workOrderSchema = new Schema({
 });
 
 workOrderSchema.virtual("url").get(function () {
-  return `/erp/workorder/${this._id}`;
+  return `/api/v1/erp/workorders/${this._id}`;
 });
 
 workOrderSchema.virtual("date_received_formatted").get(function () {

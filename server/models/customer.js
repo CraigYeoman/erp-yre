@@ -26,7 +26,7 @@ CustomerSchema.virtual("name").get(function () {
 });
 
 CustomerSchema.virtual("url").get(function () {
-  return `/erp/customer/${this._id}`;
+  return `/api/v1/erp/customers/${this._id}`;
 });
 
 module.exports = mongoose.model("Customer", CustomerSchema);

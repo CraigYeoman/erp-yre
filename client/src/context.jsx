@@ -6,6 +6,8 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [customerList, setCustomerList] = useState([{}]);
   const [customerDetail, setCustomerDetail] = useState([{}]);
+  const [partsList, setPartsList] = useState([{}]);
+  const [partDetail, setPartDetail] = useState([{}]);
   const [vendorList, setVendorList] = useState([{}]);
   const [vendorDetail, setVendorDetail] = useState([{}]);
   const [workOrdersList, setworkOrdersList] = useState([{}]);
@@ -21,6 +23,23 @@ const AppProvider = ({ children }) => {
         setCustomerDetail(data);
       } else {
         setCustomerDetail([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
+  const fetchPartDetail = async (idPart) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`/api/v1/erp/parts/${idPart}`);
+
+      if (data.part) {
+        console.log(data.part);
+        setPartDetail(data);
+      } else {
+        setPartDetail([]);
       }
     } catch (e) {
       console.log(e);
@@ -66,6 +85,10 @@ const AppProvider = ({ children }) => {
     fetchCustomerDetail(id);
   };
 
+  const selectPartID = (id) => {
+    fetchPartDetail(id);
+  };
+
   const selectVendorID = (id) => {
     fetchVendorDetail(id);
   };
@@ -79,6 +102,14 @@ const AppProvider = ({ children }) => {
       .then((response) => response.json())
       .then((data) => {
         setCustomerList(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/v1/erp/parts")
+      .then((response) => response.json())
+      .then((data) => {
+        setPartsList(data);
       });
   }, []);
 
@@ -114,6 +145,11 @@ const AppProvider = ({ children }) => {
         customerDetail,
         setCustomerDetail,
         selectCustomerID,
+        partsList,
+        setPartsList,
+        partDetail,
+        setPartDetail,
+        selectPartID,
         vendorList,
         vendorDetail,
         selectVendorID,

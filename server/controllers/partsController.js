@@ -76,7 +76,41 @@ const getAllParts = async (req, res) => {
   const parts = await result;
   res.status(200).json({ parts, nbHits: parts.length });
 };
+
+// Display part page for a specific Pendor.
+const part_detail = (req, res, next) => {
+  async.parallel(
+    {
+      part(callback) {
+        Parts.findById(req.params.id).exec(callback);
+      },
+      part_vendor(callback) {
+        Vendor.find({ part: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        // Error in API usage.
+        return next(err);
+      }
+      if (results.part == null) {
+        // No results.
+        const err = new Error("Part not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      console.log(results);
+      res.status(200).json({
+        part: results.part,
+        part_vendor: results.part_vendor,
+      });
+    }
+  );
+};
+
 module.exports = {
   getAllPartsStatic,
   getAllParts,
+  part_detail,
 };

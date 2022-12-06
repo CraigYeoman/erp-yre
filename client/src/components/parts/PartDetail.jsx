@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
-const CustomerList = () => {
+const PartDetail = () => {
   const { partDetail, selectVendorID, loading } = useGlobalContext();
 
   if (loading) {
@@ -11,9 +11,8 @@ const CustomerList = () => {
       </section>
     );
   }
-  const { name, part_number, manufacture, customer_price, cost, _id } =
+  const { name, part_number, manufacture, customer_price, cost, _id, vendor } =
     partDetail;
-  const { vendor } = partDetail.part_vendor;
   return (
     <div>
       <div key={_id}>
@@ -26,9 +25,8 @@ const CustomerList = () => {
           {vendor.name}
         </Link>
       </div>
-      ;
     </div>
   );
 };
 
-export default CustomerList;
+export default PartDetail;

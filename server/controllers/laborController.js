@@ -59,7 +59,28 @@ const getAllLabor = async (req, res) => {
   res.status(200).json({ labor, nbHits: labor.length });
 };
 
+// Display labor page for a specific Labor.
+const labor_detail = (req, res, next) => {
+  Labor.findById(req.params.id).exec(function (err, results) {
+    if (err) {
+      // Error in API usage.
+      return next(err);
+    }
+    if (results == null) {
+      // No results.
+      const err = new Error("Labor not found");
+      err.status = 404;
+      return next(err);
+    }
+    // Successful, so render.
+    res.status(200).json({
+      labor_detail: results,
+    });
+  });
+};
+
 module.exports = {
   getAllLaborStatic,
   getAllLabor,
+  labor_detail,
 };

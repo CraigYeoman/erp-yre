@@ -6,6 +6,8 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [customerList, setCustomerList] = useState([{}]);
   const [customerDetail, setCustomerDetail] = useState([{}]);
+  const [laborList, setLaborList] = useState([{}]);
+  const [laborDetail, setLaborDetail] = useState([{}]);
   const [partsList, setPartsList] = useState([{}]);
   const [partDetail, setPartDetail] = useState([{}]);
   const [vendorList, setVendorList] = useState([{}]);
@@ -30,14 +32,29 @@ const AppProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const fetchLaborDetail = async (idLabor) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`/api/v1/erp/labor/${idLabor}`);
+
+      if (data) {
+        setLaborDetail(data.labor_detail);
+      } else {
+        setLaborDetail([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
   const fetchPartDetail = async (idPart) => {
     setLoading(true);
     try {
       const { data } = await axios.get(`/api/v1/erp/parts/${idPart}`);
 
-      if (data.part) {
-        console.log(data.part);
-        setPartDetail(data);
+      if (data) {
+        setPartDetail(data.part);
       } else {
         setPartDetail([]);
       }
@@ -85,6 +102,10 @@ const AppProvider = ({ children }) => {
     fetchCustomerDetail(id);
   };
 
+  const selectLaborID = (id) => {
+    fetchLaborDetail(id);
+  };
+
   const selectPartID = (id) => {
     fetchPartDetail(id);
   };
@@ -102,6 +123,14 @@ const AppProvider = ({ children }) => {
       .then((response) => response.json())
       .then((data) => {
         setCustomerList(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/v1/erp/labor")
+      .then((response) => response.json())
+      .then((data) => {
+        setLaborList(data);
       });
   }, []);
 
@@ -141,22 +170,24 @@ const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         customerList,
-        setCustomerList,
-        customerDetail,
-        setCustomerDetail,
-        selectCustomerID,
+        laborList,
         partsList,
-        setPartsList,
-        partDetail,
-        setPartDetail,
-        selectPartID,
         vendorList,
-        vendorDetail,
-        selectVendorID,
-        loading,
-        workOrderDetail,
-        selectWorkOrderID,
         workOrdersList,
+
+        customerDetail,
+        laborDetail,
+        partDetail,
+        vendorDetail,
+        workOrderDetail,
+
+        selectCustomerID,
+        selectLaborID,
+        selectPartID,
+        selectVendorID,
+        selectWorkOrderID,
+
+        loading,
       }}
     >
       {children}

@@ -2,6 +2,8 @@ import Nav from "./components/Nav";
 import Index from "./components/Index";
 import CustomerDetail from "./components/customer/CustomerDetail";
 import CustomerList from "./components/customer/CustomerList";
+import LaborDetail from "./components/labor/LaborDetail";
+import LaborList from "./components/labor/LaborList";
 import PartDetail from "./components/parts/PartDetail";
 import PartsList from "./components/parts/PartsList";
 import VendorDetail from "./components/vendor/VendorDetail";
@@ -21,6 +23,8 @@ function App() {
           <Route path="/" element={<Index />}></Route>
           <Route path="/customerdetail" element={<CustomerDetail />}></Route>
           <Route path="/customerlist" element={<CustomerList />}></Route>
+          <Route path="/labordetail" element={<LaborDetail />}></Route>
+          <Route path="/laborlist" element={<LaborList />}></Route>
           <Route path="/partdetail" element={<PartDetail />}></Route>
           <Route path="/partslist" element={<PartsList />}></Route>
           <Route path="/vendordetail" element={<VendorDetail />}></Route>

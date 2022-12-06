@@ -17,7 +17,6 @@ const {
 // POST request to update Part.
 
 // GET request for one Part.
-
 router.route("/:id").get(part_detail);
 // GET request for list of all Part items.
 router.route("/").get(getAllParts);

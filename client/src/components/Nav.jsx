@@ -27,7 +27,7 @@ function Nav() {
       </div>
       <div className="nav-container">
         <h3>Job Types</h3>
-        <Link to="/jobtypes">Job Types</Link>
+        <Link to="/jobtypelist">Job Types</Link>
       </div>
     </div>
   );

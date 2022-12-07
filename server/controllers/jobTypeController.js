@@ -38,7 +38,27 @@ const getAllJobTypes = async (req, res) => {
   res.status(200).json({ jobTypes, nbHits: jobTypes.length });
 };
 
+const job_type_detail = (req, res, next) => {
+  JobType.findById(req.params.id).exec(function (err, results) {
+    if (err) {
+      // Error in API usage.
+      return next(err);
+    }
+    if (results == null) {
+      // No results.
+      const err = new Error("Job type not found");
+      err.status = 404;
+      return next(err);
+    }
+    // Successful, so render.
+    res.status(200).json({
+      job_type_detail: results,
+    });
+  });
+};
+
 module.exports = {
   getAllJobTypesStatic,
   getAllJobTypes,
+  job_type_detail,
 };

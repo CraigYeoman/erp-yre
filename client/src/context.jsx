@@ -6,6 +6,8 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [customerList, setCustomerList] = useState([{}]);
   const [customerDetail, setCustomerDetail] = useState([{}]);
+  const [jobTypeList, setJobTypeList] = useState([{}]);
+  const [jobTypeDetail, setJobTypeDetail] = useState([{}]);
   const [laborList, setLaborList] = useState([{}]);
   const [laborDetail, setLaborDetail] = useState([{}]);
   const [partsList, setPartsList] = useState([{}]);
@@ -25,6 +27,22 @@ const AppProvider = ({ children }) => {
         setCustomerDetail(data);
       } else {
         setCustomerDetail([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
+  const fetchJobTypeDetail = async (idJobType) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`/api/v1/erp/jobtypes/${idJobType}`);
+
+      if (data) {
+        setJobTypeDetail(data.job_type_detail);
+      } else {
+        setJobTypeDetail([]);
       }
     } catch (e) {
       console.log(e);
@@ -102,6 +120,10 @@ const AppProvider = ({ children }) => {
     fetchCustomerDetail(id);
   };
 
+  const selectJobTypeID = (id) => {
+    fetchJobTypeDetail(id);
+  };
+
   const selectLaborID = (id) => {
     fetchLaborDetail(id);
   };
@@ -123,6 +145,14 @@ const AppProvider = ({ children }) => {
       .then((response) => response.json())
       .then((data) => {
         setCustomerList(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/v1/erp/jobtypes")
+      .then((response) => response.json())
+      .then((data) => {
+        setJobTypeList(data);
       });
   }, []);
 
@@ -170,18 +200,21 @@ const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         customerList,
+        jobTypeList,
         laborList,
         partsList,
         vendorList,
         workOrdersList,
 
         customerDetail,
+        jobTypeDetail,
         laborDetail,
         partDetail,
         vendorDetail,
         workOrderDetail,
 
         selectCustomerID,
+        selectJobTypeID,
         selectLaborID,
         selectPartID,
         selectVendorID,

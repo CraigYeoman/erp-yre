@@ -24,6 +24,7 @@ function Nav() {
       <div className="nav-container">
         <h3>Labor</h3>
         <Link to="/laborlist">Labor List</Link>
+        <Link to="/laborform">New Labor</Link>
       </div>
       <div className="nav-container">
         <h3>Job Types</h3>

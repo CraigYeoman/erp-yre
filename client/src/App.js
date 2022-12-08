@@ -5,6 +5,7 @@ import CustomerList from "./components/customer/CustomerList";
 import JobTypeDetail from "./components/jobtype/JobTypeDetail";
 import JobTypeList from "./components/jobtype/JobTypeList";
 import LaborDetail from "./components/labor/LaborDetail";
+import LaborForm from "./components/labor/LaborForm";
 import LaborList from "./components/labor/LaborList";
 import PartDetail from "./components/parts/PartDetail";
 import PartsList from "./components/parts/PartsList";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/jobtypedetail" element={<JobTypeDetail />}></Route>
           <Route path="/jobtypelist" element={<JobTypeList />}></Route>
           <Route path="/labordetail" element={<LaborDetail />}></Route>
+          <Route path="/laborform" element={<LaborForm />}></Route>
           <Route path="/laborlist" element={<LaborList />}></Route>
           <Route path="/partdetail" element={<PartDetail />}></Route>
           <Route path="/partslist" element={<PartsList />}></Route>

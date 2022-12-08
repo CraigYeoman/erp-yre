@@ -79,8 +79,58 @@ const labor_detail = (req, res, next) => {
   });
 };
 
+// Display Labor create form on GET - not needed
+
+// Handle Labor create on POST.
+
+const labor_create_post = [
+  // Validate and sanitize the name field.
+  body("name", "Labor name required").trim().isLength({ min: 1 }).escape(),
+  body("price", "Labor price required").trim().isLength({ min: 1 }).escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a labor object with escaped and trimmed data.
+    const labor = new Labor({ name: req.body.name });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render({
+        labor,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid.
+      // Check if Labor with same name already exists.
+      Labor.findOne({ name: req.body.name }).exec((err, found_labor) => {
+        if (err) {
+          return next(err);
+        }
+
+        if (found_labor) {
+          // Labor exists, redirect to its detail page.
+          res.redirect(found_labor.url);
+        } else {
+          labor.save((err) => {
+            if (err) {
+              return next(err);
+            }
+            // Labor saved. Redirect to Labor detail page.
+            res.redirect(labor.url);
+          });
+        }
+      });
+    }
+  },
+];
+
 module.exports = {
   getAllLaborStatic,
   getAllLabor,
   labor_detail,
+  labor_create_post,
 };

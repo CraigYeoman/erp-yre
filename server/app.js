@@ -4,6 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 require("dotenv").config();
+const cors = require("cors");
 
 const vendorsRouter = require("./routes/vendors");
 const jobTypeRouter = require("./routes/jobtype");
@@ -29,6 +30,7 @@ const start = async () => {
   }
 };
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -11,7 +11,7 @@ const {
 // GET request for creating a Labor - not needed
 
 // POST request for creating Labor.
-router.route("/create").get(labor_create_post);
+router.route("/create").post(labor_create_post);
 // GET request to delete Labor.
 // POST request to delete Labor.
 // GET request to update Labor.

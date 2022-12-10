@@ -4,19 +4,15 @@ import axios from "axios";
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  const [customerList, setCustomerList] = useState([{}]);
   const [customerDetail, setCustomerDetail] = useState([{}]);
-  const [jobTypeList, setJobTypeList] = useState([{}]);
   const [jobTypeDetail, setJobTypeDetail] = useState([{}]);
-  const [laborList, setLaborList] = useState([{}]);
   const [laborDetail, setLaborDetail] = useState([{}]);
-  const [partsList, setPartsList] = useState([{}]);
   const [partDetail, setPartDetail] = useState([{}]);
-  const [vendorList, setVendorList] = useState([{}]);
   const [vendorDetail, setVendorDetail] = useState([{}]);
-  const [workOrdersList, setworkOrdersList] = useState([{}]);
   const [workOrderDetail, setWorkOrderDetail] = useState([{}]);
   const [loading, setLoading] = useState(false);
+  const [listType, setListType] = useState("workorders");
+  const [data, setData] = useState([{}]);
 
   const fetchCustomerDetail = async (idCustomer) => {
     setLoading(true);
@@ -141,71 +137,16 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetch("/api/v1/erp/customers")
+    fetch(`/api/v1/erp/${listType}`)
       .then((response) => response.json())
       .then((data) => {
-        setCustomerList(data);
+        setData(data);
       });
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/v1/erp/jobtypes")
-      .then((response) => response.json())
-      .then((data) => {
-        setJobTypeList(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/v1/erp/labor")
-      .then((response) => response.json())
-      .then((data) => {
-        setLaborList(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/v1/erp/parts")
-      .then((response) => response.json())
-      .then((data) => {
-        setPartsList(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/v1/erp/vendors")
-      .then((response) => response.json())
-      .then((data) => {
-        setVendorList(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/v1/erp/workorders")
-      .then((response) => response.json())
-      .then((data) => {
-        setworkOrdersList(data);
-      });
-  }, []);
-
-  //   useEffect(() => {
-  //     fetch("/api/v1/erp/customers/:id")
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         setCustomerDetail(data);
-  //       });
-  //   }, [setCustomerDetail]);
+  }, [listType]);
 
   return (
     <AppContext.Provider
       value={{
-        customerList,
-        jobTypeList,
-        laborList,
-        partsList,
-        vendorList,
-        workOrdersList,
-
         customerDetail,
         jobTypeDetail,
         laborDetail,
@@ -219,7 +160,9 @@ const AppProvider = ({ children }) => {
         selectPartID,
         selectVendorID,
         selectWorkOrderID,
+        setListType,
 
+        data,
         loading,
       }}
     >

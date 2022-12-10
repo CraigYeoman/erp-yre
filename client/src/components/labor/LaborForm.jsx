@@ -78,7 +78,6 @@ const LaborForm = () => {
       </form>
       {response && (
         <div>
-          {console.log(responseText)}
           {responseText.msg}{" "}
           <Link
             onClick={() => selectLaborID(responseText.labor._id)}

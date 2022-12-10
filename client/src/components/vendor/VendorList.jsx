@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
 const VendorList = () => {
-  const { vendorList, selectVendorID, loading } = useGlobalContext();
-  if (loading) {
+  const { data, selectVendorID } = useGlobalContext();
+  if (!data.vendors) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
@@ -12,7 +12,7 @@ const VendorList = () => {
   }
   return (
     <div>
-      {vendorList.vendors.map((vendor) => {
+      {data.vendors.map((vendor) => {
         const { _id, name, main_contact, phone_number, email } = vendor;
         return (
           <div key={_id}>

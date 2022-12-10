@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
 const CustomerList = () => {
-  const { customerList, selectCustomerID, loading } = useGlobalContext();
+  const { selectCustomerID, data } = useGlobalContext();
 
-  if (loading) {
+  if (!data.customers) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
@@ -14,7 +14,7 @@ const CustomerList = () => {
 
   return (
     <div>
-      {customerList.customers.map((customer) => {
+      {data.customers.map((customer) => {
         const {
           _id,
           first_name,

@@ -18,7 +18,10 @@ const LaborList = () => {
         const { name, price, _id } = labor;
         return (
           <div key={_id}>
-            <Link onClick={() => selectLaborID(_id)} to="/labordetail">
+            <Link
+              onClick={() => selectLaborID(_id)}
+              to={`/labordetail/${labor._id}`}
+            >
               {name}
             </Link>
             <p>{price}</p>

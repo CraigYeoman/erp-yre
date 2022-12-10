@@ -50,7 +50,7 @@ const getAllLabor = async (req, res) => {
     result = result.select(fieldsList);
   }
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+  const limit = Number(req.query.limit) || 20;
   const skip = (page - 1) * limit;
 
   result = result.skip(skip).limit(limit);
@@ -95,10 +95,10 @@ const labor_create_post = [
 
     // Create a labor object with escaped and trimmed data.
     const labor = new Labor({ name: req.body.name, price: req.body.price });
-
+    console.log(labor);
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.render({
+      res.json({
         labor,
         errors: errors.array(),
       });
@@ -119,8 +119,11 @@ const labor_create_post = [
             if (err) {
               return next(err);
             }
-            // Labor saved. Redirect to Labor detail page.
-            res.redirect(labor.url);
+            // Labor saved.
+            res.status(200).json({
+              msg: "Labor created",
+              labor: labor,
+            });
           });
         }
       });

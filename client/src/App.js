@@ -28,7 +28,7 @@ function App() {
           <Route path="/customerlist" element={<CustomerList />}></Route>
           <Route path="/jobtypedetail" element={<JobTypeDetail />}></Route>
           <Route path="/jobtypelist" element={<JobTypeList />}></Route>
-          <Route path="/labordetail" element={<LaborDetail />}></Route>
+          <Route path="/labordetail/:id" element={<LaborDetail />}></Route>
           <Route path="/laborform" element={<LaborForm />}></Route>
           <Route path="/laborlist" element={<LaborList />}></Route>
           <Route path="/partdetail" element={<PartDetail />}></Route>

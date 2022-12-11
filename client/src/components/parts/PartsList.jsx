@@ -19,13 +19,16 @@ const CustomerList = () => {
           part;
         return (
           <div key={_id}>
-            <Link onClick={() => selectPartID(_id)} to="/partdetail">
+            <Link onClick={() => selectPartID(_id)} to={`/partdetail/${_id}`}>
               {name}
             </Link>
             <p>{part_number}</p>
             <p>{manufacture}</p>
             <p>{customer_price}</p>
-            <Link onClick={() => selectVendorID(vendor._id)} to="/vendordetail">
+            <Link
+              onClick={() => selectVendorID(vendor._id)}
+              to={`/vendordetail/${vendor._id}`}
+            >
               {vendor.name}
             </Link>
           </div>

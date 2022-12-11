@@ -21,7 +21,10 @@ const PartDetail = () => {
         <p>{manufacture}</p>
         <p>{customer_price}</p>
         <p>{cost}</p>
-        <Link onClick={() => selectVendorID(vendor._id)} to="/vendordetail">
+        <Link
+          onClick={() => selectVendorID(vendor._id)}
+          to={`/vendordetail/${vendor._id}`}
+        >
           {vendor.name}
         </Link>
       </div>

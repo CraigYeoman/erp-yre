@@ -31,16 +31,19 @@ function App() {
           ></Route>
           <Route path="/customerform" element={<CustomerForm />}></Route>
           <Route path="/customerlist" element={<CustomerList />}></Route>
-          <Route path="/jobtypedetail" element={<JobTypeDetail />}></Route>
+          <Route path="/jobtypedetail/:id" element={<JobTypeDetail />}></Route>
           <Route path="/jobtypelist" element={<JobTypeList />}></Route>
           <Route path="/labordetail/:id" element={<LaborDetail />}></Route>
           <Route path="/laborform" element={<LaborForm />}></Route>
           <Route path="/laborlist" element={<LaborList />}></Route>
-          <Route path="/partdetail" element={<PartDetail />}></Route>
+          <Route path="/partdetail/:id" element={<PartDetail />}></Route>
           <Route path="/partslist" element={<PartsList />}></Route>
-          <Route path="/vendordetail" element={<VendorDetail />}></Route>
+          <Route path="/vendordetail/:id" element={<VendorDetail />}></Route>
           <Route path="/vendorlist" element={<VendorList />}></Route>
-          <Route path="/workorderdetail" element={<WorkOrderDetail />}></Route>
+          <Route
+            path="/workorderdetail/:id"
+            element={<WorkOrderDetail />}
+          ></Route>
           <Route path="/workorderlist" element={<WorkOrderList />}></Route>
           <Route path="/workorderform" element={<WorkOrderForm />}></Route>
         </Routes>

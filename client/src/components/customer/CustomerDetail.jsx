@@ -44,7 +44,7 @@ const CustomerDetail = () => {
             <div key={_id}>
               <Link
                 onClick={() => selectWorkOrderID(_id)}
-                to="/workorderdetail"
+                to={`/workorderdetail/${_id}`}
               >
                 {work_order_number}
               </Link>

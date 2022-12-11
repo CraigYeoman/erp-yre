@@ -34,7 +34,7 @@ const VendorDetail = () => {
             part;
           return (
             <div key={_id}>
-              <Link onClick={() => selectPartID(_id)} to="/partdetail">
+              <Link onClick={() => selectPartID(_id)} to={`/partdetail/${_id}`}>
                 {name}
               </Link>
               <p>{cost}</p>

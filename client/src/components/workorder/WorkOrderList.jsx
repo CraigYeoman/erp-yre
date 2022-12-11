@@ -28,7 +28,7 @@ const WorkOrderList = () => {
             <p>
               <Link
                 onClick={() => selectWorkOrderID(_id)}
-                to="/workorderdetail"
+                to={`/workorderdetail/${_id}`}
               >
                 {work_order_number}
               </Link>
@@ -36,7 +36,7 @@ const WorkOrderList = () => {
             <p>
               <Link
                 onClick={() => selectCustomerID(customer._id)}
-                to="/customerdetail"
+                to={`/customerdetail/${customer._id}`}
               >
                 {customer.first_name} {customer.last_name}
               </Link>

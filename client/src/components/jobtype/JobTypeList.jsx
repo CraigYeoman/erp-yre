@@ -18,7 +18,10 @@ const JobTypeList = () => {
         const { name, _id } = jobType;
         return (
           <div key={_id}>
-            <Link onClick={() => selectJobTypeID(_id)} to="/jobtypedetail">
+            <Link
+              onClick={() => selectJobTypeID(_id)}
+              to={`/jobtypedetail/${_id}`}
+            >
               {name}
             </Link>
           </div>

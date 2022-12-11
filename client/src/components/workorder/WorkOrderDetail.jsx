@@ -28,7 +28,7 @@ const WorkOrderDetail = () => {
           <h4>
             <Link
               onClick={() => selectCustomerID(work_order.customer._id)}
-              to="/customerdetail"
+              to={`/customerdetail/${work_order.customer._id}`}
             >
               {work_order.customer.first_name} {work_order.customer.last_name}
             </Link>

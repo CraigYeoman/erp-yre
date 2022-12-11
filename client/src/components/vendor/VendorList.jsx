@@ -16,7 +16,10 @@ const VendorList = () => {
         const { _id, name, main_contact, phone_number, email } = vendor;
         return (
           <div key={_id}>
-            <Link onClick={() => selectVendorID(_id)} to="/vendordetail">
+            <Link
+              onClick={() => selectVendorID(_id)}
+              to={`/vendordetail/${_id}`}
+            >
               {name}
             </Link>
             <p>{main_contact}</p>

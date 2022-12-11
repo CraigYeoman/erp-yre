@@ -18,6 +18,7 @@ function Nav() {
         <Link onClick={() => setListType("customers")} to="/customerlist">
           Customer List
         </Link>
+        <Link to="/customerform">New Customer</Link>
       </div>
       <div className="nav-container">
         <h3>Vendors</h3>

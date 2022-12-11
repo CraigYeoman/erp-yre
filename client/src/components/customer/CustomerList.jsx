@@ -29,7 +29,10 @@ const CustomerList = () => {
         } = customer;
         return (
           <div key={_id}>
-            <Link onClick={() => selectCustomerID(_id)} to="/customerdetail">
+            <Link
+              onClick={() => selectCustomerID(_id)}
+              to={`/customerdetail/${customer._id}`}
+            >
               {first_name} {last_name}
             </Link>
             <p>{phone_number}</p>

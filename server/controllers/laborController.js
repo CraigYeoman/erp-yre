@@ -95,7 +95,6 @@ const labor_create_post = [
 
     // Create a labor object with escaped and trimmed data.
     const labor = new Labor({ name: req.body.name, price: req.body.price });
-    console.log(labor);
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
       res.json({

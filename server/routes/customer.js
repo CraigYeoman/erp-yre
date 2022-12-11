@@ -9,8 +9,8 @@ const {
   customer_detail,
 } = require("../controllers/customerController");
 
-// GET request for creating a Customer.
-router.route("/create").get(customer_create_get);
+// GET request for creating a Customer - not needed
+
 // POST request for creating Customer.
 router.route("/create").post(customer_create_post);
 

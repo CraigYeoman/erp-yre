@@ -98,10 +98,10 @@ const customer_create_post = [
   body("phone_number", "Invalid phone number").isLength({ min: 10 }),
   body("email", "Invalid email").isEmail(),
   body("address_line_1", "Invalid address").isLength({ min: 1 }).trim(),
-  body("address_line_2", "Invalid address").isLength({ min: 1 }).trim(),
+  body("address_line_2", "Invalid address").trim(),
   body("city", "Invalid city").isLength({ min: 1 }).trim(),
-  body("state", "Invalid state initials").isLength({ min: 2 }).isPostalCode(),
-  body("zipe_code", "Invalid zipcode").isLength({ min: 5 }),
+  body("state", "Invalid state initials").isLength({ min: 2 }),
+  body("zip_code", "Invalid zipcode").isLength({ min: 5 }),
   // Process request after validation and sanitization.
   (req, res, next) => {
     // Extract the validation errors from a request.
@@ -109,13 +109,13 @@ const customer_create_post = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/errors messages.
-      res.json("customer_form", {
+      res.status(500).json({
+        customer: req.body,
         errors: errors.array(),
       });
+
       return;
     }
-    // Data from form is valid.
-
     // Create a Customer object with escaped and trimmed data.
     const customer = new Customer({
       first_name: req.body.first_name,
@@ -128,12 +128,16 @@ const customer_create_post = [
       state: req.body.state,
       zip_code: req.body.zip_code,
     });
+
     customer.save((err) => {
       if (err) {
         return next(err);
       }
-      // Successful - redirect to new customer record.
-      res.redirect(customer.url);
+      // Customer saved.
+      res.status(200).json({
+        msg: "Customer created",
+        customer: customer,
+      });
     });
   },
 ];

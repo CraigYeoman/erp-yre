@@ -1,6 +1,7 @@
 import Nav from "./components/Nav";
 import Index from "./components/Index";
 import CustomerDetail from "./components/customer/CustomerDetail";
+import CustomerForm from "./components/customer/CustomerForm";
 import CustomerList from "./components/customer/CustomerList";
 import JobTypeDetail from "./components/jobtype/JobTypeDetail";
 import JobTypeList from "./components/jobtype/JobTypeList";
@@ -24,7 +25,11 @@ function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Index />}></Route>
-          <Route path="/customerdetail" element={<CustomerDetail />}></Route>
+          <Route
+            path="/customerdetail/:id"
+            element={<CustomerDetail />}
+          ></Route>
+          <Route path="/customerform" element={<CustomerForm />}></Route>
           <Route path="/customerlist" element={<CustomerList />}></Route>
           <Route path="/jobtypedetail" element={<JobTypeDetail />}></Route>
           <Route path="/jobtypelist" element={<JobTypeList />}></Route>

@@ -5,6 +5,7 @@ import CustomerForm from "./components/customer/CustomerForm";
 import CustomerList from "./components/customer/CustomerList";
 import JobTypeDetail from "./components/jobtype/JobTypeDetail";
 import JobTypeList from "./components/jobtype/JobTypeList";
+import JobTypeForm from "./components/jobtype/JobTypeForm";
 import LaborDetail from "./components/labor/LaborDetail";
 import LaborForm from "./components/labor/LaborForm";
 import LaborList from "./components/labor/LaborList";
@@ -33,6 +34,7 @@ function App() {
           <Route path="/customerlist" element={<CustomerList />}></Route>
           <Route path="/jobtypedetail/:id" element={<JobTypeDetail />}></Route>
           <Route path="/jobtypelist" element={<JobTypeList />}></Route>
+          <Route path="/jobtypeform" element={<JobTypeForm />}></Route>
           <Route path="/labordetail/:id" element={<LaborDetail />}></Route>
           <Route path="/laborform" element={<LaborForm />}></Route>
           <Route path="/laborlist" element={<LaborList />}></Route>

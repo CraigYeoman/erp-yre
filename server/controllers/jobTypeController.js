@@ -57,8 +57,44 @@ const job_type_detail = (req, res, next) => {
   });
 };
 
+const jobtype_create_post = [
+  // Validate and sanitize fields.
+  body("name", "Job Type name required").trim().isLength({ min: 1 }).escape(),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({
+        jobtype: req.body,
+        errors: errors.array(),
+      });
+
+      return;
+    }
+    // Create a jobtype object with escaped and trimmed data.
+    const jobtype = new JobType({
+      name: req.body.name,
+    });
+
+    jobtype.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // jobtype saved.
+      res.status(200).json({
+        msg: "job type created",
+        jobtype: jobtype,
+      });
+    });
+  },
+];
+
 module.exports = {
   getAllJobTypesStatic,
   getAllJobTypes,
   job_type_detail,
+  jobtype_create_post,
 };

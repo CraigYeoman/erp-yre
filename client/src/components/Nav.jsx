@@ -44,6 +44,7 @@ function Nav() {
         <Link onClick={() => setListType("jobtypes")} to="/jobtypelist">
           Job Types
         </Link>
+        <Link to="/jobtypeform">New Job Type</Link>
       </div>
     </div>
   );

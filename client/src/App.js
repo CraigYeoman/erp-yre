@@ -12,6 +12,7 @@ import LaborList from "./components/labor/LaborList";
 import PartDetail from "./components/parts/PartDetail";
 import PartsList from "./components/parts/PartsList";
 import VendorDetail from "./components/vendor/VendorDetail";
+import VendorForm from "./components/vendor/VendorForm";
 import VendorList from "./components/vendor/VendorList";
 import WorkOrderDetail from "./components/workorder/WorkOrderDetail";
 import WorkOrderList from "./components/workorder/WorkOrderList";
@@ -41,6 +42,7 @@ function App() {
           <Route path="/partdetail/:id" element={<PartDetail />}></Route>
           <Route path="/partslist" element={<PartsList />}></Route>
           <Route path="/vendordetail/:id" element={<VendorDetail />}></Route>
+          <Route path="/vendorform" element={<VendorForm />}></Route>
           <Route path="/vendorlist" element={<VendorList />}></Route>
           <Route
             path="/workorderdetail/:id"

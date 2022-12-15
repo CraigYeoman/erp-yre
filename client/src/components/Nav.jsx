@@ -32,6 +32,7 @@ function Nav() {
         <Link onClick={() => setListType("parts")} to="/partslist">
           Parts List
         </Link>
+        <Link to="/partform">New Part</Link>
       </div>
       <div className="nav-container">
         <h3>Labor</h3>

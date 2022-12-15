@@ -100,8 +100,87 @@ const part_detail = (req, res, next) => {
     });
 };
 
+// Display parts create form on GET
+
+const parts_create_get = (req, res, next) => {
+  Vendor.find({}, "name").exec((err, vendors) => {
+    if (err) {
+      return next(err);
+    }
+    // Successful
+    res.status(200).json({
+      vendor_list: vendors,
+    });
+  });
+};
+
+const parts_create_post = [
+  // Validate and sanitize fields.
+  body("name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Part name must be specified."),
+  body("customer_price", "Customer price required")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("cost", "Cost price required").trim().isLength({ min: 1 }).escape(),
+  body("part_number")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Part number must be specified."),
+  body("vendor").trim().isLength({ min: 1 }).escape(),
+  body("manufacture")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Manufacture must be specified."),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a part object with escaped and trimmed data.
+
+    const part = new Parts({
+      name: req.body.name,
+      customer_price: req.body.customer_price,
+      cost: req.body.cost,
+      part_number: req.body.part_number,
+      vendor: req.body.vendor,
+      manufacture: req.body.manufacture,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({
+        part: req.body,
+        errors: errors.array(),
+      });
+
+      return;
+    }
+
+    part.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Part saved.
+      res.status(200).json({
+        msg: "Part created",
+        part: part,
+      });
+    });
+  },
+];
+
 module.exports = {
   getAllPartsStatic,
   getAllParts,
   part_detail,
+  parts_create_get,
+  parts_create_post,
 };

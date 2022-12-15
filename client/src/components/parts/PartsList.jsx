@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
-const CustomerList = () => {
+const PartsList = () => {
   const { data, selectPartID, selectVendorID } = useGlobalContext();
 
   if (!data.parts) {
@@ -38,4 +38,4 @@ const CustomerList = () => {
   );
 };
 
-export default CustomerList;
+export default PartsList;

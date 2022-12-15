@@ -49,6 +49,9 @@ const vendor_detail = (req, res, next) => {
         Vendor.findById(req.params.id).exec(callback);
       },
       vendor_parts(callback) {
+        Vendor.findById(req.params.id).exec(callback);
+      },
+      vendor_parts(callback) {
         Parts.find({ vendor: req.params.id }).exec(callback);
       },
     },

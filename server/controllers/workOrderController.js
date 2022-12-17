@@ -4,6 +4,7 @@ const Customer = require("../models/customer");
 const JobType = require("../models/jobType");
 const Parts = require("../models/parts");
 const Labor = require("../models/labor");
+const Accessories = require("../models/accessories");
 const async = require("async");
 
 // Display list of all Vendors.
@@ -58,7 +59,8 @@ const getAllWorkOrders = async (req, res) => {
     .populate("customer")
     .populate("jobType")
     .populate("parts")
-    .populate("labor");
+    .populate("labor")
+    .populate("accessories");
   // sort
   if (sort) {
     const sortList = sort.split(",").join(" ");
@@ -90,6 +92,7 @@ const work_order_detail = (req, res, next) => {
           .populate("jobType")
           .populate("parts")
           .populate("labor")
+          .populate("accessories")
           .exec(callback);
       },
     },
@@ -115,6 +118,7 @@ const work_order_detail = (req, res, next) => {
 
 // Display workorder create form on GET
 const work_order_create_post = (req, res, next) => {
+  console.log(WorkOrder.customer);
   async.parallel(
     {
       customer(callback) {
@@ -129,9 +133,13 @@ const work_order_create_post = (req, res, next) => {
       labor(callback) {
         Labor.find(callback);
       },
+      accessories(callback) {
+        Accessories.find(callback);
+      },
     },
     (err, results) => {
       if (err) {
+        console.log(err);
         return next(err);
       }
       res.status(200).json({
@@ -139,6 +147,7 @@ const work_order_create_post = (req, res, next) => {
         jobtypes: results.jobType,
         parts: results.parts,
         labors: results.labor,
+        accessories: results.accessories,
       });
     }
   );

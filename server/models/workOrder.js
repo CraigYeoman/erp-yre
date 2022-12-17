@@ -34,22 +34,9 @@ const workOrderSchema = new Schema({
     required: [true, "Job type must be provided"],
   },
   accessories: {
-    type: String,
-    enum: {
-      values: [
-        "None",
-        "water pump",
-        "pulleys",
-        "distributor",
-        "distributor wires",
-        "power steering pump",
-        "engine stand",
-        "flywheel",
-        "spud",
-      ],
-      message: "{VALUE} is not supported",
-    },
-    required: [true, "accessories must be provided"],
+    type: Schema.Types.ObjectId,
+    ref: "Accessories",
+    required: [true, "Accessories must be provided"],
   },
   parts: {
     type: Schema.Types.ObjectId,

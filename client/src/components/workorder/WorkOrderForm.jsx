@@ -18,18 +18,17 @@ const WorkOrderForm = () => {
     customer: "",
     date_received: "",
     date_due: "",
-    part_number: "",
-    date_finished: "",
     estimatedPrice: "",
-    complete: "",
     jobtype: "",
-    accessories: "",
     parts: "",
     labor: "",
-    notes: "",
     work_order_number: "",
+    notes: "",
   });
 
+  const [customerAccessories, setCustomerAccessories] = useState([]);
+  const [customerParts, setCustomerParts] = useState([]);
+  const [customerLabor, setCustomerLabor] = useState([]);
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
@@ -40,6 +39,11 @@ const WorkOrderForm = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const handleChangeCheckBox = (e, array, func) => {
+    const updateValues = [...array, e];
+    func(updateValues);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setResponse(false);
@@ -48,33 +52,27 @@ const WorkOrderForm = () => {
       customer,
       date_received,
       date_due,
-      part_number,
-      date_finished,
       estimatedPrice,
-      complete,
       jobtype,
-      accessories,
-      parts,
-      labor,
-      notes,
       work_order_number,
+      notes,
     } = values;
+    let accessories = customerAccessories;
+    let parts = customerParts;
+    let labor = customerLabor;
     const workOrderData = {
       customer,
       date_received,
       date_due,
-      part_number,
-      date_finished,
       estimatedPrice,
-      complete,
       jobtype,
       accessories,
       parts,
       labor,
-      notes,
       work_order_number,
+      notes,
     };
-    console.log(workOrderData);
+
     try {
       const url = `${rootUrl}/api/v1/erp/workorders/create`;
       axios
@@ -94,16 +92,16 @@ const WorkOrderForm = () => {
         date_received: "",
         date_due: "",
         part_number: "",
-        date_finished: "",
         estimatedPrice: "",
-        complete: "",
         jobtype: "",
-        accessories: "",
         parts: "",
         labor: "",
         notes: "",
         work_order_number: "",
       });
+      setCustomerAccessories([]);
+      setCustomerParts([]);
+      setCustomerLabor([]);
     } catch (error) {
       setResponseTextError(error);
       console.log(error);
@@ -122,6 +120,17 @@ const WorkOrderForm = () => {
     <div>
       <form onSubmit={onSubmit}>
         <div>
+          <label htmlFor="work_order_number">
+            Work Order Number:
+            <input
+              type="number"
+              placeholder="XXXXX"
+              name="work_order_number"
+              required={true}
+              value={values.work_order_number}
+              onChange={handleChange}
+            ></input>
+          </label>
           <label htmlFor="customer">
             Customer:
             <select
@@ -132,6 +141,9 @@ const WorkOrderForm = () => {
               onChange={handleChange}
               value={values.customer}
             >
+              <option value="" disabled selected hidden>
+                Please Choose Customer
+              </option>
               {typeof workOrderInfo.customers === "undefined" ? (
                 <option>Loading...</option>
               ) : (
@@ -174,25 +186,6 @@ const WorkOrderForm = () => {
               onChange={handleChange}
             ></input>
           </label>
-          <label htmlFor="complete">
-            Complete:
-            <input
-              type="checkbox"
-              name="complete"
-              value={values.complete}
-              onChange={handleChange}
-            ></input>
-          </label>
-          <label htmlFor="date_finished">
-            Date finished:
-            <input
-              type="date"
-              placeholder="Leave empty if incomplete"
-              name="date_finished"
-              value={values.date_finished}
-              onChange={handleChange}
-            ></input>
-          </label>
 
           <label htmlFor="estimatedPrice">
             Estimated Price:
@@ -215,6 +208,9 @@ const WorkOrderForm = () => {
               onChange={handleChange}
               value={values.jobtype}
             >
+              <option value="" disabled selected hidden>
+                Please Choose Job Type
+              </option>
               {typeof workOrderInfo.jobtypes === "undefined" ? (
                 <option>Loading...</option>
               ) : (
@@ -234,81 +230,113 @@ const WorkOrderForm = () => {
               )}
             </select>
           </label>
+
           <fieldset>
             <legend>Customer Accessories</legend>
-
-            <div>
-              <input type="checkbox" name="none" value="none" />
-              <label htmlFor="none">None</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="music"
-                name="accessories"
-                value="water pump"
-              />
-              <label htmlFor="water pump">water pump</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="music"
-                name="accessories"
-                value="pulleys"
-              />
-              <label htmlFor="pulleys">pulleys</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="music"
-                name="distributor"
-                value="distributor"
-              />
-              <label htmlFor="distributor">distributor</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="music"
-                name="distributor wires"
-                value="distributor wires"
-              />
-              <label htmlFor="distributor wires">distributor wires</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="music"
-                name="power steering pump"
-                value="power steering pump"
-              />
-              <label htmlFor="power steering pump">power steering pump</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="music"
-                name="engine stand"
-                value="engine stand"
-              />
-              <label htmlFor="engine stand">engine stand</label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="music"
-                name="flywheel"
-                value="flywheel"
-              />
-              <label htmlFor="flywheel">flywheel</label>
-            </div>
-            <div>
-              <input type="checkbox" id="music" name="spud" value="spud" />
-              <label htmlFor="spud">spud</label>
-            </div>
+            {typeof workOrderInfo.accessories === "undefined" ? (
+              <option>Loading...</option>
+            ) : (
+              workOrderInfo.accessories
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((accessory) => {
+                  return (
+                    <div key={accessory._id}>
+                      <input
+                        type="checkbox"
+                        name="accessories"
+                        onChange={() =>
+                          handleChangeCheckBox(
+                            accessory._id,
+                            customerAccessories,
+                            setCustomerAccessories
+                          )
+                        }
+                        value={accessory._id}
+                      ></input>
+                      <label htmlFor={accessory.name}>{accessory.name}</label>
+                    </div>
+                  );
+                })
+            )}
           </fieldset>
+          <fieldset>
+            <legend>Parts Needed</legend>
+            {typeof workOrderInfo.parts === "undefined" ? (
+              <option>Loading...</option>
+            ) : (
+              workOrderInfo.parts
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((part) => {
+                  return (
+                    <div key={part._id}>
+                      <input
+                        type="checkbox"
+                        name="accessories"
+                        onChange={() =>
+                          handleChangeCheckBox(
+                            part._id,
+                            customerParts,
+                            setCustomerParts
+                          )
+                        }
+                        value={part._id}
+                      ></input>
+                      <label htmlFor={part.name}>{part.name}</label>
+                    </div>
+                  );
+                })
+            )}
+          </fieldset>
+          <fieldset>
+            <legend>Labor Needed</legend>
+            {typeof workOrderInfo.labors === "undefined" ? (
+              <option>Loading...</option>
+            ) : (
+              workOrderInfo.labors
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((labor) => {
+                  return (
+                    <div key={labor._id}>
+                      <input
+                        type="checkbox"
+                        name="accessories"
+                        onChange={() =>
+                          handleChangeCheckBox(
+                            labor._id,
+                            customerLabor,
+                            setCustomerLabor
+                          )
+                        }
+                        value={labor._id}
+                      ></input>
+                      <label htmlFor={labor.name}>{labor.name}</label>
+                    </div>
+                  );
+                })
+            )}
+          </fieldset>
+          <label htmlFor="notes">
+            <textarea
+              placeholder="Notes"
+              name="notes"
+              value={values.notes}
+              onChange={handleChange}
+              cols="30"
+              rows="10"
+            ></textarea>
+          </label>
         </div>
         <button type="submit">Submit</button>
       </form>
@@ -319,13 +347,17 @@ const WorkOrderForm = () => {
             onClick={() => selectWorkOrderID(responseText.workOrder._id)}
             to={`/workorderdetail/${responseText.workOrder._id}`}
           >
-            {responseText.workOrder.name} {responseText.workOrder.last_name}
+            {responseText.workOrder.work_order_number}
           </Link>
         </div>
       )}
       {responseError && (
         <div>
-          <p>{responseTextError.workOrder.name} not created</p>
+          <p>
+            {responseText.workOrder.first_name}{" "}
+            {responseText.workOrder.last_name}{" "}
+            {responseText.workOrder.work_order_number}not created
+          </p>
           {responseTextError.errors.map((error) => {
             const { msg, param, value } = error;
             return (

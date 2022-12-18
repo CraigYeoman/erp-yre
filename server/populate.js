@@ -20,8 +20,8 @@ const jsonAccessories = require("./data/populateAccessories.json");
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
-    await Accessories.deleteMany();
-    await Accessories.create(jsonAccessories);
+    await WorkOrder.deleteMany();
+    await WorkOrder.create(jsonWorkOrder);
     console.log("Success!!!!");
     process.exit(0);
   } catch (error) {

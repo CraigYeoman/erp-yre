@@ -33,19 +33,24 @@ const workOrderSchema = new Schema({
     ref: "JobType",
     required: [true, "Job type must be provided"],
   },
-  accessories: {
-    type: Schema.Types.ObjectId,
-    ref: "Accessories",
-    required: [true, "Accessories must be provided"],
-  },
-  parts: {
-    type: Schema.Types.ObjectId,
-    ref: "Parts",
-  },
-  labor: {
-    type: Schema.Types.ObjectId,
-    ref: "Labor",
-  },
+  accessories: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Accessories",
+    },
+  ],
+  parts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Parts",
+    },
+  ],
+  labor: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Labor",
+    },
+  ],
   notes: {
     type: String,
     required: [true, "Workorder description must be provided"],

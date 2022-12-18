@@ -117,8 +117,7 @@ const work_order_detail = (req, res, next) => {
 };
 
 // Display workorder create form on GET
-const work_order_create_post = (req, res, next) => {
-  console.log(WorkOrder.customer);
+const work_order_create_get = (req, res, next) => {
   async.parallel(
     {
       customer(callback) {
@@ -139,7 +138,6 @@ const work_order_create_post = (req, res, next) => {
     },
     (err, results) => {
       if (err) {
-        console.log(err);
         return next(err);
       }
       res.status(200).json({
@@ -153,9 +151,58 @@ const work_order_create_post = (req, res, next) => {
   );
 };
 
+const work_order_create_post = [
+  // Validate and sanitize fields.
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a part object with escaped and trimmed data.
+
+    const workOrder = new WorkOrder({
+      customer: req.body.customer,
+      date_received: req.body.date_received,
+      date_due: req.body.date_due,
+      date_finished: req.body.date_finished,
+      estimatedPrice: req.body.estimatedPrice,
+      complete: req.body.complete,
+      jobType: req.body.jobtype,
+      accessories: req.body.accessories,
+      parts: req.body.parts,
+      labor: req.body.labor,
+      notes: req.body.notes,
+      work_order_number: req.body.work_order_number,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({
+        workOrder: req.body,
+        errors: errors.array(),
+      });
+
+      return;
+    }
+
+    workOrder.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // workOrder saved.
+      res.status(200).json({
+        msg: "Work order created",
+        workOrder: workOrder,
+      });
+    });
+  },
+];
+
 module.exports = {
   getAllWorkOrdersStatic,
   getAllWorkOrders,
+  work_order_create_get,
   work_order_create_post,
   work_order_detail,
 };

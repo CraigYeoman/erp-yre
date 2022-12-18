@@ -12,43 +12,82 @@ const WorkOrderDetail = () => {
       </section>
     );
   }
+  const {
+    work_order_number,
+    jobType,
+    date_received,
+    date_due,
+    complete,
+    date_finished,
+    customer,
+    estimatedPrice,
+    notes,
+    accessories,
+    labor,
+    parts,
+  } = work_order;
   return (
     <div>
       <div>
         <h2>
-          {work_order.work_order_number} {work_order.jobType.name}
+          {work_order_number} {jobType.name}
         </h2>
         <div>
-          <p>Date Received:{work_order.date_received}</p>
-          <p>Date Due:{work_order.date_due}</p>
-          <p>Status: {work_order.complete ? "Complete" : "In Process"}</p>
-          {work_order.complete ? <p>{work_order.date_finished}</p> : ""}
+          <p>Date Received:{date_received}</p>
+          <p>Date Due:{date_due}</p>
+          <p>Status: {complete ? "Complete" : "In Process"}</p>
+          {complete ? <p>{date_finished}</p> : ""}
         </div>
         <div>
           <h4>
             <Link
-              onClick={() => selectCustomerID(work_order.customer._id)}
-              to={`/customerdetail/${work_order.customer._id}`}
+              onClick={() => selectCustomerID(customer._id)}
+              to={`/customerdetail/${customer._id}`}
             >
-              {work_order.customer.first_name} {work_order.customer.last_name}
+              {customer.first_name} {customer.last_name}
             </Link>
           </h4>
-          <p>{work_order.customer.phone_number}</p>
-          <p>{work_order.customer.email}</p>
-          <p>{work_order.customer.address_line_1}</p>
-          <p>{work_order.customer.address_line_2}</p>
-          <p>{work_order.customer.city}</p>
-          <p>{work_order.customer.state}</p>
-          <p>{work_order.customer.zip_code}</p>
+          <p>{customer.phone_number}</p>
+          <p>{customer.email}</p>
+          <p>{customer.address_line_1}</p>
+          <p>{customer.address_line_2}</p>
+          <p>{customer.city}</p>
+          <p>{customer.state}</p>
+          <p>{customer.zip_code}</p>
         </div>
         <div>
-          <p>{work_order.estimatedPrice}</p>
-          {/* <p>{labor}</p>
-          <p>{parts}</p> */}
+          <p>{estimatedPrice}</p>
+
+          <div>
+            {labor.map((labor) => {
+              return (
+                <div key={labor._id}>
+                  <p>{labor.name}</p>
+                  <p>{labor.price}</p>
+                </div>
+              );
+            })}
+          </div>
+          <div>
+            {parts.map((part) => {
+              return (
+                <div key={part._id}>
+                  <p>{part.name}</p>
+                  <p>{part.customer_price}</p>
+                </div>
+              );
+            })}
+          </div>
         </div>
+
         <div>
-          <p>{work_order.notes}</p>
-          <p>{work_order.accessories}</p>
+          {accessories.map((accessory) => {
+            return <p key={accessory._id}>{accessory.name}</p>;
+          })}
+        </div>
+
+        <div>
+          <p>{notes}</p>
         </div>
       </div>
     </div>

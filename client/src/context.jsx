@@ -96,13 +96,12 @@ const AppProvider = ({ children }) => {
 
   const fetchWorkOrderDetail = async (idWorkOrder) => {
     setLoading(true);
+    console.log(idWorkOrder);
     try {
-      const { data } = await axios.get(`api/v1/erp/workorders/${idWorkOrder}`);
-
+      const { data } = await axios.get(`/api/v1/erp/workorders/${idWorkOrder}`);
+      console.log(data);
       if (data.work_order) {
         setWorkOrderDetail(data);
-        console.log(data);
-        console.log(workOrderDetail);
       } else {
         setWorkOrderDetail([]);
       }

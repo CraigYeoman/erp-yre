@@ -96,7 +96,7 @@ const AppProvider = ({ children }) => {
 
   const fetchWorkOrderDetail = async (idWorkOrder) => {
     setLoading(true);
-    console.log(idWorkOrder);
+
     try {
       const { data } = await axios.get(`/api/v1/erp/workorders/${idWorkOrder}`);
       console.log(data);

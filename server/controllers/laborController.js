@@ -1,6 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const Labor = require("../models/labor");
 const async = require("async");
+const WorkOrder = require("../models/workOrder");
 
 // Display list of all labor.
 const getAllLaborStatic = async (req, res) => {
@@ -130,9 +131,57 @@ const labor_create_post = [
   },
 ];
 
+// Handle Labor delete on GET.
+const labor_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      labor(callback) {
+        Labor.findById(req.params.id).exec(callback);
+      },
+      labor_work_orders(callback) {
+        WorkOrder.find({ labor: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.labor_work_orders.length > 0) {
+        // Labor has work orders. Render in same way as for GET route.
+        res.status(200).json({
+          labor: results.labor,
+          labor_work_orders: results.labor_work_orders,
+        });
+        return;
+      } else {
+        res.status(200).json({
+          msg: "Are you sure you want to delete?",
+        });
+      }
+    }
+  );
+};
+
+// Handle Labor delete on POST.
+const labor_delete_post = (req, res, next) => {
+  // Labor has no work orders. Delete object and redirect to the list of labors.
+  Labor.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Success - go to author list
+    res.status(200).json({
+      msg: "Labor deleted",
+    });
+  });
+};
+
 module.exports = {
   getAllLaborStatic,
   getAllLabor,
   labor_detail,
   labor_create_post,
+  labor_delete_post,
+  labor_delete_get,
 };

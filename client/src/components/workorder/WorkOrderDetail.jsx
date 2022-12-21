@@ -58,7 +58,8 @@ const WorkOrderDetail = () => {
         <div>
           <p>{estimatedPrice}</p>
 
-          <div>
+          <fieldset>
+            <legend>Labor</legend>
             {labor.map((labor) => {
               return (
                 <div key={labor._id}>
@@ -67,8 +68,9 @@ const WorkOrderDetail = () => {
                 </div>
               );
             })}
-          </div>
-          <div>
+          </fieldset>
+          <fieldset>
+            <legend>Parts Needed</legend>
             {parts.map((part) => {
               return (
                 <div key={part._id}>
@@ -77,14 +79,15 @@ const WorkOrderDetail = () => {
                 </div>
               );
             })}
-          </div>
+          </fieldset>
         </div>
 
-        <div>
+        <fieldset>
+          <legend>Customer Accessories</legend>
           {accessories.map((accessory) => {
             return <p key={accessory._id}>{accessory.name}</p>;
           })}
-        </div>
+        </fieldset>
 
         <div>
           <p>{notes}</p>

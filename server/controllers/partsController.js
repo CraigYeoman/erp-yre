@@ -1,6 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const Parts = require("../models/parts");
 const Vendor = require("../models/vendor");
+const WorkOrder = require("../models/workOrder");
 const async = require("async");
 
 // Display list of all parts.
@@ -177,10 +178,58 @@ const parts_create_post = [
   },
 ];
 
+// Handle Parts delete on GET.
+const part_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      part(callback) {
+        Parts.findById(req.params.id).exec(callback);
+      },
+      part_work_orders(callback) {
+        WorkOrder.find({ parts: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.part_work_orders.length > 0) {
+        // Part has work orders.
+        res.status(200).json({
+          part: results.part,
+          part_work_orders: results.part_work_orders,
+        });
+        return;
+      } else {
+        res.status(200).json({
+          msg: "Are you sure you want to delete?",
+        });
+      }
+    }
+  );
+};
+
+// Handle Part delete on POST.
+const part_delete_post = (req, res, next) => {
+  // Part has no work orders.
+  Parts.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Success
+    res.status(200).json({
+      msg: "Complete",
+    });
+  });
+};
+
 module.exports = {
   getAllPartsStatic,
   getAllParts,
   part_detail,
   parts_create_get,
   parts_create_post,
+  part_delete_get,
+  part_delete_post,
 };

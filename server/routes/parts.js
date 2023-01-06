@@ -7,6 +7,8 @@ const {
   part_detail,
   parts_create_get,
   parts_create_post,
+  part_delete_get,
+  part_delete_post,
 } = require("../controllers/partsController");
 
 // GET request for creating a Part.
@@ -14,7 +16,9 @@ router.route("/create").get(parts_create_get);
 // POST request for creating Part.
 router.route("/create").post(parts_create_post);
 // GET request to delete Part.
+router.route("/:id/delete").get(part_delete_get);
 // POST request to delete Part.
+router.route("/:id/delete").post(part_delete_post);
 // GET request to update Part.
 // POST request to update Part.
 

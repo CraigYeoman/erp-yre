@@ -1,5 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const JobType = require("../models/jobType");
+const WorkOrder = require("../models/workOrder");
 const async = require("async");
 
 // Display list of all job types.
@@ -92,9 +93,57 @@ const jobtype_create_post = [
   },
 ];
 
+// Handle Job Type delete on GET.
+const job_type_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      jobType(callback) {
+        JobType.findById(req.params.id).exec(callback);
+      },
+      job_type_work_orders(callback) {
+        WorkOrder.find({ jobType: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.job_type_work_orders.length > 0) {
+        // Job Type has work orders. Render in same way as for GET route.
+        res.status(200).json({
+          jobType: results.jobType,
+          job_type_work_orders: results.job_type_work_orders,
+        });
+        return;
+      } else {
+        res.status(200).json({
+          msg: "Are you sure you want to delete?",
+        });
+      }
+    }
+  );
+};
+
+// Handle Job Type delete on POST.
+const job_type_delete_post = (req, res, next) => {
+  // Job Type has no work orders. Delete object and redirect to the list of Job Types.
+  JobType.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Success - go to author list
+    res.status(200).json({
+      msg: "Complete",
+    });
+  });
+};
+
 module.exports = {
   getAllJobTypesStatic,
   getAllJobTypes,
   job_type_detail,
   jobtype_create_post,
+  job_type_delete_get,
+  job_type_delete_post,
 };

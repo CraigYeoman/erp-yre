@@ -1,53 +1,16 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { useGlobalContext } from "../../context";
-import axios from "axios";
-const rootUrl = "http://localhost:5000";
 
 const LaborDetail = () => {
-  const { laborDetail, loading, selectWorkOrderID } = useGlobalContext();
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-
-  const onSubmitGet = async (_id) => {
-    setResponse(false);
-    setResponseText("");
-    try {
-      const url = `${rootUrl}/api/v1/erp/labor/${_id}/delete/`;
-      axios
-        .get(url)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          console.log(error);
-          setResponseText(error.response.data.msg.message);
-        });
-    } catch (error) {
-      loading(false);
-    }
-  };
-
-  const onSubmitPost = async (_id) => {
-    setResponse(false);
-    setResponseText("");
-    try {
-      const url = `${rootUrl}/api/v1/erp/labor/${_id}/delete/`;
-      axios
-        .post(url)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          console.log(error);
-          setResponseText(error.response.data.msg.message);
-        });
-    } catch (error) {
-      loading(false);
-    }
-  };
+  const {
+    laborDetail,
+    loading,
+    selectWorkOrderID,
+    onSubmitGet,
+    onSubmitPost,
+    response,
+    responseText,
+  } = useGlobalContext();
 
   if (loading) {
     return (
@@ -66,13 +29,14 @@ const LaborDetail = () => {
         <p>{price}</p>
       </div>
       <div>
-        <button onClick={() => onSubmitGet(_id)}>Delete </button>
+        <button onClick={() => onSubmitGet(_id, "labor")}>Delete </button>
       </div>
 
       {response && typeof responseText.labor_work_orders === "undefined" ? (
         <div>
           Are you sure you want to delete?
-          <button onClick={() => onSubmitPost(_id)}>Delete </button>
+          <button onClick={() => onSubmitPost(_id, "labor")}>Delete</button>
+          {responseText === "Complete" && <div>Deleted</div>}
         </div>
       ) : (
         <div>

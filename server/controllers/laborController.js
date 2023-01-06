@@ -2,6 +2,7 @@ const { body, validationResult } = require("express-validator");
 const Labor = require("../models/labor");
 const async = require("async");
 const WorkOrder = require("../models/workOrder");
+const port = process.env.port || 3000;
 
 // Display list of all labor.
 const getAllLaborStatic = async (req, res) => {
@@ -170,9 +171,9 @@ const labor_delete_post = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    // Success - go to author list
+    // Success - go to labor list
     res.status(200).json({
-      msg: "Labor deleted",
+      msg: "Complete",
     });
   });
 };

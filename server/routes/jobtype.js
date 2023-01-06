@@ -6,6 +6,8 @@ const {
   getAllJobTypes,
   job_type_detail,
   jobtype_create_post,
+  job_type_delete_get,
+  job_type_delete_post,
 } = require("../controllers/jobTypeController");
 
 // GET request for creating a Job Type.
@@ -13,7 +15,9 @@ const {
 // POST request for creating Job Type.
 router.route("/create").post(jobtype_create_post);
 // GET request to delete Job Type.
+router.route("/:id/delete").get(job_type_delete_get);
 // POST request to delete Job Type.
+router.route("/:id/delete").post(job_type_delete_post);
 // GET request to update Job Type.
 // POST request to update Job Type.
 

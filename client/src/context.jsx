@@ -13,6 +13,55 @@ const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [listType, setListType] = useState("workorders");
   const [data, setData] = useState([{}]);
+  const [response, setResponse] = useState(false);
+  const [responseText, setResponseText] = useState("");
+  const rootUrl = "http://localhost:5000";
+
+  useEffect(() => {
+    setResponse(false);
+    setResponseText("");
+  }, [loading]);
+
+  const onSubmitGet = async (_id, schema) => {
+    setResponse(false);
+    setResponseText("");
+    try {
+      const url = `${rootUrl}/api/v1/erp/${schema}/${_id}/delete/`;
+      axios
+        .get(url)
+        .then(function (response) {
+          setResponseText(response.data);
+          setResponse(true);
+        })
+        .catch(function (error) {
+          console.log(error);
+          setResponseText(error.response.data.msg.message);
+        });
+    } catch (error) {
+      loading(false);
+    }
+  };
+
+  const onSubmitPost = async (_id, schema) => {
+    setResponse(false);
+    setResponseText("");
+    try {
+      const url = `${rootUrl}/api/v1/erp/${schema}/${_id}/delete/`;
+      axios
+        .post(url)
+        .then(function (response) {
+          setResponseText(response.data);
+          setResponse(true);
+          setResponseText(response.data.msg);
+        })
+        .catch(function (error) {
+          console.log(error);
+          setResponseText(error.response.data.msg.message);
+        });
+    } catch (error) {
+      loading(false);
+    }
+  };
 
   const fetchCustomerDetail = async (idCustomer) => {
     setLoading(true);
@@ -163,6 +212,12 @@ const AppProvider = ({ children }) => {
 
         data,
         loading,
+        onSubmitGet,
+        onSubmitPost,
+        response,
+        responseText,
+        setResponse,
+        setResponseText,
       }}
     >
       {children}

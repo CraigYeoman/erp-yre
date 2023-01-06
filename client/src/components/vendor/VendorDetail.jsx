@@ -2,7 +2,15 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
 const VendorDetail = () => {
-  const { vendorDetail, loading, selectPartID } = useGlobalContext();
+  const {
+    vendorDetail,
+    loading,
+    selectPartID,
+    onSubmitGet,
+    onSubmitPost,
+    response,
+    responseText,
+  } = useGlobalContext();
   if (loading) {
     return (
       <section className="section">
@@ -10,23 +18,55 @@ const VendorDetail = () => {
       </section>
     );
   }
+
+  const {
+    _id,
+    main_contact,
+    phone_number,
+    name,
+    email,
+    address_line_1,
+    address_line_2,
+    city,
+    state,
+    zip_code,
+    customer_number,
+  } = vendorDetail.vendor;
   return (
     <div>
       <div>
-        <div key={vendorDetail.vendor._id}>
+        <div key={_id}>
           <p>
-            {vendorDetail.vendor.name} {vendorDetail.vendor.main_contact}
+            {name} {main_contact}
           </p>
 
-          <p>{vendorDetail.vendor.phone_number}</p>
-          <p>{vendorDetail.vendor.email}</p>
-          <p>{vendorDetail.vendor.address_line_1}</p>
-          <p>{vendorDetail.vendor.address_line_2}</p>
-          <p>{vendorDetail.vendor.city}</p>
-          <p>{vendorDetail.vendor.state}</p>
-          <p>{vendorDetail.vendor.zip_code}</p>
-          <p>{vendorDetail.vendor.customer_number}</p>
+          <p>{phone_number}</p>
+          <p>{email}</p>
+          <p>{address_line_1}</p>
+          <p>{address_line_2}</p>
+          <p>{city}</p>
+          <p>{state}</p>
+          <p>{zip_code}</p>
+          <p>{customer_number}</p>
         </div>
+
+        <div>
+          <button onClick={() => onSubmitGet(_id, "vendors")}>Delete </button>
+        </div>
+
+        {response && typeof responseText.vendor_parts === "undefined" ? (
+          <div>
+            Are you sure you want to delete?
+            <button onClick={() => onSubmitPost(_id, "vendors")}>Delete</button>
+            {responseText === "Complete" && <div>Deleted</div>}
+          </div>
+        ) : (
+          <div>
+            {response && (
+              <div> Please edit the parts below before deleting</div>
+            )}
+          </div>
+        )}
       </div>
       <div>
         {vendorDetail.vendor_parts.map((part) => {

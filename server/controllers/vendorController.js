@@ -136,9 +136,56 @@ const vendor_create_post = [
   },
 ];
 
+// Handle Vendor delete on GET.
+const vendor_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      vendor(callback) {
+        Vendor.findById(req.params.id).exec(callback);
+      },
+      vendor_parts(callback) {
+        Parts.find({ vendor: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.vendor_parts.length > 0) {
+        // Vendor has work orders. Render in same way as for GET route.
+        res.status(200).json({
+          Vendor: results.vendor,
+          vendor_parts: results.vendor_parts,
+        });
+        return;
+      } else {
+        res.status(200).json({
+          msg: "Are you sure you want to delete?",
+        });
+      }
+    }
+  );
+};
+
+// Handle Vendor delete on POST.
+const vendor_delete_post = (req, res, next) => {
+  Vendor.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Success - go to Vendor list
+    res.status(200).json({
+      msg: "Complete",
+    });
+  });
+};
+
 module.exports = {
   getAllVendorsStatic,
   getAllVendors,
   vendor_detail,
   vendor_create_post,
+  vendor_delete_get,
+  vendor_delete_post,
 };

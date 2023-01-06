@@ -6,6 +6,8 @@ const {
   getAllVendorsStatic,
   vendor_detail,
   vendor_create_post,
+  vendor_delete_get,
+  vendor_delete_post,
 } = require("../controllers/vendorController");
 
 // GET request for creating a Vendor.
@@ -13,7 +15,9 @@ const {
 // POST request for creating Vendor.
 router.route("/create").post(vendor_create_post);
 // GET request to delete Vendor.
+router.route("/:id/delete").get(vendor_delete_get);
 // POST request to delete Vendor.
+router.route("/:id/delete").post(vendor_delete_post);
 // GET request to update Vendor.
 // POST request to update Vendor.
 

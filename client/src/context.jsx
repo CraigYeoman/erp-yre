@@ -12,7 +12,7 @@ const AppProvider = ({ children }) => {
   const [workOrderDetail, setWorkOrderDetail] = useState([{}]);
   const [loading, setLoading] = useState(false);
   const [listType, setListType] = useState("workorders");
-  const [data, setData] = useState([{}]);
+  // const [data, setData] = useState([{}]);
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const rootUrl = "http://localhost:5000";
@@ -184,13 +184,13 @@ const AppProvider = ({ children }) => {
     fetchWorkOrderDetail(id);
   };
 
-  useEffect(() => {
-    fetch(`/api/v1/erp/${listType}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      });
-  }, [listType]);
+  // useEffect(() => {
+  //   fetch(`/api/v1/erp/${listType}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setData(data);
+  //     });
+  // });
 
   return (
     <AppContext.Provider
@@ -210,8 +210,9 @@ const AppProvider = ({ children }) => {
         selectWorkOrderID,
         setListType,
 
-        data,
+        // data,
         loading,
+        listType,
         onSubmitGet,
         onSubmitPost,
         response,

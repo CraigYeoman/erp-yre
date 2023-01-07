@@ -1,8 +1,18 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../context";
 
 const CustomerList = () => {
-  const { selectCustomerID, data } = useGlobalContext();
+  const { selectCustomerID, listType } = useGlobalContext();
+  const [data, setData] = useState([{}]);
+
+  useEffect(() => {
+    fetch(`/api/v1/erp/${listType}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+      });
+  }, []);
 
   if (!data.customers) {
     return (

@@ -7,7 +7,7 @@ const Labor = require("../models/labor");
 const Accessories = require("../models/accessories");
 const async = require("async");
 
-// Display list of all Vendors.
+// Display list of all Work orders.
 const getAllWorkOrdersStatic = async (req, res) => {
   const workOrders = await WorkOrder.find().sort("customer");
   res.status(200).json({ workOrders, nbHits: workOrders.length });
@@ -199,10 +199,31 @@ const work_order_create_post = [
   },
 ];
 
+// Handle Work Order delete on GET.
+const work_order_delete_get = async (req, res) => {
+  const work_order = await WorkOrder.findById(req.params.id);
+  res.status(200).json({ work_order });
+};
+
+// Handle Work Order delete on POST.
+const work_order_delete_post = (req, res, next) => {
+  WorkOrder.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Success
+    res.status(200).json({
+      msg: "Complete",
+    });
+  });
+};
+
 module.exports = {
   getAllWorkOrdersStatic,
   getAllWorkOrders,
   work_order_create_get,
   work_order_create_post,
   work_order_detail,
+  work_order_delete_get,
+  work_order_delete_post,
 };

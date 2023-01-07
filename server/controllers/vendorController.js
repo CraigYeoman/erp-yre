@@ -174,7 +174,7 @@ const vendor_delete_post = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    // Success - go to Vendor list
+    // Success
     res.status(200).json({
       msg: "Complete",
     });

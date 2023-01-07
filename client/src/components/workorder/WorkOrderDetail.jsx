@@ -2,7 +2,15 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
 const WorkOrderDetail = () => {
-  const { workOrderDetail, loading, selectCustomerID } = useGlobalContext();
+  const {
+    workOrderDetail,
+    loading,
+    selectCustomerID,
+    onSubmitGet,
+    onSubmitPost,
+    response,
+    responseText,
+  } = useGlobalContext();
   const { work_order } = workOrderDetail;
 
   if (loading) {
@@ -25,13 +33,30 @@ const WorkOrderDetail = () => {
     accessories,
     labor,
     parts,
+    _id,
   } = work_order;
   return (
     <div>
       <div>
-        <h2>
-          {work_order_number} {jobType.name}
-        </h2>
+        <div>
+          <h2>
+            {work_order_number} {jobType.name}
+          </h2>
+          <div>
+            <button onClick={() => onSubmitGet(_id, "workorders")}>
+              Delete
+            </button>
+            {response && (
+              <div>
+                Are you sure you want to delete?
+                <button onClick={() => onSubmitPost(_id, "workorders")}>
+                  Delete
+                </button>
+              </div>
+            )}
+            {responseText === "Complete" && "Deleted"}
+          </div>
+        </div>
         <div>
           <p>Date Received:{date_received}</p>
           <p>Date Due:{date_due}</p>

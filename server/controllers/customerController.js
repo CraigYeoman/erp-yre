@@ -142,10 +142,58 @@ const customer_create_post = [
   },
 ];
 
+// Handle Customer delete on GET.
+const customer_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      customer(callback) {
+        Customer.findById(req.params.id).exec(callback);
+      },
+      customer_work_orders(callback) {
+        WorkOrder.find({ customer: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      if (results.customer_work_orders.length > 0) {
+        // Customer has work orders.
+        res.status(200).json({
+          customer: results.customer,
+          customer_work_orders: results.customer_work_orders,
+        });
+        return;
+      } else {
+        res.status(200).json({
+          msg: "Are you sure you want to delete?",
+        });
+      }
+    }
+  );
+};
+
+// Handle Customer delete on POST.
+const customer_delete_post = (req, res, next) => {
+  // Customer has no work orders.
+  Customer.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    // Success
+    res.status(200).json({
+      msg: "Complete",
+    });
+  });
+};
+
 module.exports = {
   getAllCustomersStatic,
   getAllCustomers,
   customer_detail,
   customer_create_get,
   customer_create_post,
+  customer_delete_get,
+  customer_delete_post,
 };

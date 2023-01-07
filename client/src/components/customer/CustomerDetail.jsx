@@ -2,7 +2,16 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 
 const CustomerDetail = () => {
-  const { customerDetail, loading, selectWorkOrderID } = useGlobalContext();
+  const {
+    customerDetail,
+    loading,
+    selectWorkOrderID,
+    onSubmitGet,
+    onSubmitPost,
+    response,
+    responseText,
+  } = useGlobalContext();
+
   if (loading) {
     return (
       <section className="section">
@@ -10,23 +19,55 @@ const CustomerDetail = () => {
       </section>
     );
   }
+
+  const {
+    _id,
+    first_name,
+    last_name,
+    phone_number,
+    email,
+    address_line_1,
+    address_line_2,
+    city,
+    state,
+    zip_code,
+  } = customerDetail.customer;
+
   return (
     <div>
       <div>
-        <div key={customerDetail.customer._id}>
+        <div key={_id}>
           <p>
-            {customerDetail.customer.first_name}{" "}
-            {customerDetail.customer.last_name}
+            {first_name} {last_name}
           </p>
-
-          <p>{customerDetail.customer.phone_number}</p>
-          <p>{customerDetail.customer.email}</p>
-          <p>{customerDetail.customer.address_line_1}</p>
-          <p>{customerDetail.customer.address_line_2}</p>
-          <p>{customerDetail.customer.city}</p>
-          <p>{customerDetail.customer.state}</p>
-          <p>{customerDetail.customer.zip_code}</p>
+          <p>{phone_number}</p>
+          <p>{email}</p>
+          <p>{address_line_1}</p>
+          <p>{address_line_2}</p>
+          <p>{city}</p>
+          <p>{state}</p>
+          <p>{zip_code}</p>
         </div>
+        <div>
+          <button onClick={() => onSubmitGet(_id, "customers")}>Delete </button>
+        </div>
+
+        {response &&
+        typeof responseText.customer_work_orders === "undefined" ? (
+          <div>
+            Are you sure you want to delete?
+            <button onClick={() => onSubmitPost(_id, "customers")}>
+              Delete
+            </button>
+            {responseText === "Complete" && <div>Deleted</div>}
+          </div>
+        ) : (
+          <div>
+            {response && (
+              <div> Please edit the work orders below before deleting.</div>
+            )}
+          </div>
+        )}
       </div>
       <div>
         {customerDetail.customer_workorders.map((workOrder) => {

@@ -13,6 +13,42 @@ const getAllWorkOrdersStatic = async (req, res) => {
   res.status(200).json({ workOrders, nbHits: workOrders.length });
 };
 
+const index = (req, res) => {
+  async.parallel(
+    {
+      work_order_count(callback) {
+        WorkOrder.countDocuments({}, callback);
+      },
+      work_order_count_new(callback) {
+        WorkOrder.countDocuments({ JobType: "new" }, callback);
+      },
+      work_order_count_refreshen(callback) {
+        WorkOrder.countDocuments({ JobType: "refreshen" }, callback);
+      },
+      work_order_count_repair(callback) {
+        WorkOrder.countDocuments({ JobType: "repair" }, callback);
+      },
+      work_order_count_machine_work(callback) {
+        WorkOrder.countDocuments({ JobType: "machine work" }, callback);
+      },
+      work_order_count_in_out(callback) {
+        WorkOrder.countDocuments({ JobType: "in out" }, callback);
+      },
+      work_order_count_walk_in(callback) {
+        WorkOrder.countDocuments({ JobType: "walk in" }, callback);
+      },
+      work_order_count_used(callback) {
+        WorkOrder.countDocuments({ JobType: "used" }, callback);
+      },
+    },
+    (results) => {
+      res.status(200).json({
+        results,
+      });
+    }
+  );
+};
+
 const getAllWorkOrders = async (req, res) => {
   const { customer, complete, jobType, sort, fields, numericFilters } =
     req.query;
@@ -226,4 +262,5 @@ module.exports = {
   work_order_detail,
   work_order_delete_get,
   work_order_delete_post,
+  index,
 };

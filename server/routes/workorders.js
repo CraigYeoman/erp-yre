@@ -9,8 +9,10 @@ const {
   work_order_detail,
   work_order_delete_get,
   work_order_delete_post,
+  index,
 } = require("../controllers/workOrderController");
 
+router.route("/index").get(index);
 // GET request for creating a work order.
 router.route("/create").get(work_order_create_get);
 // POST request for creating a work order.

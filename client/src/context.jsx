@@ -219,6 +219,7 @@ const AppProvider = ({ children }) => {
         responseText,
         setResponse,
         setResponseText,
+        rootUrl,
       }}
     >
       {children}

@@ -139,6 +139,49 @@ const job_type_delete_post = (req, res, next) => {
   });
 };
 
+// Handle JobType edit on POST
+const job_type_edit_post = [
+  // Validate and sanitize fields.
+  body("name", "Job Type name required").trim().isLength({ min: 1 }).escape(),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({
+        jobtype: req.body,
+        errors: errors.array(),
+      });
+
+      return;
+    }
+    // Create a jobtype object with escaped and trimmed data.
+    const jobtype = new JobType({
+      name: req.body.name,
+      _id: req.params.id,
+    });
+
+    JobType.findByIdAndUpdate(
+      req.params.id,
+      jobtype,
+      {},
+      (err, updatedJobType) => {
+        if (err) {
+          return next(err);
+        }
+        // jobtype saved.
+        res.status(200).json({
+          msg: "job type edited",
+          jobtype: jobtype,
+          updatedJobType: updatedJobType,
+        });
+      }
+    );
+  },
+];
+
 module.exports = {
   getAllJobTypesStatic,
   getAllJobTypes,
@@ -146,4 +189,5 @@ module.exports = {
   jobtype_create_post,
   job_type_delete_get,
   job_type_delete_post,
+  job_type_edit_post,
 };

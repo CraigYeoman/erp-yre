@@ -13,7 +13,7 @@ const getAllWorkOrdersStatic = async (req, res) => {
   res.status(200).json({ workOrders, nbHits: workOrders.length });
 };
 
-const index = (req, res) => {
+const index = (req, res, next) => {
   async.parallel(
     {
       work_order_count(callback) {
@@ -41,7 +41,15 @@ const index = (req, res) => {
         WorkOrder.countDocuments({ JobType: "used" }, callback);
       },
     },
-    (results) => {
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results == null) {
+        const err = new Error("Not found");
+        err.status = 404;
+        return next(err);
+      }
       res.status(200).json({
         results,
       });

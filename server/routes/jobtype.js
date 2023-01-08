@@ -8,6 +8,7 @@ const {
   jobtype_create_post,
   job_type_delete_get,
   job_type_delete_post,
+  job_type_edit_post,
 } = require("../controllers/jobTypeController");
 
 // GET request for creating a Job Type.
@@ -20,7 +21,7 @@ router.route("/:id/delete").get(job_type_delete_get);
 router.route("/:id/delete").post(job_type_delete_post);
 // GET request to update Job Type.
 // POST request to update Job Type.
-
+router.route("/:id/edit").post(job_type_edit_post);
 // GET request for one Job Type.
 router.route("/:id").get(job_type_detail);
 // GET request for list of all Job Type items.

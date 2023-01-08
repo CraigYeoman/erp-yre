@@ -10,6 +10,7 @@ const JobTypeDetail = () => {
     response,
     responseText,
     selectWorkOrderID,
+    selectJobTypeID,
   } = useGlobalContext();
 
   if (loading) {
@@ -27,7 +28,13 @@ const JobTypeDetail = () => {
       <div key={_id}>
         <h3>{name}</h3>
       </div>
+
       <div>
+        <button>
+          <Link onClick={() => selectJobTypeID(_id)} to={`/jobtypeedit/${_id}`}>
+            Edit
+          </Link>
+        </button>
         <button onClick={() => onSubmitGet(_id, "jobtypes")}>Delete </button>
       </div>
 

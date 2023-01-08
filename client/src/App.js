@@ -9,6 +9,7 @@ import JobTypeEdit from "./components/jobtype/JobTypeEditForm";
 import JobTypeList from "./components/jobtype/JobTypeList";
 import JobTypeForm from "./components/jobtype/JobTypeForm";
 import LaborDetail from "./components/labor/LaborDetail";
+import LaborEditForm from "./components/labor/LaborEditForm";
 import LaborForm from "./components/labor/LaborForm";
 import LaborList from "./components/labor/LaborList";
 import PartDetail from "./components/parts/PartDetail";
@@ -45,6 +46,7 @@ function App() {
           <Route path="/jobtypelist" element={<JobTypeList />}></Route>
           <Route path="/jobtypeform" element={<JobTypeForm />}></Route>
           <Route path="/labordetail/:id" element={<LaborDetail />}></Route>
+          <Route path="/laboredit/:id" element={<LaborEditForm />}></Route>
           <Route path="/laborform" element={<LaborForm />}></Route>
           <Route path="/laborlist" element={<LaborList />}></Route>
           <Route path="/partdetail/:id" element={<PartDetail />}></Route>

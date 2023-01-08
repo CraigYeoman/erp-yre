@@ -178,6 +178,47 @@ const labor_delete_post = (req, res, next) => {
   });
 };
 
+// Handle Labor edit on POST.
+const labor_edit_post = [
+  // Validate and sanitize the name field.
+  body("name", "Labor name required").trim().isLength({ min: 1 }).escape(),
+  body("price", "Labor price required").trim().isLength({ min: 1 }).escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.json({
+        labor,
+        errors: errors.array(),
+      });
+      return;
+    }
+
+    // Create a labor object with escaped and trimmed data.
+    const labor = new Labor({
+      name: req.body.name,
+      price: req.body.price,
+      _id: req.params.id,
+    });
+
+    Labor.findByIdAndUpdate(req.params.id, labor, {}, (err, updatedLabor) => {
+      if (err) {
+        return next(err);
+      }
+      // jobtype saved.
+      res.status(200).json({
+        msg: "labor edited",
+        labor: labor,
+        updatedLabor: updatedLabor,
+      });
+    });
+  },
+];
+
 module.exports = {
   getAllLaborStatic,
   getAllLabor,
@@ -185,4 +226,5 @@ module.exports = {
   labor_create_post,
   labor_delete_post,
   labor_delete_get,
+  labor_edit_post,
 };

@@ -8,6 +8,7 @@ const {
   labor_create_post,
   labor_delete_get,
   labor_delete_post,
+  labor_edit_post,
 } = require("../controllers/laborController");
 
 // GET request for creating a Labor - not needed
@@ -20,7 +21,7 @@ router.route("/:id/delete").get(labor_delete_get);
 router.route("/:id/delete").post(labor_delete_post);
 // GET request to update Labor.
 // POST request to update Labor.
-
+router.route("/:id/edit").post(labor_edit_post);
 // GET request for one Labor.
 router.route("/:id").get(labor_detail);
 // GET request for list of all Labor items.

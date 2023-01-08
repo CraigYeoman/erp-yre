@@ -18,7 +18,7 @@ const CustomerForm = () => {
     zip_code: customerDetail.customer.zip_code,
     _id: customerDetail.customer._id,
   });
-  console.log(customerDetail.customer.first_name);
+
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
@@ -87,6 +87,7 @@ const CustomerForm = () => {
       setResponseError(true);
     }
   };
+
   if (loading) {
     return (
       <section className="section">

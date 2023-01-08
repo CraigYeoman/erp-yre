@@ -10,6 +10,7 @@ const LaborDetail = () => {
     onSubmitPost,
     response,
     responseText,
+    selectLaborID,
   } = useGlobalContext();
 
   if (loading) {
@@ -29,6 +30,11 @@ const LaborDetail = () => {
         <p>{price}</p>
       </div>
       <div>
+        <button>
+          <Link onClick={() => selectLaborID(_id)} to={`/laboredit/${_id}`}>
+            Edit
+          </Link>
+        </button>
         <button onClick={() => onSubmitGet(_id, "labor")}>Delete </button>
       </div>
 

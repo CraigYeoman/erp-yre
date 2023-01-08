@@ -188,6 +188,77 @@ const customer_delete_post = (req, res, next) => {
   });
 };
 
+// Handle customer edit form on POST
+const customer_edit_post = [
+  // Validate and sanitize fields.
+  body("first_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("First name must be specified.")
+    .isAlphanumeric()
+    .withMessage("First name has non-alphanumeric characters."),
+  body("last_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Last name must be specified.")
+    .isAlphanumeric()
+    .withMessage("Last name has non-alphanumeric characters."),
+  body("phone_number", "Invalid phone number").isLength({ min: 10 }),
+  body("email", "Invalid email").isEmail(),
+  body("address_line_1", "Invalid address").isLength({ min: 1 }).trim(),
+  body("address_line_2", "Invalid address").trim(),
+  body("city", "Invalid city").isLength({ min: 1 }).trim(),
+  body("state", "Invalid state initials").isLength({ min: 2 }),
+  body("zip_code", "Invalid zipcode").isLength({ min: 5 }),
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({
+        customer: req.body,
+        errors: errors.array(),
+      });
+
+      return;
+    }
+    // Create a Customer object with escaped and trimmed data.
+    const customer = new Customer({
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      phone_number: req.body.phone_number,
+      email: req.body.email,
+      address_line_1: req.body.address_line_1,
+      address_line_2: req.body.address_line_2,
+      city: req.body.city,
+      state: req.body.state,
+      zip_code: req.body.zip_code,
+      _id: req.params.id,
+    });
+
+    Customer.findByIdAndUpdate(
+      req.params.id,
+      customer,
+      {},
+      (err, updatedCustomer) => {
+        if (err) {
+          return next(err);
+        }
+        // jobtype saved.
+        res.status(200).json({
+          msg: "Customer edited",
+          customer: customer,
+          updatedCustomer: updatedCustomer,
+        });
+      }
+    );
+  },
+];
+
 module.exports = {
   getAllCustomersStatic,
   getAllCustomers,
@@ -196,4 +267,5 @@ module.exports = {
   customer_create_post,
   customer_delete_get,
   customer_delete_post,
+  customer_edit_post,
 };

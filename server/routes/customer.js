@@ -9,6 +9,7 @@ const {
   customer_detail,
   customer_delete_get,
   customer_delete_post,
+  customer_edit_post,
 } = require("../controllers/customerController");
 
 // GET request for creating a Customer - not needed
@@ -21,7 +22,7 @@ router.route("/:id/delete").get(customer_delete_get);
 router.route("/:id/delete").post(customer_delete_post);
 // GET request to update Customer.
 // POST request to update Customer.
-
+router.route("/:id/edit").post(customer_edit_post);
 // GET request for one Customer.
 router.route("/:id").get(customer_detail);
 // GET request for list of all Customer items.

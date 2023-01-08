@@ -1,6 +1,7 @@
 import Nav from "./components/Nav";
 import Index from "./components/Index";
 import CustomerDetail from "./components/customer/CustomerDetail";
+import CustomerEditForm from "./components/customer/CustomerEditForm";
 import CustomerForm from "./components/customer/CustomerForm";
 import CustomerList from "./components/customer/CustomerList";
 import JobTypeDetail from "./components/jobtype/JobTypeDetail";
@@ -32,6 +33,10 @@ function App() {
           <Route
             path="/customerdetail/:id"
             element={<CustomerDetail />}
+          ></Route>
+          <Route
+            path="/customeredit/:id"
+            element={<CustomerEditForm />}
           ></Route>
           <Route path="/customerform" element={<CustomerForm />}></Route>
           <Route path="/customerlist" element={<CustomerList />}></Route>

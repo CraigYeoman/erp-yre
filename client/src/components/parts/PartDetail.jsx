@@ -11,6 +11,7 @@ const PartDetail = () => {
     onSubmitGet,
     onSubmitPost,
     selectWorkOrderID,
+    selectPartID,
   } = useGlobalContext();
 
   if (loading) {
@@ -37,8 +38,12 @@ const PartDetail = () => {
           {vendor.name}
         </Link>
       </div>
-
       <div>
+        <button>
+          <Link onClick={() => selectPartID(_id)} to={`/partedit/${_id}`}>
+            Edit
+          </Link>
+        </button>
         <button onClick={() => onSubmitGet(_id, "parts")}>Delete </button>
       </div>
 

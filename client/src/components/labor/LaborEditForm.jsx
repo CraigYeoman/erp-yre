@@ -4,7 +4,7 @@ import { useGlobalContext } from "../../context";
 import { useState } from "react";
 const rootUrl = "http://localhost:5000";
 
-const LaborForm = () => {
+const LaborEditForm = () => {
   const { loading, selectLaborID, laborDetail } = useGlobalContext();
   const [values, setValues] = useState({
     name: laborDetail.name,
@@ -22,8 +22,8 @@ const LaborForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setResponse(false);
-    const { name, price } = values;
-    const laborData = { name, price };
+    const { name, price, _id } = values;
+    const laborData = { name, price, _id };
     try {
       const url = `${rootUrl}/api/v1/erp/labor/${laborDetail._id}/edit`;
       axios
@@ -105,4 +105,4 @@ const LaborForm = () => {
   );
 };
 
-export default LaborForm;
+export default LaborEditForm;

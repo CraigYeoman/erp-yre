@@ -4,7 +4,7 @@ import { useGlobalContext } from "../../context";
 import { useState } from "react";
 const rootUrl = "http://localhost:5000";
 
-const CustomerForm = () => {
+const CustomerEditForm = () => {
   const { loading, selectCustomerID, customerDetail } = useGlobalContext();
   const [values, setValues] = useState({
     first_name: customerDetail.customer.first_name,
@@ -259,4 +259,4 @@ const CustomerForm = () => {
   );
 };
 
-export default CustomerForm;
+export default CustomerEditForm;

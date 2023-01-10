@@ -4,7 +4,7 @@ import { useGlobalContext } from "../../context";
 import { useState } from "react";
 const rootUrl = "http://localhost:5000";
 
-const JobTypeForm = () => {
+const JobTypeEditForm = () => {
   const { loading, selectJobTypeID, jobTypeDetail } = useGlobalContext();
   const [values, setValues] = useState({
     name: jobTypeDetail.name,
@@ -116,4 +116,4 @@ const JobTypeForm = () => {
   );
 };
 
-export default JobTypeForm;
+export default JobTypeEditForm;

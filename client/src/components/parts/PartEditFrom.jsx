@@ -4,7 +4,7 @@ import { useGlobalContext } from "../../context";
 import { useState, useEffect } from "react";
 const rootUrl = "http://localhost:5000";
 
-const PartForm = () => {
+const PartEditForm = () => {
   useEffect(() => {
     fetch("/api/v1/erp/parts/create")
       .then((response) => response.json())
@@ -13,14 +13,15 @@ const PartForm = () => {
       });
   }, []);
 
-  const { loading, selectPartID } = useGlobalContext();
+  const { loading, selectPartID, partDetail } = useGlobalContext();
   const [values, setValues] = useState({
-    name: "",
-    customer_price: "",
-    cost: "",
-    part_number: "",
-    vendor: "",
-    manufacture: "",
+    name: partDetail.name,
+    customer_price: partDetail.customer_price,
+    cost: partDetail.cost,
+    part_number: partDetail.part_number,
+    vendor: partDetail.vendor,
+    manufacture: partDetail.manufacture,
+    _id: partDetail._id,
   });
 
   const [response, setResponse] = useState(false);
@@ -37,8 +38,15 @@ const PartForm = () => {
     e.preventDefault();
     setResponse(false);
     setResponseError(false);
-    const { name, customer_price, cost, part_number, vendor, manufacture } =
-      values;
+    const {
+      name,
+      customer_price,
+      cost,
+      part_number,
+      vendor,
+      manufacture,
+      _id,
+    } = values;
     const partData = {
       name,
       customer_price,
@@ -46,10 +54,11 @@ const PartForm = () => {
       part_number,
       vendor,
       manufacture,
+      _id,
     };
 
     try {
-      const url = `${rootUrl}/api/v1/erp/parts/create`;
+      const url = `${rootUrl}/api/v1/erp/parts/${partDetail._id}/edit`;
       axios
         .post(url, partData)
         .then(function (response) {
@@ -142,9 +151,6 @@ const PartForm = () => {
               onChange={handleChange}
               value={values.vendor}
             >
-              <option value="" disabled selected hidden>
-                Please Choose Vendor
-              </option>
               {typeof vendorInfo.vendor_list === "undefined" ? (
                 <option>Loading...</option>
               ) : (
@@ -181,12 +187,31 @@ const PartForm = () => {
       {response && (
         <div>
           {responseText.msg}
-          <Link
-            onClick={() => selectPartID(responseText.part._id)}
-            to={`/partdetail/${responseText.part._id}`}
-          >
-            {responseText.part.name} {responseText.part.last_name}
-          </Link>
+          <div>
+            <h3>Old</h3>
+            <p>{responseText.updatedPart.name}</p>
+            <p>{responseText.updatedPart.customer_price}</p>
+            <p>{responseText.updatedPart.cost}</p>
+            <p>{responseText.updatedPart.part_number}</p>
+            <p>{responseText.updatedPart.vendor}</p>
+            <p>{responseText.updatedPart.manufacture}</p>
+          </div>
+          <div>
+            <h3>New</h3>
+            <p>
+              <Link
+                onClick={() => selectPartID(responseText.part._id)}
+                to={`/partdetail/${responseText.part._id}`}
+              >
+                {responseText.part.name}
+              </Link>
+            </p>
+            <p>{responseText.part.customer_price}</p>
+            <p>{responseText.part.cost}</p>
+            <p>{responseText.part.part_number}</p>
+            <p>{responseText.part.vendor}</p>
+            <p>{responseText.part.manufacture}</p>
+          </div>
         </div>
       )}
       {responseError && (
@@ -206,4 +231,4 @@ const PartForm = () => {
   );
 };
 
-export default PartForm;
+export default PartEditForm;

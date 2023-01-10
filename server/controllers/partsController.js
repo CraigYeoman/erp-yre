@@ -224,6 +224,72 @@ const part_delete_post = (req, res, next) => {
   });
 };
 
+// Handle Part edit on POST.
+const part_edit_post = [
+  // Validate and sanitize fields.
+  body("name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Part name must be specified."),
+  body("customer_price", "Customer price required")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("cost", "Cost price required").trim().isLength({ min: 1 }).escape(),
+  body("part_number")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Part number must be specified."),
+  body("vendor").trim().isLength({ min: 1 }).escape(),
+  body("manufacture")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Manufacture must be specified."),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a part object with escaped and trimmed data.
+
+    const part = new Parts({
+      name: req.body.name,
+      customer_price: req.body.customer_price,
+      cost: req.body.cost,
+      part_number: req.body.part_number,
+      vendor: req.body.vendor,
+      manufacture: req.body.manufacture,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({
+        part: req.body,
+        errors: errors.array(),
+      });
+
+      return;
+    }
+
+    Parts.findByIdAndUpdate(req.params.id, part, {}, (err, updatedPart) => {
+      if (err) {
+        return next(err);
+      }
+      // jobtype saved.
+      res.status(200).json({
+        msg: "part edited",
+        part: part,
+        updatedPart: updatedPart,
+      });
+    });
+  },
+];
+
 module.exports = {
   getAllPartsStatic,
   getAllParts,
@@ -232,4 +298,5 @@ module.exports = {
   parts_create_post,
   part_delete_get,
   part_delete_post,
+  part_edit_post,
 };

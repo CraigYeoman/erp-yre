@@ -10,6 +10,7 @@ const VendorDetail = () => {
     onSubmitPost,
     response,
     responseText,
+    selectVendorID,
   } = useGlobalContext();
   if (loading) {
     return (
@@ -49,7 +50,11 @@ const VendorDetail = () => {
           <p>{zip_code}</p>
           <p>{customer_number}</p>
         </div>
-
+        <button>
+          <Link onClick={() => selectVendorID(_id)} to={`/vendoredit/${_id}`}>
+            Edit
+          </Link>
+        </button>
         <div>
           <button onClick={() => onSubmitGet(_id, "vendors")}>Delete </button>
         </div>

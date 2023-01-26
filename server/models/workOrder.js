@@ -66,9 +66,9 @@ workOrderSchema.virtual("url").get(function () {
 });
 
 workOrderSchema.virtual("date_received_formatted").get(function () {
-  return this.date_received
-    ? DateTime.fromJSDate(this.date_received).toLocaleString(DateTime.DATE_MED)
-    : "";
+  return DateTime.fromJSDate(this.date_received).toLocaleString(
+    DateTime.DATE_MED
+  );
 });
 
 workOrderSchema.virtual("date_due_formatted").get(function () {

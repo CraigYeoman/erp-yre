@@ -10,6 +10,7 @@ const WorkOrderDetail = () => {
     onSubmitPost,
     response,
     responseText,
+    selectID,
   } = useGlobalContext();
   const { work_order } = workOrderDetail;
 
@@ -45,6 +46,11 @@ const WorkOrderDetail = () => {
           <div>
             <button onClick={() => onSubmitGet(_id, "workorders")}>
               Delete
+            </button>
+            <button>
+              <Link onClick={() => selectID(_id)} to={`/workorderedit/${_id}`}>
+                Edit
+              </Link>
             </button>
             {response && (
               <div>

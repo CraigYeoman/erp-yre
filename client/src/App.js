@@ -21,8 +21,10 @@ import VendorEdit from "./components/vendor/VendorEditForm";
 import VendorForm from "./components/vendor/VendorForm";
 import VendorList from "./components/vendor/VendorList";
 import WorkOrderDetail from "./components/workorder/WorkOrderDetail";
+import WorkOrderEdit from "./components/workorder/WorkOrderEditForm";
 import WorkOrderList from "./components/workorder/WorkOrderList";
 import WorkOrderForm from "./components/workorder/WorkOrderForm";
+import Testing from "./testing";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -63,8 +65,10 @@ function App() {
             path="/workorderdetail/:id"
             element={<WorkOrderDetail />}
           ></Route>
+          <Route path="/workorderedit/:id" element={<WorkOrderEdit />}></Route>
           <Route path="/workorderlist" element={<WorkOrderList />}></Route>
           <Route path="/workorderform" element={<WorkOrderForm />}></Route>
+          <Route path="/testing" element={<Testing />}></Route>
         </Routes>
       </Router>
     </div>

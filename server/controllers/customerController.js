@@ -248,7 +248,7 @@ const customer_edit_post = [
         if (err) {
           return next(err);
         }
-        // jobtype saved.
+        // jobtype updated.
         res.status(200).json({
           msg: "Customer edited",
           customer: customer,

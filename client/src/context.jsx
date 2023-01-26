@@ -16,6 +16,7 @@ const AppProvider = ({ children }) => {
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const rootUrl = "http://localhost:5000";
+  const [id, selectID] = useState("");
 
   useEffect(() => {
     setResponse(false);
@@ -148,7 +149,7 @@ const AppProvider = ({ children }) => {
 
     try {
       const { data } = await axios.get(`/api/v1/erp/workorders/${idWorkOrder}`);
-      console.log(data);
+
       if (data.work_order) {
         setWorkOrderDetail(data);
       } else {
@@ -209,6 +210,9 @@ const AppProvider = ({ children }) => {
         selectVendorID,
         selectWorkOrderID,
         setListType,
+
+        id,
+        selectID,
 
         // data,
         loading,

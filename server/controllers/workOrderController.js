@@ -262,6 +262,115 @@ const work_order_delete_post = (req, res, next) => {
   });
 };
 
+// Edit work order get.
+const work_order_edit_get = (req, res, next) => {
+  async.parallel(
+    {
+      work_order(callback) {
+        WorkOrder.findById(req.params.id)
+          .populate("customer")
+          .populate("jobType")
+          .populate("parts")
+          .populate("labor")
+          .populate("accessories")
+          .exec(callback);
+      },
+      customer(callback) {
+        Customer.find(callback);
+      },
+      jobType(callback) {
+        JobType.find(callback);
+      },
+      parts(callback) {
+        Parts.find(callback);
+      },
+      labor(callback) {
+        Labor.find(callback);
+      },
+      accessories(callback) {
+        Accessories.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        // Error in API usage.
+        return next(err);
+      }
+      if (results.work_order == null) {
+        // No results.
+        const err = new Error("Work Order not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+
+      res.status(200).json({
+        work_order: results.work_order,
+        customers: results.customer,
+        jobtypes: results.jobType,
+        parts: results.parts,
+        labors: results.labor,
+        accessories: results.accessories,
+      });
+    }
+  );
+};
+
+const work_order_edit_post = [
+  // Validate and sanitize fields.
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a part object with escaped and trimmed data.
+
+    const workOrder = new WorkOrder({
+      customer: req.body.customer,
+      date_received: req.body.date_received,
+      date_due: req.body.date_due,
+      date_finished: req.body.date_finished,
+      estimatedPrice: req.body.estimatedPrice,
+      complete: req.body.complete,
+      jobType: req.body.jobtype,
+      accessories: req.body.accessories,
+      parts: req.body.parts,
+      labor: req.body.labor,
+      notes: req.body.notes,
+      work_order_number: req.body.work_order_number,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/errors messages.
+      res.status(500).json({
+        workOrder: req.body,
+        errors: errors.array(),
+      });
+
+      return;
+    }
+
+    WorkOrder.findByIdAndUpdate(
+      req.params.id,
+      workOrder,
+      {},
+      (err, updatedWorkOrder) => {
+        if (err) {
+          return next(err);
+        }
+        // workOrder updated.
+        res.status(200).json({
+          msg: "Work order edited",
+          workOrder: workOrder,
+          updatedWorkOrder: updatedWorkOrder,
+        });
+      }
+    );
+  },
+];
+
 module.exports = {
   getAllWorkOrdersStatic,
   getAllWorkOrders,
@@ -270,5 +379,7 @@ module.exports = {
   work_order_detail,
   work_order_delete_get,
   work_order_delete_post,
+  work_order_edit_get,
+  work_order_edit_post,
   index,
 };

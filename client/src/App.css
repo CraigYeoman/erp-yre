@@ -13,15 +13,38 @@ body {
 }
 
 .nav {
-    display: grid;
-    gap: 15px;
     margin-top: 20px;
     margin-left: 10px;
+}
+
+.nav-title {
+
 }
 
 .nav-container {
     display: grid;
     align-items: center;
     grid-template-rows: 24px auto;
+    height: 75px;
     gap: 5px;
+    margin-top: 5px;
+    margin-bottom: 7px;
+
 }
+
+
+a { 
+    color: inherit;
+    text-decoration:none; 
+    
+ } 
+
+ .nav a {
+    margin-left: 10px;
+ }
+
+ a:hover {
+    color: blue;
+    font-weight: bolder;
+    text-decoration: underline;
+ }

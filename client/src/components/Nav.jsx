@@ -5,7 +5,11 @@ function Nav() {
   const { setListType } = useGlobalContext();
   return (
     <div className="nav">
-      <Link to="/">Index</Link>
+      <div className="nav-title">
+        <h2>
+          <Link to="/">Home</Link>
+        </h2>
+      </div>
       <div className="nav-container">
         <h3>Work Orders</h3>
         <Link onClick={() => setListType("workorders")} to="/workorderlist">

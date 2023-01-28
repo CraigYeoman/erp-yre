@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../context";
+const { DateTime } = require("luxon");
 
 const WorkOrderList = () => {
   const { selectWorkOrderID, selectCustomerID, listType } = useGlobalContext();
@@ -22,7 +23,7 @@ const WorkOrderList = () => {
     );
   }
   return (
-    <div>
+    <div className="work-order-list-container ">
       {data.workOrders.map((workOrder) => {
         const {
           _id,
@@ -34,27 +35,29 @@ const WorkOrderList = () => {
           estimatedPrice,
         } = workOrder;
         return (
-          <div key={_id}>
-            <p>
-              <Link
-                onClick={() => selectWorkOrderID(_id)}
-                to={`/workorderdetail/${_id}`}
-              >
-                {work_order_number}
-              </Link>
-            </p>
-            <p>
-              <Link
-                onClick={() => selectCustomerID(customer._id)}
-                to={`/customerdetail/${customer._id}`}
-              >
-                {customer.first_name} {customer.last_name}
-              </Link>
-            </p>
-            <p>{jobType.name}</p>
-            <p>{date_received}</p>
-            <p>{date_due}</p>
-            <p>{estimatedPrice}</p>
+          <div className="work-order-container" key={_id}>
+            <fieldset>
+              <legend>
+                <Link
+                  onClick={() => selectWorkOrderID(_id)}
+                  to={`/workorderdetail/${_id}`}
+                >
+                  {work_order_number}
+                </Link>
+              </legend>
+              <p>
+                <Link
+                  onClick={() => selectCustomerID(customer._id)}
+                  to={`/customerdetail/${customer._id}`}
+                >
+                  {customer.first_name} {customer.last_name}
+                </Link>
+              </p>
+              <p>{jobType.name}</p>
+              <p>{DateTime.fromISO(date_received).toFormat("D")}</p>
+              <p>{DateTime.fromISO(date_due).toFormat("D")}</p>
+              <p>${estimatedPrice}</p>
+            </fieldset>
           </div>
         );
       })}

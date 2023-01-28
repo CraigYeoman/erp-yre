@@ -48,3 +48,53 @@ a {
     font-weight: bolder;
     text-decoration: underline;
  }
+
+/* Work order list */
+ .work-order-list-container {
+    display: grid;
+
+    margin-top: 15px;
+    width: 750px;
+ }
+
+
+.work-order-container fieldset  {
+    display: grid;
+    grid-template-columns: 200px 150px 200px 200px 50px;
+    align-items: center;
+    height: 50px;
+    padding-top: 0px;
+}
+
+.work-order-container p  {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+ .work-order-container a {
+    text-decoration: underline;
+ }
+
+ @media screen and (max-width:750px){
+    .App {
+        grid-template-columns: 150px 1fr;
+    }
+    
+    .work-order-list-container {
+        display: grid;
+        gap: 15px;
+        margin-top: 15px;
+        width:100%;
+     }
+
+     .work-order-container fieldset  {
+        display: grid;
+        gap: 10px;
+        align-items: center;
+        grid-template-columns: none;
+        margin-right: 15px;
+        height: auto;
+    }
+ }
+
+

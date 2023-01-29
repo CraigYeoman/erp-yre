@@ -24,6 +24,10 @@ const workOrderSchema = new Schema({
     type: Number,
     required: [true, "Workorder price must be provided"],
   },
+  deposit: {
+    type: Number,
+    default: 0,
+  },
   complete: {
     type: Boolean,
     default: false,
@@ -53,7 +57,6 @@ const workOrderSchema = new Schema({
   ],
   notes: {
     type: String,
-    required: [true, "Workorder description must be provided"],
   },
   work_order_number: {
     type: Number,

@@ -17,11 +17,14 @@ const jsonParts = require("./data/populateParts.json");
 const jsonWorkOrder = require("./data/populateWorkOrder.json");
 const jsonAccessories = require("./data/populateAccessories.json");
 
+let model = WorkOrder;
+let data = jsonCustomers;
+
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
-    await WorkOrder.deleteMany();
-    await WorkOrder.create(jsonWorkOrder);
+    await model.deleteMany();
+    // await model.create(data);
     console.log("Success!!!!");
     process.exit(0);
   } catch (error) {

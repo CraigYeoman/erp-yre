@@ -26,5 +26,9 @@
     {
         "name": "Refreshen USRA B-Mod",
         "price": 3200
+    },
+    {
+        "name": "Refreshen USRA A-Mod",
+        "price": 4000
     }
 ]

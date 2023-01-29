@@ -97,4 +97,18 @@ a {
     }
  }
 
+ /* Customer list */
+.customer-list-container {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(180px, 200px));
+    gap: 15px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.customer-container fieldset {
+    height:160px
+}
 

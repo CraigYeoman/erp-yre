@@ -23,7 +23,7 @@ const CustomerList = () => {
   }
 
   return (
-    <div>
+    <div className="customer-list-container">
       {data.customers.map((customer) => {
         const {
           _id,
@@ -38,20 +38,22 @@ const CustomerList = () => {
           zip_code,
         } = customer;
         return (
-          <div key={_id}>
-            <Link
-              onClick={() => selectCustomerID(_id)}
-              to={`/customerdetail/${customer._id}`}
-            >
-              {first_name} {last_name}
-            </Link>
-            <p>{phone_number}</p>
-            <p>{email}</p>
-            <p>{address_line_1}</p>
-            <p>{address_line_2}</p>
-            <p>{city}</p>
-            <p>{state}</p>
-            <p>{zip_code}</p>
+          <div className="customer-container" key={_id}>
+            <fieldset>
+              <legend>
+                <Link
+                  onClick={() => selectCustomerID(_id)}
+                  to={`/customerdetail/${customer._id}`}
+                >
+                  {first_name} {last_name}
+                </Link>
+              </legend>
+              <p>{phone_number}</p>
+              <p>{email}</p>
+              <p>
+                {address_line_1}, {city}, {state} {zip_code}
+              </p>
+            </fieldset>
           </div>
         );
       })}

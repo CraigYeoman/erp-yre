@@ -1,30 +1,30 @@
 [
     {
-        "name": "none"
+        "name": "None"
     },
     {
-        "name": "water pump"
+        "name": "Water Pump"
     },
     {
-        "name": "pulleys"
+        "name": "Pulleys"
     },
     {
-        "name": "distributor"
+        "name": "Distributor"
     },
     {
-        "name": "distributor wires"
+        "name": "Distributor Wires"
     },
     {
-        "name": "power steering pump"
+        "name": "Power Steering Pump"
     },
     {
-        "name": "engine stand"
+        "name": "Engine Stand"
     },
     {
-        "name": "flywheel"
+        "name": "Flywheel"
     },
     {
-        "name": "spud"
+        "name": "Spud"
     }
 ]
 

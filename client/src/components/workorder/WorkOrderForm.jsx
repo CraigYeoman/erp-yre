@@ -352,7 +352,7 @@ const WorkOrderForm = () => {
       </form>
       {response && (
         <div>
-          {responseText.msg}
+          {responseText.msg}{" "}
           <Link
             onClick={() => selectWorkOrderID(responseText.workOrder._id)}
             to={`/workorderdetail/${responseText.workOrder._id}`}

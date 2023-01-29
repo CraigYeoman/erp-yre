@@ -52,7 +52,6 @@ a {
 /* Work order list */
  .work-order-list-container {
     display: grid;
-
     margin-top: 15px;
     width: 750px;
  }
@@ -112,3 +111,23 @@ a {
     height:160px
 }
 
+/* Vendor list */
+
+.vendor-list-container {
+    display: grid;
+    margin-top: 15px;
+    width: 750px;
+ }
+
+ .vendor-container {
+    display: grid;
+    grid-template-columns: 200px 150px 200px 200px;
+    align-items: center;
+    height: 50px;
+    padding-top: 0px;
+ }
+
+ .vendor-container a {
+    font-weight: bolder;
+    text-decoration: underline;
+ }

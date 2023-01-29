@@ -22,11 +22,11 @@ const VendorList = () => {
     );
   }
   return (
-    <div>
+    <div className="vendor-list-container">
       {data.vendors.map((vendor) => {
         const { _id, name, main_contact, phone_number, email } = vendor;
         return (
-          <div key={_id}>
+          <div className="vendor-container" key={_id}>
             <Link
               onClick={() => selectVendorID(_id)}
               to={`/vendordetail/${_id}`}

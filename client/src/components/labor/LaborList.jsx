@@ -23,18 +23,18 @@ const LaborList = () => {
   }
 
   return (
-    <div>
+    <div className="labor-list-container">
       {data.labor.map((labor) => {
         const { name, price, _id } = labor;
         return (
-          <div key={_id}>
+          <div className="labor-container" key={_id}>
             <Link
               onClick={() => selectLaborID(_id)}
               to={`/labordetail/${labor._id}`}
             >
               {name}
             </Link>
-            <p>{price}</p>
+            <p>${price}</p>
           </div>
         );
       })}

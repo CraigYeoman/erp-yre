@@ -158,3 +158,26 @@ a {
  .parts-container a {
     text-decoration: underline;
  }
+
+  /* Labor list */
+
+.labor-list-container {
+    display: flex;
+    margin-top: 15px;
+    gap:15px;
+    flex-direction: column;
+}
+
+.labor-container {
+    border-radius: 16px;
+    width: auto;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    align-items: center;
+    padding-top: 10px;
+    width: 200px;
+}
+
+.labor-container p {
+    margin-bottom: 10px;
+}

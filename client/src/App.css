@@ -94,6 +94,8 @@ a {
         margin-right: 15px;
         height: auto;
     }
+
+
  }
 
  /* Customer list */
@@ -129,5 +131,30 @@ a {
 
  .vendor-container a {
     font-weight: bolder;
+    text-decoration: underline;
+ }
+
+ /* Parts list */
+
+ .parts-list-container {
+    display: flex;
+    margin-top: 15px;
+    flex-direction: column;
+    width: 900px;
+ }
+
+ .parts-container {
+    display: grid;
+    grid-template-columns: 300px 100px 150px 100px 200px;
+    align-items: center;
+    height: 50px;
+    margin-top: 15px;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    width: auto;
+    padding-left: 15px;
+ }
+
+ .parts-container a {
     text-decoration: underline;
  }

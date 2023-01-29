@@ -14,7 +14,7 @@ body {
 
 .nav {
     margin-top: 20px;
-    margin-left: 10px;
+    margin-left: 25px;
 }
 
 .nav-title {
@@ -77,6 +77,10 @@ a {
  @media screen and (max-width:750px){
     .App {
         grid-template-columns: 150px 1fr;
+    }
+
+    .nav{
+        margin-left: 10px;
     }
     
     .work-order-list-container {
@@ -180,4 +184,22 @@ a {
 
 .labor-container p {
     margin-bottom: 10px;
+}
+
+/* Job Type List */
+
+.job-list-container {
+    display: flex;
+    margin-top: 30px;
+    gap:15px;
+    flex-direction: column;
+}
+
+.job-container {
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    padding: 5px;
+    padding-left: 15px;
+    font-weight: bolder;
+    width: 150px;
 }

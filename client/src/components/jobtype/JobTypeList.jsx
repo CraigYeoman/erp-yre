@@ -23,11 +23,11 @@ const JobTypeList = () => {
   }
 
   return (
-    <div>
+    <div className="job-list-container">
       {data.jobTypes.map((jobType) => {
         const { name, _id } = jobType;
         return (
-          <div key={_id}>
+          <div className="job-container" key={_id}>
             <Link
               onClick={() => selectJobTypeID(_id)}
               to={`/jobtypedetail/${_id}`}

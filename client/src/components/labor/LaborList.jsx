@@ -24,6 +24,7 @@ const LaborList = () => {
 
   return (
     <div className="labor-list-container">
+      <h3>Labor List</h3>
       {data.labor.map((labor) => {
         const { name, price, _id } = labor;
         return (

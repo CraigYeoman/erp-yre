@@ -24,6 +24,13 @@ const PartsList = () => {
 
   return (
     <div className="parts-list-container">
+      <div className="parts-container-title">
+        <p>Name</p>
+        <p>Part Number</p>
+        <p>Manufacture</p>
+        <p>Customer Price</p>
+        <p>Vendor Name</p>
+      </div>
       {data.parts.map((part) => {
         const { name, part_number, manufacture, vendor, customer_price, _id } =
           part;

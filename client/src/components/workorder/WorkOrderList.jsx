@@ -24,6 +24,16 @@ const WorkOrderList = () => {
   }
   return (
     <div className="work-order-list-container ">
+      <div className="work-order-container">
+        <fieldset>
+          <legend>Work Order Number</legend>
+          <p>Customer Name</p>
+          <p>Job Type</p>
+          <p>Date Recieved</p>
+          <p>Due Date</p>
+          <p>Estimated Price</p>
+        </fieldset>
+      </div>
       {data.workOrders.map((workOrder) => {
         const {
           _id,

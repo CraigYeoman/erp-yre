@@ -24,6 +24,7 @@ const JobTypeList = () => {
 
   return (
     <div className="job-list-container">
+      <h3>Job Types</h3>
       {data.jobTypes.map((jobType) => {
         const { name, _id } = jobType;
         return (

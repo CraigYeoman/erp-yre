@@ -1,3 +1,12 @@
+:root {
+    --main-background-color: rgb(13, 17, 23);
+    --main-text-color: white;
+    --main-border-color: #ccc;
+    --secondary-background-color: rgb(22, 27, 34);
+    --card-svg-color: invert(7%) sepia(8%) saturate(963%) hue-rotate(341deg) brightness(96%) contrast(92%);
+    --box-shadow: 0px 0px 3px #404040;
+}
+
 body {
     margin: 0;
     display: grid;
@@ -10,14 +19,29 @@ body {
     grid-template-rows: 1fr 5fr;
     width: 100vw;
     height: 100vh;
-    background-color: rgb(13, 17, 23);
+    background-color: var(--main-background-color);
+    color: var(--main-text-color);
+}
+
+.buttons {
+    background-color: var(--secondary-background-color);
+    border: 1px solid #ccc;
     color: white;
+    border-radius: 5px;
+    padding: 5px;
+    width: 55px;
+    text-align: center;
+}
+
+.buttons:hover {
+    background-color: rgb(102, 102, 102);
+    
 }
 
 .nav {
 
     padding-left: 15px;
-    background-color:rgb(22, 27, 34);
+    background-color:var(--secondary-background-color);
     height: 100vh;
 }
 
@@ -48,8 +72,8 @@ a {
  }
 
  a:hover {
-    color: blue;
-    font-weight: bolder;
+    color: rgb(102, 102, 102);
+    /* font-weight: bolder; */
     text-decoration: underline;
  }
 
@@ -84,6 +108,82 @@ a {
 
 
 /* Work Order Detail */
+
+.work-order-detail-container {
+    display: flex;
+    margin-top: 15px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.work-order-detail-container a:hover {
+    background-color: rgb(102, 102, 102);
+    color: white;
+    text-decoration: none;
+    font-weight: normal;
+ }
+
+.work-order-detail-info1-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.work-order-detail-dates{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    background-color:var(--secondary-background-color);
+    border: 1px solid var(--main-border-color);
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.work-order-detail-customer-info {
+    background-color:var(--secondary-background-color);
+    border: 1px solid var(--main-border-color);
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.work-order-detail-dates-1 {
+    text-align: right;
+}
+
+.work-order-detail-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.work-order-detail-button-container{
+    display: flex;
+    gap: 15px;
+}
+
+.work-order-detail-totals-container {
+    /* background-color:var(--secondary-background-color); */
+    /* border: 1px solid var(--main-border-color); */
+    border-radius: 15px;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.work-order-detail-totals {
+    display: flex;
+    flex-direction: row;
+    text-align: right;
+}
 
 
 

@@ -3,24 +3,27 @@
     --main-text-color: white;
     --main-border-color: #ccc;
     --secondary-background-color: rgb(22, 27, 34);
-    --card-svg-color: invert(7%) sepia(8%) saturate(963%) hue-rotate(341deg) brightness(96%) contrast(92%);
     --box-shadow: 0px 0px 3px #404040;
+   
+    
 }
 
 body {
     margin: 0;
     display: grid;
     justify-items: center;
+    
 }
 
 .App {
     display: grid;
     grid-template-columns: 170px auto;
-    grid-template-rows: 1fr 5fr;
     width: 100vw;
-    height: 100vh;
     background-color: var(--main-background-color);
     color: var(--main-text-color);
+    background-size: cover;
+    height: 100%;
+    min-height: 100vh;
 }
 
 .buttons {
@@ -39,10 +42,8 @@ body {
 }
 
 .nav {
-
     padding-left: 15px;
     background-color:var(--secondary-background-color);
-    height: 100vh;
 }
 
 .nav-title {
@@ -124,7 +125,7 @@ a {
     font-weight: normal;
  }
 
-.work-order-detail-info1-container{
+.work-order-detail-info-container{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -169,22 +170,11 @@ a {
     gap: 15px;
 }
 
-.work-order-detail-totals-container {
-    /* background-color:var(--secondary-background-color); */
-    /* border: 1px solid var(--main-border-color); */
-    border-radius: 15px;
-    padding: 5px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
 
-.work-order-detail-totals {
-    display: flex;
-    flex-direction: row;
-    text-align: right;
+.work-order-detail-notes {
+    min-width: 200px;
+    min-height: 140px;
 }
-
 
 
  @media screen and (max-width:750px){

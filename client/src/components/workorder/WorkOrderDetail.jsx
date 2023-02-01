@@ -67,7 +67,7 @@ const WorkOrderDetail = () => {
           {responseText === "Complete" && "Deleted"}
         </div>
       </div>
-      <div className="work-order-detail-info1-container">
+      <div className="work-order-detail-info-container">
         <div className="work-order-detail-dates">
           <div className="work-order-detail-dates-1">
             <p>Date Received: </p>
@@ -94,7 +94,7 @@ const WorkOrderDetail = () => {
           <p>Email: {customer.email}</p>
         </div>
       </div>
-      <div className="work-order-detail-totals-container">
+      <div className="work-order-detail-info-container">
         <fieldset className="work-order-detail-totals">
           <legend>Totals</legend>
           <div>
@@ -108,6 +108,12 @@ const WorkOrderDetail = () => {
             <p>${estimatedPrice - deposit}</p>
           </div>
         </fieldset>
+        <fieldset className="work-order-detail-notes">
+          <legend>Notes</legend>
+          <p>{notes}</p>
+        </fieldset>
+      </div>
+      <div className="work-order-detail-info-container">
         {labor.length === 0 ? (
           <option></option>
         ) : (
@@ -150,11 +156,6 @@ const WorkOrderDetail = () => {
           })}
         </fieldset>
       )}
-
-      <div>
-        Notes
-        <p>{notes}</p>
-      </div>
     </div>
   );
 };

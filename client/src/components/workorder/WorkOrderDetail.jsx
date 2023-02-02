@@ -68,20 +68,22 @@ const WorkOrderDetail = () => {
         </div>
       </div>
       <div className="work-order-detail-info-container">
-        <div className="work-order-detail-dates">
-          <div className="work-order-detail-dates-1">
+        <fieldset className="work-order-detail-info">
+          <legend>Dates</legend>
+          <div className="work-order-detail-name">
             <p>Date Received: </p>
             <p>Date Due: </p>
             <p>Status: </p>
           </div>
-          <div>
+          <div className="work-order-detail-value">
             <p>{DateTime.fromISO(date_received).toFormat("D")}</p>
             <p>{DateTime.fromISO(date_due).toFormat("D")}</p>
             <p>{complete ? "Complete" : "In Process"}</p>
             {complete ? <p>{date_finished}</p> : ""}
           </div>
-        </div>
-        <div className="work-order-detail-customer-info">
+        </fieldset>
+        <fieldset className="work-order-detail-info customer">
+          <legend>Customer</legend>
           <p>
             <Link
               onClick={() => selectCustomerID(customer._id)}
@@ -92,23 +94,23 @@ const WorkOrderDetail = () => {
           </p>
           <p>Phone Number :{customer.phone_number}</p>
           <p>Email: {customer.email}</p>
-        </div>
+        </fieldset>
       </div>
       <div className="work-order-detail-info-container">
-        <fieldset className="work-order-detail-totals">
+        <fieldset className="work-order-detail-info">
           <legend>Totals</legend>
-          <div>
-            <p>Estimated Total: </p>
+          <div className="work-order-detail-name">
+            <p>Est. Total: </p>
             <p>Deposit: </p>
-            <p>Estimated Amount Due: </p>
+            <p>Est. Due: </p>
           </div>
-          <div>
+          <div className="work-order-detail-value">
             <p>${estimatedPrice}</p>
             <p>${deposit}</p>
             <p>${estimatedPrice - deposit}</p>
           </div>
         </fieldset>
-        <fieldset className="work-order-detail-notes">
+        <fieldset className="work-order-detail-info">
           <legend>Notes</legend>
           <p>{notes}</p>
         </fieldset>
@@ -117,39 +119,59 @@ const WorkOrderDetail = () => {
         {labor.length === 0 ? (
           <option></option>
         ) : (
-          <fieldset>
+          <fieldset className="work-order-detail-info">
             <legend>Labor</legend>
-            {labor.map((labor) => {
-              return (
-                <div key={labor._id}>
-                  <p>{labor.name}</p>
-                  <p>${labor.price}</p>
-                </div>
-              );
-            })}
+            <div className="work-order-detail-name">
+              {labor.map((labor) => {
+                return (
+                  <div key={labor.name}>
+                    <p>{labor.name}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="work-order-detail-value">
+              {labor.map((labor) => {
+                return (
+                  <div key={labor._id}>
+                    <p>${labor.price}</p>
+                  </div>
+                );
+              })}
+            </div>
           </fieldset>
         )}
 
         {parts.length === 0 ? (
           <option></option>
         ) : (
-          <fieldset>
+          <fieldset className="work-order-detail-info">
             <legend>Parts Needed</legend>
-            {parts.map((part) => {
-              return (
-                <div key={part._id}>
-                  <p>{part.name}</p>
-                  <p>${part.customer_price}</p>
-                </div>
-              );
-            })}
+            <div className="work-order-detail-name">
+              {parts.map((part) => {
+                return (
+                  <div key={part.name}>
+                    <p>{part.name}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="work-order-detail-value">
+              {parts.map((part) => {
+                return (
+                  <div key={part._id}>
+                    <p>${part.customer_price}</p>
+                  </div>
+                );
+              })}
+            </div>
           </fieldset>
         )}
       </div>
       {accessories.length === 0 ? (
         <option></option>
       ) : (
-        <fieldset>
+        <fieldset className="work-order-detail-info">
           <legend>Customer Accessories</legend>
           {accessories.map((accessory) => {
             return <p key={accessory._id}>{accessory.name}</p>;

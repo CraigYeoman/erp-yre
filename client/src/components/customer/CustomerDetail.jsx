@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+const { DateTime } = require("luxon");
 
 const CustomerDetail = () => {
   const {
@@ -35,22 +36,21 @@ const CustomerDetail = () => {
   } = customerDetail.customer;
 
   return (
-    <div>
-      <div>
+    <div className="customer-detail">
+      <div className="customer-detail-container">
         <div key={_id}>
           <p>
             {first_name} {last_name}
           </p>
           <p>{phone_number}</p>
           <p>{email}</p>
-          <p>{address_line_1}</p>
+          <p>
+            {address_line_1}, {city}, {state} {zip_code}
+          </p>
           <p>{address_line_2}</p>
-          <p>{city}</p>
-          <p>{state}</p>
-          <p>{zip_code}</p>
         </div>
         <div>
-          <button>
+          <button className="buttons">
             <Link
               onClick={() => selectCustomerID(_id)}
               to={`/customeredit/${_id}`}
@@ -58,7 +58,12 @@ const CustomerDetail = () => {
               Edit
             </Link>
           </button>
-          <button onClick={() => onSubmitGet(_id, "customers")}>Delete </button>
+          <button
+            className="buttons"
+            onClick={() => onSubmitGet(_id, "customers")}
+          >
+            Delete{" "}
+          </button>
         </div>
 
         {response &&
@@ -79,6 +84,7 @@ const CustomerDetail = () => {
         )}
       </div>
       <div>
+        <h3>Work Orders</h3>
         {customerDetail.customer_workorders.map((workOrder) => {
           const {
             _id,
@@ -89,22 +95,39 @@ const CustomerDetail = () => {
             work_order_number,
             estimatedPrice,
             notes,
+            complete,
           } = workOrder;
+          console.log(customerDetail.customer_workorders);
           return (
-            <div key={_id}>
-              <Link
-                onClick={() => selectWorkOrderID(_id)}
-                to={`/workorderdetail/${_id}`}
-              >
-                {work_order_number}
-              </Link>
+            <fieldset className="customer-detail-work-order" key={_id}>
+              <legend>
+                <Link
+                  onClick={() => selectWorkOrderID(_id)}
+                  to={`/workorderdetail/${_id}`}
+                >
+                  {work_order_number}
+                </Link>
+              </legend>
               <p>{jobType.name}</p>
-              <p>{date_received}</p>
-              <p>{date_due}</p>
-              <p>{date_finished}</p>
-              <p>{estimatedPrice}</p>
+              <p>
+                Date Recieved: {DateTime.fromISO(date_received).toFormat("D")}
+              </p>
+              <p>Date Due: {DateTime.fromISO(date_due).toFormat("D")}</p>
+              {complete === false ? (
+                <p>Status: Inprocess</p>
+              ) : (
+                <div>
+                  <p>Status: Complete</p>
+                  <p>
+                    Date Completed:{" "}
+                    {DateTime.fromISO(date_finished).toFormat("D")}
+                  </p>
+                </div>
+              )}
+
+              <p>Estimated Total: ${estimatedPrice}</p>
               <p>{notes}</p>
-            </div>
+            </fieldset>
           );
         })}
       </div>

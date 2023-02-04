@@ -124,11 +124,14 @@ const WorkOrderForm = () => {
   }
 
   return (
-    <div>
+    <div className="container-column">
       <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="work_order_number">
-            Work Order Number:
+        <div className="container-column work-order-form">
+          <h2>New Work Order</h2>
+          <div className="container-column">
+            <label className="container-column" htmlFor="work_order_number">
+              Work Order Number
+            </label>
             <input
               type="number"
               placeholder="XXXXX"
@@ -137,9 +140,9 @@ const WorkOrderForm = () => {
               value={values.work_order_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="customer">
-            Customer:
+          </div>
+          <div className="container-column">
+            <label htmlFor="customer">Customer</label>
             <select
               type="select"
               placeholder="customer"
@@ -169,10 +172,9 @@ const WorkOrderForm = () => {
                   })
               )}
             </select>
-          </label>
-
-          <label htmlFor="date_received">
-            date_received:
+          </div>
+          <div className="container-column">
+            <label htmlFor="date_received">Date Received</label>
             <input
               type="date"
               placeholder="XX/XX/XXXX"
@@ -181,9 +183,9 @@ const WorkOrderForm = () => {
               value={values.date_received}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="date_due">
-            date_due:
+          </div>
+          <div className="container-column">
+            <label htmlFor="date_due">Due Date</label>
             <input
               type="date"
               placeholder="XX/XX/XXXX"
@@ -192,10 +194,9 @@ const WorkOrderForm = () => {
               value={values.date_due}
               onChange={handleChange}
             ></input>
-          </label>
-
-          <label htmlFor="estimatedPrice">
-            Estimated Price:
+          </div>
+          <div className="container-column">
+            <label htmlFor="estimatedPrice">Estimated Price</label>
             <input
               type="number"
               placeholder="$$$"
@@ -204,9 +205,9 @@ const WorkOrderForm = () => {
               value={values.estimatedPrice}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="jobtype">
-            Job Type:
+          </div>
+          <div className="container-column">
+            <label htmlFor="jobtype">Job Type</label>
             <select
               type="select"
               placeholder="jobtype"
@@ -236,7 +237,77 @@ const WorkOrderForm = () => {
                   })
               )}
             </select>
-          </label>
+          </div>
+          <fieldset>
+            <legend>Parts Needed</legend>
+            {typeof workOrderInfo.parts === "undefined" ? (
+              <option>Loading...</option>
+            ) : (
+              workOrderInfo.parts
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((part) => {
+                  return (
+                    <div key={part._id}>
+                      <input
+                        type="checkbox"
+                        name="accessories"
+                        onChange={(event) =>
+                          handleChangeCheckBox(
+                            part._id,
+                            customerParts,
+                            setCustomerParts,
+                            event
+                          )
+                        }
+                        value={part._id}
+                      ></input>
+                      <label htmlFor={part.name}>
+                        ${part.customer_price} - {part.name}
+                      </label>
+                    </div>
+                  );
+                })
+            )}
+          </fieldset>
+          <fieldset>
+            <legend>Labor Needed</legend>
+            {typeof workOrderInfo.labors === "undefined" ? (
+              <option>Loading...</option>
+            ) : (
+              workOrderInfo.labors
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((labor) => {
+                  return (
+                    <div key={labor._id}>
+                      <input
+                        type="checkbox"
+                        name="accessories"
+                        onChange={(event) =>
+                          handleChangeCheckBox(
+                            labor._id,
+                            customerLabor,
+                            setCustomerLabor,
+                            event
+                          )
+                        }
+                        value={labor._id}
+                      ></input>
+                      <label htmlFor={labor.name}>
+                        ${labor.price} - {labor.name}
+                      </label>
+                    </div>
+                  );
+                })
+            )}
+          </fieldset>
 
           <fieldset>
             <legend>Customer Accessories</legend>
@@ -271,72 +342,6 @@ const WorkOrderForm = () => {
                 })
             )}
           </fieldset>
-          <fieldset>
-            <legend>Parts Needed</legend>
-            {typeof workOrderInfo.parts === "undefined" ? (
-              <option>Loading...</option>
-            ) : (
-              workOrderInfo.parts
-                .sort((a, b) => {
-                  let textA = a.name.toUpperCase();
-                  let textB = b.name.toUpperCase();
-                  return textA < textB ? -1 : textA > textB ? 1 : 0;
-                })
-                .map((part) => {
-                  return (
-                    <div key={part._id}>
-                      <input
-                        type="checkbox"
-                        name="accessories"
-                        onChange={(event) =>
-                          handleChangeCheckBox(
-                            part._id,
-                            customerParts,
-                            setCustomerParts,
-                            event
-                          )
-                        }
-                        value={part._id}
-                      ></input>
-                      <label htmlFor={part.name}>{part.name}</label>
-                    </div>
-                  );
-                })
-            )}
-          </fieldset>
-          <fieldset>
-            <legend>Labor Needed</legend>
-            {typeof workOrderInfo.labors === "undefined" ? (
-              <option>Loading...</option>
-            ) : (
-              workOrderInfo.labors
-                .sort((a, b) => {
-                  let textA = a.name.toUpperCase();
-                  let textB = b.name.toUpperCase();
-                  return textA < textB ? -1 : textA > textB ? 1 : 0;
-                })
-                .map((labor) => {
-                  return (
-                    <div key={labor._id}>
-                      <input
-                        type="checkbox"
-                        name="accessories"
-                        onChange={(event) =>
-                          handleChangeCheckBox(
-                            labor._id,
-                            customerLabor,
-                            setCustomerLabor,
-                            event
-                          )
-                        }
-                        value={labor._id}
-                      ></input>
-                      <label htmlFor={labor.name}>{labor.name}</label>
-                    </div>
-                  );
-                })
-            )}
-          </fieldset>
           <label htmlFor="notes">
             <textarea
               placeholder="Notes"
@@ -347,8 +352,10 @@ const WorkOrderForm = () => {
               rows="10"
             ></textarea>
           </label>
+          <button className="buttons" type="submit">
+            Submit
+          </button>
         </div>
-        <button type="submit">Submit</button>
       </form>
       {response && (
         <div>

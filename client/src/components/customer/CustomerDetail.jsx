@@ -37,6 +37,7 @@ const CustomerDetail = () => {
 
   return (
     <div className="container-column">
+      <h2>Customer</h2>
       <div className="container-background">
         <div key={_id}>
           <p>

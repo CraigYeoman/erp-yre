@@ -25,6 +25,7 @@ const PartDetail = () => {
     partDetail;
   return (
     <div className="container-column">
+      <h3>Part Detail</h3>
       <div className="container-background" key={_id}>
         <h3>{name}</h3>
         <div className="container-row">

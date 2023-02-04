@@ -403,3 +403,21 @@ a {
 }
 
 /* Vendor Detail */
+
+/* Parts Detail */
+
+/* Job Type Detail */
+
+/* Work Order Form */
+
+.container-column.work-order-form {
+    gap: 10px;
+}
+
+input, select{
+    border: 2px solid rgb(255, 255, 255);
+    padding: 5px;
+    border-radius: 5px;
+    color: black;
+    margin-top: 3px;
+  }

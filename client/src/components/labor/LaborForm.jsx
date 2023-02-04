@@ -48,11 +48,12 @@ const LaborForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Labor Name:
+    <div className="container-column">
+      <h3>Create Labor</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="name">Labor Name</label>
             <input
               type="text"
               placeholder="Labor Name"
@@ -61,9 +62,9 @@ const LaborForm = () => {
               value={values.name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="price">
-            Price:
+          </div>
+          <div className="container-column">
+            <label htmlFor="price">Price</label>
             <input
               type="number"
               placeholder="$$$"
@@ -72,9 +73,11 @@ const LaborForm = () => {
               value={values.price}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
         <div>

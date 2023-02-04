@@ -96,11 +96,12 @@ const VendorForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Company Name:
+    <div className="container-column">
+      <h3>Create Vendor</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="name">Company Name</label>
             <input
               type="text"
               placeholder="Company LLC"
@@ -109,9 +110,9 @@ const VendorForm = () => {
               value={values.name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="main_contact">
-            Main Contact:
+          </div>
+          <div className="container-column">
+            <label htmlFor="main_contact">Main Contact</label>
             <input
               type="text"
               placeholder="Don John"
@@ -120,9 +121,10 @@ const VendorForm = () => {
               value={values.main_contact}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="phone_number">
-            Phone Number:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="phone_number">Phone Number</label>
             <input
               type="tel"
               placeholder="9999999999"
@@ -131,9 +133,10 @@ const VendorForm = () => {
               value={values.phone_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="email">
-            Email:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               placeholder="joe@gmail.com"
@@ -142,9 +145,10 @@ const VendorForm = () => {
               value={values.email}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_1">
-            Address line 1:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="address_line_1">Address line 1</label>
             <input
               type="text"
               placeholder="Address"
@@ -153,9 +157,10 @@ const VendorForm = () => {
               value={values.address_line_1}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_2">
-            Address line 2:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="address_line_2">Address line 2</label>
             <input
               type="text"
               placeholder="Address line 2"
@@ -163,9 +168,10 @@ const VendorForm = () => {
               value={values.address_line_2}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="city">
-            City:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="city">City</label>
             <input
               type="text"
               placeholder="City"
@@ -174,9 +180,10 @@ const VendorForm = () => {
               value={values.city}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="state">
-            State:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="state">State</label>
             <input
               type="text"
               placeholder="state"
@@ -185,9 +192,10 @@ const VendorForm = () => {
               value={values.state}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="zip_code">
-            Zip Code:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="zip_code">Zip Code</label>
             <input
               type="text"
               placeholder="Zip Code"
@@ -196,9 +204,10 @@ const VendorForm = () => {
               value={values.zip_code}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="customer_number">
-            Customer Number:
+          </div>
+
+          <div className="container-column">
+            <label htmlFor="customer_number">Customer Number</label>
             <input
               type="text"
               placeholder="Customer Number"
@@ -207,9 +216,11 @@ const VendorForm = () => {
               value={values.customer_number}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
         <div>

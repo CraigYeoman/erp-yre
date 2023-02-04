@@ -92,11 +92,12 @@ const CustomerForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="first_name">
-            Customer First Name:
+    <div className="container-column">
+      <h2>New Customer</h2>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="first_name">Customer First Name</label>
             <input
               type="text"
               placeholder="First Name"
@@ -105,9 +106,9 @@ const CustomerForm = () => {
               value={values.first_name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="last_name">
-            Last Name:
+          </div>
+          <div className="container-column">
+            <label htmlFor="last_name">Last Name</label>
             <input
               type="text"
               placeholder="Last Name"
@@ -116,9 +117,9 @@ const CustomerForm = () => {
               value={values.last_name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="phone_number">
-            Phone Number:
+          </div>
+          <div className="container-column">
+            <label htmlFor="phone_number">Phone Number</label>
             <input
               type="tel"
               placeholder="9999999999"
@@ -127,9 +128,9 @@ const CustomerForm = () => {
               value={values.phone_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="email">
-            Email:
+          </div>
+          <div className="container-column">
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               placeholder="joe@gmail.com"
@@ -138,9 +139,9 @@ const CustomerForm = () => {
               value={values.email}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_1">
-            Address line 1:
+          </div>
+          <div className="container-column">
+            <label htmlFor="address_line_1">Address line 1</label>
             <input
               type="text"
               placeholder="Address"
@@ -149,9 +150,9 @@ const CustomerForm = () => {
               value={values.address_line_1}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_2">
-            Address line 2:
+          </div>
+          <div className="container-column">
+            <label htmlFor="address_line_2">Address line 2</label>
             <input
               type="text"
               placeholder="Address line 2"
@@ -159,9 +160,9 @@ const CustomerForm = () => {
               value={values.address_line_2}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="city">
-            City:
+          </div>
+          <div className="container-column">
+            <label htmlFor="city">City</label>
             <input
               type="text"
               placeholder="City"
@@ -170,9 +171,9 @@ const CustomerForm = () => {
               value={values.city}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="state">
-            State:
+          </div>
+          <div className="container-column">
+            <label htmlFor="state">State</label>
             <input
               type="text"
               placeholder="state"
@@ -181,9 +182,9 @@ const CustomerForm = () => {
               value={values.state}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="zip_code">
-            Zip Code:
+          </div>
+          <div className="container-column">
+            <label htmlFor="zip_code">Zip Code</label>
             <input
               type="text"
               placeholder="Zip Code"
@@ -192,9 +193,11 @@ const CustomerForm = () => {
               value={values.zip_code}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
         <div>

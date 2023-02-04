@@ -126,7 +126,7 @@ const WorkOrderForm = () => {
   return (
     <div className="container-column">
       <form onSubmit={onSubmit}>
-        <div className="container-column work-order-form">
+        <div className="container-column gap">
           <h2>New Work Order</h2>
           <div className="container-column">
             <label className="container-column" htmlFor="work_order_number">

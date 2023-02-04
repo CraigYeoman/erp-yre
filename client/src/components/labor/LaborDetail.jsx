@@ -25,7 +25,7 @@ const LaborDetail = () => {
 
   return (
     <div className="container-column">
-      <div key={_id}>
+      <div className="container-column" key={_id}>
         <h3>{name}</h3>
         <p>Customer Cost: ${price}</p>
       </div>

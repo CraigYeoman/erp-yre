@@ -24,18 +24,23 @@ const JobTypeDetail = () => {
   const { name, _id } = jobTypeDetail;
 
   return (
-    <div>
+    <div className="container-column">
       <div key={_id}>
         <h3>{name}</h3>
       </div>
 
-      <div>
-        <button>
+      <div className="container-row">
+        <button className="buttons">
           <Link onClick={() => selectJobTypeID(_id)} to={`/jobtypeedit/${_id}`}>
             Edit
           </Link>
         </button>
-        <button onClick={() => onSubmitGet(_id, "jobtypes")}>Delete </button>
+        <button
+          className="buttons"
+          onClick={() => onSubmitGet(_id, "jobtypes")}
+        >
+          Delete{" "}
+        </button>
       </div>
 
       {response && typeof responseText.job_type_work_orders === "undefined" ? (

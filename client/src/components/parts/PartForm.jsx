@@ -85,11 +85,12 @@ const PartForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Part Name:
+    <div className="container-column">
+      <h3>Create Part</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="name">Part Name</label>
             <input
               type="text"
               placeholder="3/8 8740 ARP Rod Bolt"
@@ -98,9 +99,9 @@ const PartForm = () => {
               value={values.name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="customer_price">
-            Customer Price:
+          </div>
+          <div className="container-column">
+            <label htmlFor="customer_price">Customer Price</label>
             <input
               type="number"
               placeholder="$$$"
@@ -109,9 +110,9 @@ const PartForm = () => {
               value={values.customer_price}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="cost">
-            Cost:
+          </div>
+          <div className="container-column">
+            <label htmlFor="cost">Cost</label>
             <input
               type="number"
               placeholder="$$$"
@@ -120,9 +121,9 @@ const PartForm = () => {
               value={values.cost}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="part_number">
-            Part Number:
+          </div>
+          <div className="container-column">
+            <label htmlFor="part_number">Part Number</label>
             <input
               type="text"
               placeholder="XYZ"
@@ -131,9 +132,9 @@ const PartForm = () => {
               value={values.part_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="vendor">
-            Vendor:
+          </div>
+          <div className="container-column">
+            <label htmlFor="vendor">Vendor</label>
             <select
               type="select"
               placeholder="vendor"
@@ -163,9 +164,9 @@ const PartForm = () => {
                   })
               )}
             </select>
-          </label>
-          <label htmlFor="manufacture">
-            Manufacture:
+          </div>
+          <div className="container-column">
+            <label htmlFor="manufacture">Manufacture</label>
             <input
               type="text"
               placeholder="manufacture"
@@ -174,9 +175,11 @@ const PartForm = () => {
               value={values.manufacture}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
         <div>

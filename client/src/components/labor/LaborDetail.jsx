@@ -24,18 +24,20 @@ const LaborDetail = () => {
   const { name, price, _id } = laborDetail;
 
   return (
-    <div>
+    <div className="container-column">
       <div key={_id}>
         <h3>{name}</h3>
-        <p>{price}</p>
+        <p>Customer Cost: ${price}</p>
       </div>
-      <div>
-        <button>
+      <div className="container-row">
+        <button className="buttons">
           <Link onClick={() => selectLaborID(_id)} to={`/laboredit/${_id}`}>
             Edit
           </Link>
         </button>
-        <button onClick={() => onSubmitGet(_id, "labor")}>Delete </button>
+        <button className="buttons" onClick={() => onSubmitGet(_id, "labor")}>
+          Delete{" "}
+        </button>
       </div>
 
       {response && typeof responseText.labor_work_orders === "undefined" ? (

@@ -36,8 +36,8 @@ const CustomerDetail = () => {
   } = customerDetail.customer;
 
   return (
-    <div className="customer-detail">
-      <div className="customer-detail-container">
+    <div className="container-column">
+      <div className="container-background">
         <div key={_id}>
           <p>
             {first_name} {last_name}
@@ -50,7 +50,7 @@ const CustomerDetail = () => {
           <p>{address_line_2}</p>
         </div>
         <div>
-          <button className="buttons">
+          <button className="buttons dark">
             <Link
               onClick={() => selectCustomerID(_id)}
               to={`/customeredit/${_id}`}
@@ -59,7 +59,7 @@ const CustomerDetail = () => {
             </Link>
           </button>
           <button
-            className="buttons"
+            className="buttons dark"
             onClick={() => onSubmitGet(_id, "customers")}
           >
             Delete{" "}

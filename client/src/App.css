@@ -37,9 +37,29 @@ body {
     cursor:pointer;
 }
 
+.buttons.dark{
+    background-color:var(--main-background-color);
+    margin-left: 10px;
+}
+
 .buttons:hover {
     background-color: rgb(102, 102, 102);
     
+}
+
+.buttons.dark:hover {
+    background-color:var(--main-background-color);
+    margin-left: 10px;
+    background-color: rgb(102, 102, 102);
+    color: white;
+    text-decoration: none;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.buttons.dark:hover a{
+    color: white;
+    text-decoration: none;
 }
 
 .nav {
@@ -347,15 +367,21 @@ a {
     width: 150px;
 }
 
-/* Customer Detail */
+/* Modular */
 
-.customer-detail {
+.container-column {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.customer-detail-container {
+.container-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.container-background {
     gap: 10px;
     text-align: left;  
     border-radius: 15px;
@@ -366,16 +392,14 @@ a {
     margin-bottom: 15px;
 }
 
-.customer-detail-container .buttons {
-    background-color:var(--main-background-color);
-    margin-left: 10px;
+.align-left {
+    text-align: left;
+
 }
-.customer-detail-container .buttons:hover {
-    background-color:var(--main-background-color);
-    margin-left: 10px;
-    background-color: rgb(102, 102, 102);
-    color: white;
-    text-decoration: none;
-    font-weight: normal;
-    cursor: pointer;
+
+.align-right {
+    text-align: right;
+    margin-right: 5px;;
 }
+
+/* Vendor Detail */

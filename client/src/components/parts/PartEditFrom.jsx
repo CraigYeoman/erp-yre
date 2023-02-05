@@ -94,11 +94,12 @@ const PartEditForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Part Name:
+    <div className="container-column">
+      <h3>Edit Part</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="name">Part Name</label>
             <input
               type="text"
               placeholder="3/8 8740 ARP Rod Bolt"
@@ -107,9 +108,9 @@ const PartEditForm = () => {
               value={values.name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="customer_price">
-            Customer Price:
+          </div>
+          <div className="container-column">
+            <label htmlFor="customer_price">Customer Price</label>
             <input
               type="number"
               placeholder="$$$"
@@ -118,9 +119,9 @@ const PartEditForm = () => {
               value={values.customer_price}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="cost">
-            Cost:
+          </div>
+          <div className="container-column">
+            <label htmlFor="cost">Cost</label>
             <input
               type="number"
               placeholder="$$$"
@@ -129,9 +130,9 @@ const PartEditForm = () => {
               value={values.cost}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="part_number">
-            Part Number:
+          </div>
+          <div className="container-column">
+            <label htmlFor="part_number">Part Number</label>
             <input
               type="text"
               placeholder="XYZ"
@@ -140,9 +141,9 @@ const PartEditForm = () => {
               value={values.part_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="vendor">
-            Vendor:
+          </div>
+          <div className="container-column">
+            <label htmlFor="vendor">Vendor</label>
             <select
               type="select"
               placeholder="vendor"
@@ -169,9 +170,9 @@ const PartEditForm = () => {
                   })
               )}
             </select>
-          </label>
-          <label htmlFor="manufacture">
-            Manufacture:
+          </div>
+          <div className="container-column">
+            <label htmlFor="manufacture">Manufacture</label>
             <input
               type="text"
               placeholder="manufacture"
@@ -180,37 +181,40 @@ const PartEditForm = () => {
               value={values.manufacture}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
-        <div>
-          {responseText.msg}
-          <div>
-            <h3>Old</h3>
-            <p>{responseText.updatedPart.name}</p>
-            <p>{responseText.updatedPart.customer_price}</p>
-            <p>{responseText.updatedPart.cost}</p>
-            <p>{responseText.updatedPart.part_number}</p>
-            <p>{responseText.updatedPart.vendor}</p>
-            <p>{responseText.updatedPart.manufacture}</p>
-          </div>
-          <div>
-            <h3>New</h3>
-            <p>
-              <Link
-                onClick={() => selectPartID(responseText.part._id)}
-                to={`/partdetail/${responseText.part._id}`}
-              >
-                {responseText.part.name}
-              </Link>
-            </p>
-            <p>{responseText.part.customer_price}</p>
-            <p>{responseText.part.cost}</p>
-            <p>{responseText.part.part_number}</p>
-            <p>{responseText.part.vendor}</p>
-            <p>{responseText.part.manufacture}</p>
+        <div className="container-column">
+          <h3>Part Edited</h3>
+          <div className="container-row">
+            <div className="container-background">
+              <h3>Previous</h3>
+              <p>{responseText.updatedPart.name}</p>
+              <p>{responseText.updatedPart.customer_price}</p>
+              <p>${responseText.updatedPart.cost}</p>
+              <p>${responseText.updatedPart.part_number}</p>
+              <p>{responseText.updatedPart.manufacture}</p>
+            </div>
+            <div className="container-background">
+              <h3>New</h3>
+              <p>
+                <Link
+                  onClick={() => selectPartID(responseText.part._id)}
+                  to={`/partdetail/${responseText.part._id}`}
+                >
+                  {responseText.part.name}
+                </Link>
+              </p>
+              <p>{responseText.part.customer_price}</p>
+              <p>${responseText.part.cost}</p>
+              <p>${responseText.part.part_number}</p>
+              <p>{responseText.part.vendor}</p>
+              <p>{responseText.part.manufacture}</p>
+            </div>
           </div>
         </div>
       )}

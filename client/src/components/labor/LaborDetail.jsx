@@ -36,7 +36,7 @@ const LaborDetail = () => {
           </Link>
         </button>
         <button className="buttons" onClick={() => onSubmitGet(_id, "labor")}>
-          Delete{" "}
+          Delete
         </button>
       </div>
 

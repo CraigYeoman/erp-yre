@@ -50,11 +50,12 @@ const LaborEditForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Labor Name:
+    <div className="container-column">
+      <h3>Labor</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="name">Labor Name</label>
             <input
               type="text"
               placeholder="Labor Name"
@@ -63,9 +64,9 @@ const LaborEditForm = () => {
               value={values.name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="price">
-            Price:
+          </div>
+          <div className="container-column">
+            <label htmlFor="price">Price</label>
             <input
               type="number"
               placeholder="$$$"
@@ -74,30 +75,34 @@ const LaborEditForm = () => {
               value={values.price}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
-        <div>
-          <p>{responseText.msg}</p>
-          <div>
-            <h3>Old</h3>
-            <p>{responseText.updatedLabor.name}</p>
-            <p>{responseText.updatedLabor.price}</p>
-          </div>
-          <div>
-            <h3>Updated</h3>
-            <p>
-              {" "}
-              <Link
-                onClick={() => selectLaborID(responseText.labor._id)}
-                to={`/labordetail/${responseText.labor._id}`}
-              >
-                {responseText.labor.name}
-              </Link>{" "}
-            </p>
-            <p>{responseText.labor.price}</p>
+        <div className="container-column">
+          <h3>Labor Edited</h3>
+          <div className="container-row">
+            <div className="container-background">
+              <h3>Previous</h3>
+              <p>{responseText.updatedLabor.name}</p>
+              <p>${responseText.updatedLabor.price}</p>
+            </div>
+            <div className="container-background">
+              <h3>Updated</h3>
+              <p>
+                {" "}
+                <Link
+                  onClick={() => selectLaborID(responseText.labor._id)}
+                  to={`/labordetail/${responseText.labor._id}`}
+                >
+                  {responseText.labor.name}
+                </Link>{" "}
+              </p>
+              <p>${responseText.labor.price}</p>
+            </div>
           </div>
         </div>
       )}

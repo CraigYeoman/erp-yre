@@ -95,7 +95,11 @@ input, select{
 
 .buttons:hover {
     background-color: rgb(102, 102, 102);
-    
+}
+
+.buttons:hover a{
+    color: white;
+    text-decoration: none;
 }
 
 .buttons.dark:hover {

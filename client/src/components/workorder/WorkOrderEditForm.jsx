@@ -152,11 +152,12 @@ const WorkOrderForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="work_order_number">
-            Work Order Number:
+    <div className="container-column">
+      <h3>Edit Work Order</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="work_order_number">Work Order Number</label>
             <input
               type="number"
               placeholder="XXXXX"
@@ -165,9 +166,9 @@ const WorkOrderForm = () => {
               value={values.work_order_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="customer">
-            Customer:
+          </div>
+          <div className="container-column">
+            <label htmlFor="customer">Customer</label>
             <select
               type="select"
               placeholder="customer"
@@ -177,7 +178,7 @@ const WorkOrderForm = () => {
               value={values.customer}
             >
               <option value={workOrderDetail.work_order.customer._id}>
-                {workOrderDetail.work_order.customer.first_name}
+                {workOrderDetail.work_order.customer.first_name}{" "}
                 {workOrderDetail.work_order.customer.last_name}
               </option>
 
@@ -198,10 +199,9 @@ const WorkOrderForm = () => {
                   );
                 })}
             </select>
-          </label>
-
-          <label htmlFor="date_received">
-            date_received:
+          </div>
+          <div className="container-column">
+            <label htmlFor="date_received">Date Received</label>
             <input
               type="date"
               placeholder={values.date_received}
@@ -210,9 +210,9 @@ const WorkOrderForm = () => {
               value={values.date_received}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="date_due">
-            Due date:
+          </div>
+          <div className="container-column">
+            <label htmlFor="date_due">Due date</label>
             <input
               type="date"
               placeholder="XX/XX/XXXX"
@@ -221,10 +221,9 @@ const WorkOrderForm = () => {
               value={values.date_due}
               onChange={handleChange}
             ></input>
-          </label>
-
-          <label htmlFor="estimatedPrice">
-            Estimated Price:
+          </div>
+          <div className="container-column">
+            <label htmlFor="estimatedPrice">Estimated Price </label>
             <input
               type="number"
               placeholder="$$$"
@@ -233,9 +232,9 @@ const WorkOrderForm = () => {
               value={values.estimatedPrice}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="jobtype">
-            Job Type:
+          </div>
+          <div className="container-column">
+            <label htmlFor="jobtype">Job Type</label>
             <select
               type="select"
               placeholder="jobtype"
@@ -268,8 +267,7 @@ const WorkOrderForm = () => {
                   })
               )}
             </select>
-          </label>
-
+          </div>
           <fieldset>
             <legend>Customer Accessories</legend>
             {workOrderDetail.accessories
@@ -325,7 +323,9 @@ const WorkOrderForm = () => {
                         )
                       }
                     ></input>
-                    <label htmlFor={part.name}>{part.name}</label>
+                    <label htmlFor={part.name}>
+                      ${part.customer_price} - {part.name}
+                    </label>
                   </div>
                 );
               })}
@@ -355,7 +355,9 @@ const WorkOrderForm = () => {
                         )
                       }
                     ></input>
-                    <label htmlFor={labor.name}>{labor.name}</label>
+                    <label htmlFor={labor.name}>
+                      ${labor.price} - {labor.name}
+                    </label>
                   </div>
                 );
               })}

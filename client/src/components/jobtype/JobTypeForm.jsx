@@ -58,22 +58,23 @@ const JobTypeForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Job Type Name:
-            <input
-              type="text"
-              placeholder="name"
-              name="name"
-              required={true}
-              value={values.first_name}
-              onChange={handleChange}
-            ></input>
-          </label>
+    <div className="container-column">
+      <h3>New Job Type</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column">
+          <label htmlFor="name">Job Type Name</label>
+          <input
+            type="text"
+            placeholder="name"
+            name="name"
+            required={true}
+            value={values.first_name}
+            onChange={handleChange}
+          ></input>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
         <div>

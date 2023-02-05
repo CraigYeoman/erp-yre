@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../context";
 
 const VendorList = () => {
-  const { listType, selectVendorID } = useGlobalContext();
+  const { listType, selectVendorID, formatPhoneNumber } = useGlobalContext();
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const VendorList = () => {
               {name}
             </Link>
             <p>{main_contact}</p>
-            <p>{phone_number}</p>
+            <p>{formatPhoneNumber(phone_number)}</p>
             <p>{email}</p>
           </div>
         );

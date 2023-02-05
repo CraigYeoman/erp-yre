@@ -181,7 +181,6 @@ const WorkOrderForm = () => {
                 {workOrderDetail.work_order.customer.first_name}{" "}
                 {workOrderDetail.work_order.customer.last_name}
               </option>
-
               {workOrderDetail.customers
                 .filter(
                   (a) => a._id !== workOrderDetail.work_order.customer._id
@@ -300,7 +299,6 @@ const WorkOrderForm = () => {
           </fieldset>
           <fieldset>
             <legend>Parts Needed</legend>
-
             {workOrderDetail.parts
               .sort((a, b) => {
                 let textA = a.name.toUpperCase();
@@ -332,7 +330,6 @@ const WorkOrderForm = () => {
           </fieldset>
           <fieldset>
             <legend>Labor Needed</legend>
-
             {workOrderDetail.labors
               .sort((a, b) => {
                 let textA = a.name.toUpperCase();
@@ -373,7 +370,9 @@ const WorkOrderForm = () => {
             ></textarea>
           </label>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
         <div>

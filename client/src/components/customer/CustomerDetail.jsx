@@ -12,6 +12,7 @@ const CustomerDetail = () => {
     response,
     responseText,
     selectCustomerID,
+    formatPhoneNumber,
   } = useGlobalContext();
 
   if (loading) {
@@ -43,14 +44,14 @@ const CustomerDetail = () => {
           <p>
             {first_name} {last_name}
           </p>
-          <p>{phone_number}</p>
+          <p>{formatPhoneNumber(phone_number)}</p>
           <p>{email}</p>
           <p>
             {address_line_1}, {city}, {state} {zip_code}
           </p>
           <p>{address_line_2}</p>
         </div>
-        <div>
+        <div className="container-row gap">
           <button className="buttons dark">
             <Link
               onClick={() => selectCustomerID(_id)}

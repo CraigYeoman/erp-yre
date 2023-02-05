@@ -5,7 +5,8 @@ import { useState } from "react";
 const rootUrl = "http://localhost:5000";
 
 const CustomerEditForm = () => {
-  const { loading, selectCustomerID, customerDetail } = useGlobalContext();
+  const { loading, selectCustomerID, customerDetail, formatPhoneNumber } =
+    useGlobalContext();
   const [values, setValues] = useState({
     first_name: customerDetail.customer.first_name,
     last_name: customerDetail.customer.last_name,
@@ -97,11 +98,12 @@ const CustomerEditForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="first_name">
-            Customer First Name:
+    <div className="container-column">
+      <h3>Edit Customer</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="first_name">Customer First Name</label>
             <input
               type="text"
               placeholder="First Name"
@@ -110,9 +112,9 @@ const CustomerEditForm = () => {
               value={values.first_name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="last_name">
-            Last Name:
+          </div>
+          <div className="container-column">
+            <label htmlFor="last_name">Last Name</label>
             <input
               type="text"
               placeholder="Last Name"
@@ -121,9 +123,9 @@ const CustomerEditForm = () => {
               value={values.last_name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="phone_number">
-            Phone Number:
+          </div>
+          <div className="container-column">
+            <label htmlFor="phone_number">Phone Number</label>
             <input
               type="tel"
               placeholder="9999999999"
@@ -132,9 +134,9 @@ const CustomerEditForm = () => {
               value={values.phone_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="email">
-            Email:
+          </div>
+          <div className="container-column">
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               placeholder="joe@gmail.com"
@@ -143,9 +145,9 @@ const CustomerEditForm = () => {
               value={values.email}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_1">
-            Address line 1:
+          </div>
+          <div className="container-column">
+            <label htmlFor="address_line_1">Address line 1</label>
             <input
               type="text"
               placeholder="Address"
@@ -154,9 +156,9 @@ const CustomerEditForm = () => {
               value={values.address_line_1}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_2">
-            Address line 2:
+          </div>
+          <div className="container-column">
+            <label htmlFor="address_line_2">Address line 2</label>
             <input
               type="text"
               placeholder="Address line 2"
@@ -164,9 +166,9 @@ const CustomerEditForm = () => {
               value={values.address_line_2}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="city">
-            City:
+          </div>
+          <div className="container-column">
+            <label htmlFor="city">City</label>
             <input
               type="text"
               placeholder="City"
@@ -175,9 +177,9 @@ const CustomerEditForm = () => {
               value={values.city}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="state">
-            State:
+          </div>
+          <div className="container-column">
+            <label htmlFor="state">State</label>
             <input
               type="text"
               placeholder="state"
@@ -186,9 +188,9 @@ const CustomerEditForm = () => {
               value={values.state}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="zip_code">
-            Zip Code:
+          </div>
+          <div className="container-column">
+            <label htmlFor="zip_code">Zip Code</label>
             <input
               type="text"
               placeholder="Zip Code"
@@ -197,45 +199,51 @@ const CustomerEditForm = () => {
               value={values.zip_code}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
-        <div>
-          <p>{responseText.msg}</p>
-          <div>
-            <h3>Old</h3>
-            <p>
-              {responseText.updatedCustomer.first_name}{" "}
-              {responseText.updatedCustomer.last_name}
-            </p>
-            <p>{responseText.updatedCustomer.phone_number}</p>
-            <p>{responseText.updatedCustomer.email}</p>
-            <p>{responseText.updatedCustomer.address_line_1}</p>
-            <p>{responseText.updatedCustomer.address_line_2}</p>
-            <p>{responseText.updatedCustomer.city}</p>
-            <p>{responseText.updatedCustomer.state}</p>
-            <p>{responseText.updatedCustomer.zip_code}</p>
-          </div>
-          <div>
-            <h3>Updated</h3>
-            <p>
-              <Link
-                onClick={() => selectCustomerID(responseText.customer._id)}
-                to={`/customerdetail/${responseText.customer._id}`}
-              >
-                {responseText.customer.first_name}{" "}
-                {responseText.customer.last_name}
-              </Link>
-            </p>
-            <p>{responseText.customer.phone_number}</p>
-            <p>{responseText.customer.email}</p>
-            <p>{responseText.customer.address_line_1}</p>
-            <p>{responseText.customer.address_line_2}</p>
-            <p>{responseText.customer.city}</p>
-            <p>{responseText.customer.state}</p>
-            <p>{responseText.customer.zip_code}</p>
+        <div className="container-column">
+          <h3>{responseText.msg}</h3>
+          <div className="container-row">
+            <div className="container-background">
+              <h3>Previous</h3>
+              <p>
+                {responseText.updatedCustomer.first_name}{" "}
+                {responseText.updatedCustomer.last_name}
+              </p>
+              <p>
+                {formatPhoneNumber(responseText.updatedCustomer.phone_number)}
+              </p>
+              <p>{responseText.updatedCustomer.email}</p>
+              <p>{responseText.updatedCustomer.address_line_1}</p>
+              <p>{responseText.updatedCustomer.address_line_2}</p>
+              <p>{responseText.updatedCustomer.city}</p>
+              <p>{responseText.updatedCustomer.state}</p>
+              <p>{responseText.updatedCustomer.zip_code}</p>
+            </div>
+            <div className="container-background">
+              <h3>Updated</h3>
+              <p>
+                <Link
+                  onClick={() => selectCustomerID(responseText.customer._id)}
+                  to={`/customerdetail/${responseText.customer._id}`}
+                >
+                  {responseText.customer.first_name}{" "}
+                  {responseText.customer.last_name}
+                </Link>
+              </p>
+              <p>{formatPhoneNumber(responseText.customer.phone_number)}</p>
+              <p>{responseText.customer.email}</p>
+              <p>{responseText.customer.address_line_1}</p>
+              <p>{responseText.customer.address_line_2}</p>
+              <p>{responseText.customer.city}</p>
+              <p>{responseText.customer.state}</p>
+              <p>{responseText.customer.zip_code}</p>
+            </div>
           </div>
         </div>
       )}

@@ -11,6 +11,7 @@ const VendorDetail = () => {
     response,
     responseText,
     selectVendorID,
+    formatPhoneNumber,
   } = useGlobalContext();
   if (loading) {
     return (
@@ -40,7 +41,7 @@ const VendorDetail = () => {
         <div key={_id}>
           <p>{name}</p>
           <p>{main_contact}</p>
-          <p>{phone_number}</p>
+          <p>{formatPhoneNumber(phone_number)}</p>
           <p>{email}</p>
           <p>
             {address_line_1}, {city}, {state} {zip_code}

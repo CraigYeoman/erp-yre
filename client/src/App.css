@@ -44,6 +44,10 @@ body {
     align-items: center;
 }
 
+.container-row.gap {
+    gap: 10px;
+}
+
 .container-background {
     gap: 10px;
     text-align: left;  

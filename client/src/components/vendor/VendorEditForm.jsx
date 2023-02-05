@@ -5,7 +5,8 @@ import { useState } from "react";
 const rootUrl = "http://localhost:5000";
 
 const VendorEditForm = () => {
-  const { loading, selectVendorID, vendorDetail } = useGlobalContext();
+  const { loading, selectVendorID, vendorDetail, formatPhoneNumber } =
+    useGlobalContext();
   const [values, setValues] = useState({
     name: vendorDetail.vendor.name,
     main_contact: vendorDetail.vendor.main_contact,
@@ -99,11 +100,12 @@ const VendorEditForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Company Name:
+    <div className="container-column">
+      <h3>Edit Vendor</h3>
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column gap">
+          <div className="container-column">
+            <label htmlFor="name">Company Name</label>
             <input
               type="text"
               placeholder="Company LLC"
@@ -112,9 +114,9 @@ const VendorEditForm = () => {
               value={values.name}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="main_contact">
-            Main Contact:
+          </div>
+          <div className="container-column">
+            <label htmlFor="main_contact">Main Contact</label>
             <input
               type="text"
               placeholder="Don John"
@@ -123,9 +125,9 @@ const VendorEditForm = () => {
               value={values.main_contact}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="phone_number">
-            Phone Number:
+          </div>
+          <div className="container-column">
+            <label htmlFor="phone_number">Phone Number</label>
             <input
               type="tel"
               placeholder="9999999999"
@@ -134,9 +136,9 @@ const VendorEditForm = () => {
               value={values.phone_number}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="email">
-            Email:
+          </div>
+          <div className="container-column">
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               placeholder="joe@gmail.com"
@@ -145,9 +147,9 @@ const VendorEditForm = () => {
               value={values.email}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_1">
-            Address line 1:
+          </div>
+          <div className="container-column">
+            <label htmlFor="address_line_1">Address line 1</label>
             <input
               type="text"
               placeholder="Address"
@@ -156,9 +158,9 @@ const VendorEditForm = () => {
               value={values.address_line_1}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="address_line_2">
-            Address line 2:
+          </div>
+          <div className="container-column">
+            <label htmlFor="address_line_2">Address line 2</label>
             <input
               type="text"
               placeholder="Address line 2"
@@ -166,9 +168,9 @@ const VendorEditForm = () => {
               value={values.address_line_2}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="city">
-            City:
+          </div>
+          <div className="container-column">
+            <label htmlFor="city">City</label>
             <input
               type="text"
               placeholder="City"
@@ -177,9 +179,9 @@ const VendorEditForm = () => {
               value={values.city}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="state">
-            State:
+          </div>
+          <div className="container-column">
+            <label htmlFor="state">State</label>
             <input
               type="text"
               placeholder="state"
@@ -188,9 +190,9 @@ const VendorEditForm = () => {
               value={values.state}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="zip_code">
-            Zip Code:
+          </div>
+          <div className="container-column">
+            <label htmlFor="zip_code">Zip Code</label>
             <input
               type="text"
               placeholder="Zip Code"
@@ -199,9 +201,9 @@ const VendorEditForm = () => {
               value={values.zip_code}
               onChange={handleChange}
             ></input>
-          </label>
-          <label htmlFor="customer_number">
-            Customer Number:
+          </div>
+          <div className="container-column">
+            <label htmlFor="customer_number">Customer Number</label>
             <input
               type="text"
               placeholder="Customer Number"
@@ -210,43 +212,50 @@ const VendorEditForm = () => {
               value={values.customer_number}
               onChange={handleChange}
             ></input>
-          </label>
+          </div>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
-        <div>
-          {responseText.msg}
-          <div>
-            <h3>Old</h3>
-            <p>{responseText.updatedVendor.name}</p>
-            <p>{responseText.updatedVendor.main_contact}</p>
-            <p>{responseText.updatedVendor.phone_number}</p>
-            <p>{responseText.updatedVendor.email}</p>
-            <p>{responseText.updatedVendor.address_line_1}</p>
-            <p>{responseText.updatedVendor.address_line_2}</p>
-            <p>{responseText.updatedVendor.city}</p>
-            <p>{responseText.updatedVendor.state}</p>
-            <p>{responseText.updatedVendor.zip_code}</p>
-            <p>{responseText.updatedVendor.customer_number}</p>
-          </div>
-          <div>
-            <h3>New</h3>
-            <Link
-              onClick={() => selectVendorID(responseText.vendor._id)}
-              to={`/vendordetail/${responseText.vendor._id}`}
-            >
-              {responseText.vendor.name}
-            </Link>
-            <p>{responseText.vendor.main_contact}</p>
-            <p>{responseText.vendor.phone_number}</p>
-            <p>{responseText.vendor.email}</p>
-            <p>{responseText.vendor.address_line_1}</p>
-            <p>{responseText.vendor.address_line_2}</p>
-            <p>{responseText.vendor.city}</p>
-            <p>{responseText.vendor.state}</p>
-            <p>{responseText.vendor.zip_code}</p>
-            <p>{responseText.vendor.customer_number}</p>
+        <div className="container-column">
+          <h3>Vendor Edited</h3>
+          <div className="container-row">
+            <div className="container-background">
+              <h3>Previous</h3>
+              <p>{responseText.updatedVendor.name}</p>
+              <p>{responseText.updatedVendor.main_contact}</p>
+              <p>
+                {formatPhoneNumber(responseText.updatedVendor.phone_number)}
+              </p>
+              <p>{responseText.updatedVendor.email}</p>
+              <p>{responseText.updatedVendor.address_line_1}</p>
+              <p>{responseText.updatedVendor.address_line_2}</p>
+              <p>{responseText.updatedVendor.city}</p>
+              <p>{responseText.updatedVendor.state}</p>
+              <p>{responseText.updatedVendor.zip_code}</p>
+              <p>{responseText.updatedVendor.customer_number}</p>
+            </div>
+
+            <div className="container-background">
+              <h3>New</h3>
+              <Link
+                onClick={() => selectVendorID(responseText.vendor._id)}
+                to={`/vendordetail/${responseText.vendor._id}`}
+              >
+                {responseText.vendor.name}
+              </Link>
+              <p>{responseText.vendor.main_contact}</p>
+              <p>{formatPhoneNumber(responseText.vendor.phone_number)}</p>
+              <p>{responseText.vendor.email}</p>
+              <p>{responseText.vendor.address_line_1}</p>
+              <p>{responseText.vendor.address_line_2}</p>
+              <p>{responseText.vendor.city}</p>
+              <p>{responseText.vendor.state}</p>
+              <p>{responseText.vendor.zip_code}</p>
+              <p>{responseText.vendor.customer_number}</p>
+            </div>
           </div>
         </div>
       )}

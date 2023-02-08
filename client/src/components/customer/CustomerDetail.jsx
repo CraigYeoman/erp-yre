@@ -99,7 +99,6 @@ const CustomerDetail = () => {
             notes,
             complete,
           } = workOrder;
-          console.log(customerDetail.customer_workorders);
           return (
             <fieldset className="customer-detail-work-order" key={_id}>
               <legend>

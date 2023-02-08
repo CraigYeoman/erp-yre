@@ -6,6 +6,8 @@ const Parts = require("../models/parts");
 const Labor = require("../models/labor");
 const Accessories = require("../models/accessories");
 const async = require("async");
+const endOfWeek = require("date-fns/endOfWeek");
+const startOfWeek = require("date-fns/startOfWeek");
 
 // Display list of all Work orders.
 const getAllWorkOrdersStatic = async (req, res) => {
@@ -13,7 +15,7 @@ const getAllWorkOrdersStatic = async (req, res) => {
   res.status(200).json({ workOrders, nbHits: workOrders.length });
 };
 
-const index = (req, res, next) => {
+const indexOld = (req, res, next) => {
   async.parallel(
     {
       work_order_count(callback) {
@@ -55,6 +57,32 @@ const index = (req, res, next) => {
       });
     }
   );
+};
+
+const index = async (req, res, next) => {
+  const collection = await JobType.find();
+  const countArray = [];
+
+  for (const job of collection) {
+    let count = await WorkOrder.countDocuments({
+      jobType: job._id,
+    });
+    countArray.push({ name: job.name, count: count });
+  }
+
+  currentDate = new Date();
+  let start = startOfWeek(currentDate);
+  let end = endOfWeek(currentDate);
+  start.toISOString();
+  end.toISOString();
+
+  const due_this_week = await WorkOrder.find({
+    $and: [{ date_due: { $gte: start } }, { date_due: { $lte: end } }],
+  });
+
+  console.log(start);
+  console.log(end);
+  res.status(200).json({ countArray, due_this_week });
 };
 
 const getAllWorkOrders = async (req, res) => {

@@ -11,30 +11,41 @@ const Index = () => {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        console.log(data);
       });
   }, []);
 
-  if (data.results == null) {
+  if (data.countArray == null) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
       </section>
     );
   }
-  const {
-    work_order_count,
-    work_order_count_new,
-    work_order_count_refreshen,
-    work_order_count_repair,
-    work_order_count_machine_work,
-    work_order_count_in_out,
-    work_order_count_walk_in,
-    work_order_count_used,
-  } = data.results;
+
+  console.log(data);
+
+  // const {
+  //   work_order_count,
+  //   work_order_count_new,
+  //   work_order_count_refreshen,
+  //   work_order_count_repair,
+  //   work_order_count_machine_work,
+  //   work_order_count_in_out,
+  //   work_order_count_walk_in,
+  //   work_order_count_used,
+  // } = data.results;
   return (
     <div>
       <h1>Erp App</h1>
-      <div>
+      {data.countArray.map((jobType) => (
+        <div>
+          <p>
+            {jobType.name}:{jobType.count}
+          </p>
+        </div>
+      ))}
+      {/* <div>
         <h3>Work Order Count: {work_order_count}</h3>
         <h3>New Motors: {work_order_count_new}</h3>
         <h3>Refreshens {work_order_count_refreshen}</h3>
@@ -43,7 +54,7 @@ const Index = () => {
         <h3>Machine Work: {work_order_count_machine_work}</h3>
         <h3>In and Out: {work_order_count_in_out}</h3>
         <h3>Walk In: {work_order_count_walk_in}</h3>
-      </div>
+      </div> */}
     </div>
   );
 };

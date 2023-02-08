@@ -30,7 +30,6 @@ const JobTypeEditForm = () => {
       name,
       _id,
     };
-    console.log(jobtypeData);
     try {
       const url = `${rootUrl}/api/v1/erp/jobtypes/${jobTypeDetail._id}/edit`;
       axios
@@ -64,36 +63,45 @@ const JobTypeEditForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">
-            Job Type Name:
-            <input
-              type="text"
-              placeholder="name"
-              name="name"
-              required={true}
-              value={values.name}
-              onChange={handleChange}
-            ></input>
-          </label>
+    <div className="container-column">
+      <form className="container-column gap" onSubmit={onSubmit}>
+        <div className="container-column">
+          <label htmlFor="name">Job Type Name</label>
+          <input
+            type="text"
+            placeholder="name"
+            name="name"
+            required={true}
+            value={values.name}
+            onChange={handleChange}
+          ></input>
         </div>
-        <button type="submit">Submit</button>
+        <button className="buttons" type="submit">
+          Submit
+        </button>
       </form>
       {response && (
-        <div>
-          <p>{responseText.msg}</p>
-          <p>Old {responseText.updatedJobType.name}</p>
-          <p>
-            New{" "}
-            <Link
-              onClick={() => selectJobTypeID(responseText.jobtype._id)}
-              to={`/jobtypedetail/${responseText.jobtype._id}`}
-            >
-              {responseText.jobtype.name}
-            </Link>
-          </p>
+        <div className="container-column">
+          <h3>Job Type Edited</h3>
+          <div className="container-column">
+            <div className="container-row">
+              <div className="container-background">
+                <h3>Previous</h3>
+                <p>{responseText.updatedJobType.name}</p>
+              </div>
+              <div className="container-background">
+                <h3>New</h3>
+                <p>
+                  <Link
+                    onClick={() => selectJobTypeID(responseText.jobtype._id)}
+                    to={`/jobtypedetail/${responseText.jobtype._id}`}
+                  >
+                    {responseText.jobtype.name}
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
       {responseError && (

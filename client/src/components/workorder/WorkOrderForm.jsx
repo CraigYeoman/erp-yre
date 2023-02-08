@@ -43,11 +43,9 @@ const WorkOrderForm = () => {
     if (event.target.checked === true) {
       const updatedValues = [...array, id];
       func(updatedValues);
-      console.log(updatedValues);
     } else if (event.target.checked === false) {
       const updatedValues = array.filter((a) => a !== id);
       func(updatedValues);
-      console.log(updatedValues);
     }
   };
 

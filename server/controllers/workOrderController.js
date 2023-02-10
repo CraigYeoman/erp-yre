@@ -71,18 +71,49 @@ const index = async (req, res, next) => {
   }
 
   currentDate = new Date();
-  let start = startOfWeek(currentDate);
-  let end = endOfWeek(currentDate);
-  start.toISOString();
-  end.toISOString();
+  let currentWeekStart = startOfWeek(currentDate);
+  let currentWeekEnd = endOfWeek(currentDate);
+  let nextWeekStart = new Date(currentWeekStart);
+  let nextWeekEnd = new Date(currentWeekEnd);
+  let thirdWeekStart = new Date(currentWeekStart);
+  let fourthWeekEnd = new Date(currentWeekEnd);
+  currentWeekStart.toISOString();
+  currentWeekEnd.toISOString();
+  nextWeekStart.setDate(nextWeekStart.getDate() + 7);
+  nextWeekEnd.setDate(nextWeekEnd.getDate() + 7);
+  thirdWeekStart.setDate(nextWeekStart.getDate() + 14);
+  fourthWeekEnd.setDate(nextWeekEnd.getDate() + 28);
 
   const due_this_week = await WorkOrder.find({
-    $and: [{ date_due: { $gte: start } }, { date_due: { $lte: end } }],
-  });
+    $and: [
+      { date_due: { $gte: currentWeekStart } },
+      { date_due: { $lte: currentWeekEnd } },
+    ],
+  })
+    .populate("customer")
+    .populate("jobType");
 
-  console.log(start);
-  console.log(end);
-  res.status(200).json({ countArray, due_this_week });
+  const due_next_week = await WorkOrder.find({
+    $and: [
+      { date_due: { $gte: nextWeekStart } },
+      { date_due: { $lte: nextWeekEnd } },
+    ],
+  })
+    .populate("customer")
+    .populate("jobType");
+
+  const due_week_three_four = await WorkOrder.find({
+    $and: [
+      { date_due: { $gte: thirdWeekStart } },
+      { date_due: { $lte: fourthWeekEnd } },
+    ],
+  })
+    .populate("customer")
+    .populate("jobType");
+
+  res
+    .status(200)
+    .json({ countArray, due_this_week, due_next_week, due_week_three_four });
 };
 
 const getAllWorkOrders = async (req, res) => {

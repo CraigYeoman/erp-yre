@@ -1,10 +1,11 @@
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../context";
+const { DateTime } = require("luxon");
 
 const Index = () => {
   const [data, setData] = useState([{}]);
-  const { rootUrl } = useGlobalContext();
+  const { rootUrl, selectCustomerID, selectWorkOrderID } = useGlobalContext();
 
   useEffect(() => {
     fetch(`${rootUrl}/api/v1/erp/workorders/index`)
@@ -38,23 +39,79 @@ const Index = () => {
   return (
     <div>
       <h1>Erp App</h1>
-      {data.countArray.map((jobType) => (
-        <div>
-          <p>
-            {jobType.name}:{jobType.count}
-          </p>
-        </div>
-      ))}
-      {/* <div>
-        <h3>Work Order Count: {work_order_count}</h3>
-        <h3>New Motors: {work_order_count_new}</h3>
-        <h3>Refreshens {work_order_count_refreshen}</h3>
-        <h3>Repairs: {work_order_count_repair}</h3>
-        <h3>Used: {work_order_count_used}</h3>
-        <h3>Machine Work: {work_order_count_machine_work}</h3>
-        <h3>In and Out: {work_order_count_in_out}</h3>
-        <h3>Walk In: {work_order_count_walk_in}</h3>
-      </div> */}
+      <div>
+        Work Order Totals
+        {data.countArray.map((jobType) => (
+          <div>
+            <p>
+              {jobType.name}:{jobType.count}
+            </p>
+          </div>
+        ))}
+      </div>
+      <div>
+        Due This Week
+        {data.due_this_week.map((work_order) => (
+          <div>
+            <p>{DateTime.fromISO(work_order.date_due).toFormat("D")}</p>
+            <Link
+              onClick={() => selectWorkOrderID(work_order._id)}
+              to={`/workorderdetail/${work_order._id}`}
+            >
+              {work_order.work_order_number}
+            </Link>
+            <Link
+              onClick={() => selectCustomerID(work_order.customer._id)}
+              to={`/customerdetail/${work_order.customer._id}`}
+            >
+              {work_order.customer.first_name} {work_order.customer.last_name}
+            </Link>
+            <p>{work_order.jobType.name}</p>
+          </div>
+        ))}
+      </div>
+      <div>
+        Due Next Week
+        {data.due_next_week.map((work_order) => (
+          <div>
+            <p>{DateTime.fromISO(work_order.date_due).toFormat("D")}</p>
+            <Link
+              onClick={() => selectWorkOrderID(work_order._id)}
+              to={`/workorderdetail/${work_order._id}`}
+            >
+              {work_order.work_order_number}
+            </Link>
+            <Link
+              onClick={() => selectCustomerID(work_order.customer._id)}
+              to={`/customerdetail/${work_order.customer._id}`}
+            >
+              {work_order.customer.first_name} {work_order.customer.last_name}
+            </Link>
+            <p>{work_order.jobType.name}</p>
+          </div>
+        ))}
+      </div>
+      <div>
+        Due In 30 Days
+        {data.due_week_three_four.map((work_order) => (
+          <div>
+            <p>{DateTime.fromISO(work_order.date_due).toFormat("D")}</p>
+            <Link
+              onClick={() => selectWorkOrderID(work_order._id)}
+              to={`/workorderdetail/${work_order._id}`}
+            >
+              {work_order.work_order_number}
+            </Link>
+            <Link
+              onClick={() => selectCustomerID(work_order.customer._id)}
+              to={`/customerdetail/${work_order.customer._id}`}
+            >
+              {work_order.customer.first_name} {work_order.customer.last_name}
+            </Link>
+            <p>{work_order.jobType.name}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

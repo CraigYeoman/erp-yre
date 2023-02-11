@@ -84,6 +84,12 @@ const index = async (req, res, next) => {
   thirdWeekStart.setDate(nextWeekStart.getDate() + 14);
   fourthWeekEnd.setDate(nextWeekEnd.getDate() + 28);
 
+  const past_due = await WorkOrder.find({
+    date_due: { $lte: currentDate },
+  })
+    .populate("customer")
+    .populate("jobType");
+
   const due_this_week = await WorkOrder.find({
     $and: [
       { date_due: { $gte: currentWeekStart } },
@@ -113,7 +119,13 @@ const index = async (req, res, next) => {
 
   res
     .status(200)
-    .json({ countArray, due_this_week, due_next_week, due_week_three_four });
+    .json({
+      countArray,
+      past_due,
+      due_this_week,
+      due_next_week,
+      due_week_three_four,
+    });
 };
 
 const getAllWorkOrders = async (req, res) => {

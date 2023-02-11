@@ -37,6 +37,12 @@ h3 {
     align-items: center;
 }
 
+.container-row.top {
+    align-items: normal;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
 .container-column.gap {
     gap: 10px;
 }
@@ -62,6 +68,11 @@ h3 {
     border: 1px solid var(--main-border-color);
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+.container-background.sized {
+    width: 200px;
+    height: 160px;
 }
 
 .align-left {

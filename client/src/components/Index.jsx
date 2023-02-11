@@ -12,7 +12,6 @@ const Index = () => {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        console.log(data);
       });
   }, []);
 
@@ -24,93 +23,154 @@ const Index = () => {
     );
   }
 
-  console.log(data);
-
-  // const {
-  //   work_order_count,
-  //   work_order_count_new,
-  //   work_order_count_refreshen,
-  //   work_order_count_repair,
-  //   work_order_count_machine_work,
-  //   work_order_count_in_out,
-  //   work_order_count_walk_in,
-  //   work_order_count_used,
-  // } = data.results;
   return (
-    <div>
+    <div className="container-column">
       <h1>Erp App</h1>
-      <div>
-        Work Order Totals
+      <div className="container-row top">
+        <h4>
+          <p>Work Order Totals</p>
+        </h4>
         {data.countArray.map((jobType) => (
-          <div>
+          <h4 key={jobType.name}>
             <p>
-              {jobType.name}:{jobType.count}
+              {jobType.name}: {jobType.count}
             </p>
-          </div>
+          </h4>
         ))}
       </div>
-      <div>
-        Due This Week
-        {data.due_this_week.map((work_order) => (
-          <div>
-            <p>{DateTime.fromISO(work_order.date_due).toFormat("D")}</p>
-            <Link
-              onClick={() => selectWorkOrderID(work_order._id)}
-              to={`/workorderdetail/${work_order._id}`}
-            >
-              {work_order.work_order_number}
-            </Link>
-            <Link
-              onClick={() => selectCustomerID(work_order.customer._id)}
-              to={`/customerdetail/${work_order.customer._id}`}
-            >
-              {work_order.customer.first_name} {work_order.customer.last_name}
-            </Link>
-            <p>{work_order.jobType.name}</p>
+      <div className="container-row top">
+        <div className="container-column">
+          <h3>Past Due</h3>
+          <div className="container-column">
+            {data.past_due.map((work_order) => (
+              <div key={work_order._id} className="container-background sized">
+                <p>
+                  Due Date :{" "}
+                  {DateTime.fromISO(work_order.date_due).toFormat("D")}
+                </p>
+                <p>
+                  Work Order :{" "}
+                  <Link
+                    onClick={() => selectWorkOrderID(work_order._id)}
+                    to={`/workorderdetail/${work_order._id}`}
+                  >
+                    {work_order.work_order_number}
+                  </Link>
+                </p>
+                <p>
+                  Name :{" "}
+                  <Link
+                    onClick={() => selectCustomerID(work_order.customer._id)}
+                    to={`/customerdetail/${work_order.customer._id}`}
+                  >
+                    {work_order.customer.first_name}{" "}
+                    {work_order.customer.last_name}
+                  </Link>
+                </p>
+                <p>Job Type : {work_order.jobType.name}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        Due Next Week
-        {data.due_next_week.map((work_order) => (
-          <div>
-            <p>{DateTime.fromISO(work_order.date_due).toFormat("D")}</p>
-            <Link
-              onClick={() => selectWorkOrderID(work_order._id)}
-              to={`/workorderdetail/${work_order._id}`}
-            >
-              {work_order.work_order_number}
-            </Link>
-            <Link
-              onClick={() => selectCustomerID(work_order.customer._id)}
-              to={`/customerdetail/${work_order.customer._id}`}
-            >
-              {work_order.customer.first_name} {work_order.customer.last_name}
-            </Link>
-            <p>{work_order.jobType.name}</p>
+        </div>
+        <div className="container-column">
+          <h3>Due This Week</h3>
+          <div className="container-column">
+            {data.due_this_week.map((work_order) => (
+              <div key={work_order._id} className="container-background sized">
+                <p>
+                  Due Date :{" "}
+                  {DateTime.fromISO(work_order.date_due).toFormat("D")}
+                </p>
+                <p>
+                  Work Order :{" "}
+                  <Link
+                    onClick={() => selectWorkOrderID(work_order._id)}
+                    to={`/workorderdetail/${work_order._id}`}
+                  >
+                    {work_order.work_order_number}
+                  </Link>
+                </p>
+                <p>
+                  Name :{" "}
+                  <Link
+                    onClick={() => selectCustomerID(work_order.customer._id)}
+                    to={`/customerdetail/${work_order.customer._id}`}
+                  >
+                    {work_order.customer.first_name}{" "}
+                    {work_order.customer.last_name}
+                  </Link>
+                </p>
+                <p>Job Type : {work_order.jobType.name}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        Due In 30 Days
-        {data.due_week_three_four.map((work_order) => (
-          <div>
-            <p>{DateTime.fromISO(work_order.date_due).toFormat("D")}</p>
-            <Link
-              onClick={() => selectWorkOrderID(work_order._id)}
-              to={`/workorderdetail/${work_order._id}`}
-            >
-              {work_order.work_order_number}
-            </Link>
-            <Link
-              onClick={() => selectCustomerID(work_order.customer._id)}
-              to={`/customerdetail/${work_order.customer._id}`}
-            >
-              {work_order.customer.first_name} {work_order.customer.last_name}
-            </Link>
-            <p>{work_order.jobType.name}</p>
+        </div>
+        <div className="container-column">
+          <h3>Due Next Week</h3>
+          <div className="container-column">
+            {data.due_next_week.map((work_order) => (
+              <div key={work_order._id} className="container-background sized">
+                <p>
+                  Due Date :{" "}
+                  {DateTime.fromISO(work_order.date_due).toFormat("D")}
+                </p>
+                <p>
+                  Work Order :{" "}
+                  <Link
+                    onClick={() => selectWorkOrderID(work_order._id)}
+                    to={`/workorderdetail/${work_order._id}`}
+                  >
+                    {work_order.work_order_number}
+                  </Link>
+                </p>
+                <p>
+                  Name :{" "}
+                  <Link
+                    onClick={() => selectCustomerID(work_order.customer._id)}
+                    to={`/customerdetail/${work_order.customer._id}`}
+                  >
+                    {work_order.customer.first_name}{" "}
+                    {work_order.customer.last_name}
+                  </Link>
+                </p>
+                <p>Job Type : {work_order.jobType.name}</p>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <div className="container-column">
+          <h3>Due In 30 Days</h3>
+          <div className="container-column">
+            {data.due_week_three_four.map((work_order) => (
+              <div key={work_order._id} className="container-background sized">
+                <p>
+                  Due Date :{" "}
+                  {DateTime.fromISO(work_order.date_due).toFormat("D")}
+                </p>
+                <p>
+                  Work Order :{" "}
+                  <Link
+                    onClick={() => selectWorkOrderID(work_order._id)}
+                    to={`/workorderdetail/${work_order._id}`}
+                  >
+                    {work_order.work_order_number}
+                  </Link>
+                </p>
+                <p>
+                  Name :{" "}
+                  <Link
+                    onClick={() => selectCustomerID(work_order.customer._id)}
+                    to={`/customerdetail/${work_order.customer._id}`}
+                  >
+                    {work_order.customer.first_name}{" "}
+                    {work_order.customer.last_name}
+                  </Link>
+                </p>
+                <p>Job Type : {work_order.jobType.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

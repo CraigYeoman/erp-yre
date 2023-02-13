@@ -45,13 +45,13 @@ const workOrderSchema = new Schema({
   ],
   parts: [
     {
-      type: Schema.Types.ObjectId,
+      type: Array,
       ref: "Parts",
     },
   ],
   labor: [
     {
-      type: Schema.Types.ObjectId,
+      type: Array,
       ref: "Labor",
     },
   ],

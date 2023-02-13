@@ -14,6 +14,12 @@ const PartsSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Vendor",
   },
+  category: {
+    type: String,
+    required: true,
+    minLength: 3,
+    maxLength: 100,
+  },
   manufacture: { type: String, required: true, minLength: 3, maxLength: 100 },
 });
 

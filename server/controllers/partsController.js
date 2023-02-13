@@ -138,6 +138,7 @@ const parts_create_post = [
     .isLength({ min: 1 })
     .escape()
     .withMessage("Manufacture must be specified."),
+  body("category").isLength({ min: 1 }),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -153,6 +154,7 @@ const parts_create_post = [
       part_number: req.body.part_number,
       vendor: req.body.vendor,
       manufacture: req.body.manufacture,
+      category: req.body.category,
     });
 
     if (!errors.isEmpty()) {
@@ -263,6 +265,7 @@ const part_edit_post = [
       part_number: req.body.part_number,
       vendor: req.body.vendor,
       manufacture: req.body.manufacture,
+      category: req.body.category,
       _id: req.params.id,
     });
 

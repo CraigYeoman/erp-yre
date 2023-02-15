@@ -1,15 +1,14 @@
 const { body, validationResult } = require("express-validator");
 const PartCategory = require("../models/partCategory");
-const WorkOrder = require("../models/workOrder");
 const async = require("async");
 
-// Display list of all job types.
-const getAllPartCategorysStatic = async (req, res) => {
-  const partcategorys = await PartCategory.find().sort("type");
-  res.status(200).json({ partcategorys, nbHits: partcategorys.length });
+// Display list of all Part Categorys.
+const getAllpartCategoriesStatic = async (req, res) => {
+  const partCategories = await PartCategory.find().sort("type");
+  res.status(200).json({ partCategories, nbHits: partCategories.length });
 };
 
-const getAllPartCategorys = async (req, res) => {
+const getAllpartCategories = async (req, res) => {
   const { name, sort, fields } = req.query;
   const queryObject = {};
   if (name) {
@@ -35,8 +34,8 @@ const getAllPartCategorys = async (req, res) => {
 
   result = result.skip(skip).limit(limit);
 
-  const partCategorys = await result;
-  res.status(200).json({ partCategorys, nbHits: partCategorys.length });
+  const partCategories = await result;
+  res.status(200).json({ partCategories, nbHits: partCategories.length });
 };
 
 const part_category_detail = (req, res, next) => {
@@ -47,7 +46,7 @@ const part_category_detail = (req, res, next) => {
     }
     if (results == null) {
       // No results.
-      const err = new Error("Job type not found");
+      const err = new Error("Part Category not found");
       err.status = 404;
       return next(err);
     }
@@ -86,14 +85,14 @@ const part_category_create_post = [
       }
       // part category saved.
       res.status(200).json({
-        msg: "job type created",
+        msg: "Part Category created",
         partcategory: partcategory,
       });
     });
   },
 ];
 
-// Handle Job Type delete on GET.
+// Handle Part Category delete on GET.
 const part_category_delete_get = (req, res, next) => {
   async.parallel(
     {
@@ -113,9 +112,8 @@ const part_category_delete_get = (req, res, next) => {
   );
 };
 
-// Handle Job Type delete on POST.
+// Handle Part Category delete on POST.
 const part_category_delete_post = (req, res, next) => {
-  // Job Type has no work orders. Delete object and redirect to the list of Job Types.
   PartCategory.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       return next(err);
@@ -130,7 +128,10 @@ const part_category_delete_post = (req, res, next) => {
 // Handle Part Category edit on POST
 const part_category_edit_post = [
   // Validate and sanitize fields.
-  body("name", "Job Type name required").trim().isLength({ min: 1 }).escape(),
+  body("name", "Part Category name required")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
   // Process request after validation and sanitization.
   (req, res, next) => {
     // Extract the validation errors from a request.
@@ -145,7 +146,7 @@ const part_category_edit_post = [
 
       return;
     }
-    // Create a partcategory object with escaped and trimmed data.
+    // Create a part category object with escaped and trimmed data.
     const partcategory = new PartCategory({
       name: req.body.name,
       _id: req.params.id,
@@ -161,7 +162,7 @@ const part_category_edit_post = [
         }
         // partcategory saved.
         res.status(200).json({
-          msg: "job type edited",
+          msg: "Part category edited",
           partcategory: partcategory,
           updatedPartCategory: updatedPartCategory,
         });
@@ -171,8 +172,8 @@ const part_category_edit_post = [
 ];
 
 module.exports = {
-  getAllPartCategorysStatic,
-  getAllPartCategorys,
+  getAllpartCategoriesStatic,
+  getAllpartCategories,
   part_category_detail,
   part_category_create_post,
   part_category_delete_get,

@@ -13,9 +13,12 @@ import LaborEditForm from "./components/labor/LaborEditForm";
 import LaborForm from "./components/labor/LaborForm";
 import LaborList from "./components/labor/LaborList";
 import PartDetail from "./components/parts/PartDetail";
-import PartEdit from "./components/parts/PartEditFrom";
+import PartEdit from "./components/parts/PartEditForm";
 import PartsList from "./components/parts/PartsList";
 import PartForm from "./components/parts/PartForm";
+import PartCategory from "./components/parts/PartCategory";
+import PartCategoryDetail from "./components/parts/PartCategoryDetail";
+import PartCategoryForm from "./components/parts/PartCategoryForm";
 import VendorDetail from "./components/vendor/VendorDetail";
 import VendorEdit from "./components/vendor/VendorEditForm";
 import VendorForm from "./components/vendor/VendorForm";
@@ -57,6 +60,15 @@ function App() {
           <Route path="/partedit/:id" element={<PartEdit />}></Route>
           <Route path="/partslist" element={<PartsList />}></Route>
           <Route path="/partform" element={<PartForm />}></Route>
+          <Route path="/partcategory" element={<PartCategory />}></Route>
+          <Route
+            path="/partcategoryform"
+            element={<PartCategoryForm />}
+          ></Route>
+          <Route
+            path="/partcategorydetail"
+            element={<PartCategoryDetail />}
+          ></Route>
           <Route path="/vendordetail/:id" element={<VendorDetail />}></Route>
           <Route path="/vendoredit/:id" element={<VendorEdit />}></Route>
           <Route path="/vendorform" element={<VendorForm />}></Route>

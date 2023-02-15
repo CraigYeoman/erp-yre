@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getAllPartCategorysStatic,
-  getAllPartCategorys,
+  getAllpartCategoriesStatic,
+  getAllpartCategories,
   part_category_detail,
   part_category_create_post,
   part_category_delete_get,
@@ -25,7 +25,7 @@ router.route("/:id/edit").post(part_category_edit_post);
 // GET request for one Job Type.
 router.route("/:id").get(part_category_detail);
 // GET request for list of all Job Type items.
-router.route("/").get(getAllPartCategorys);
-router.route("/static").get(getAllPartCategorysStatic);
+router.route("/").get(getAllpartCategories);
+router.route("/static").get(getAllpartCategoriesStatic);
 
 module.exports = router;

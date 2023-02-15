@@ -3,6 +3,7 @@ const Parts = require("../models/parts");
 const Vendor = require("../models/vendor");
 const WorkOrder = require("../models/workOrder");
 const async = require("async");
+const Category = require("../models/partCategory");
 
 // Display list of all parts.
 const getAllPartsStatic = async (req, res) => {
@@ -55,7 +56,9 @@ const getAllParts = async (req, res) => {
     });
   }
 
-  let result = Parts.find(queryObject).populate("vendor");
+  let result = Parts.find(queryObject)
+    .populate("vendor")
+    .populate("partCategory");
   // sort
   if (sort) {
     const sortList = sort.split(",").join(" ");
@@ -82,6 +85,7 @@ const getAllParts = async (req, res) => {
 const part_detail = (req, res, next) => {
   Parts.findById(req.params.id)
     .populate("vendor")
+    .populate("partCategory")
     .exec(function (err, results) {
       if (err) {
         // Error in API usage.
@@ -154,7 +158,7 @@ const parts_create_post = [
       part_number: req.body.part_number,
       vendor: req.body.vendor,
       manufacture: req.body.manufacture,
-      category: req.body.category,
+      PartCategory: req.body.partCategory,
     });
 
     if (!errors.isEmpty()) {
@@ -250,6 +254,7 @@ const part_edit_post = [
     .isLength({ min: 1 })
     .escape()
     .withMessage("Manufacture must be specified."),
+  body("category").isLength({ min: 1 }),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -265,7 +270,7 @@ const part_edit_post = [
       part_number: req.body.part_number,
       vendor: req.body.vendor,
       manufacture: req.body.manufacture,
-      category: req.body.category,
+      partCategory: req.body.partCategory,
       _id: req.params.id,
     });
 

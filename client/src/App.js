@@ -18,6 +18,7 @@ import PartsList from "./components/parts/PartsList";
 import PartForm from "./components/parts/PartForm";
 import PartCategory from "./components/parts/PartCategory";
 import PartCategoryDetail from "./components/parts/PartCategoryDetail";
+import PartCategoryEdit from "./components/parts/PartCategoryEditFrom";
 import PartCategoryForm from "./components/parts/PartCategoryForm";
 import VendorDetail from "./components/vendor/VendorDetail";
 import VendorEdit from "./components/vendor/VendorEditForm";
@@ -66,8 +67,12 @@ function App() {
             element={<PartCategoryForm />}
           ></Route>
           <Route
-            path="/partcategorydetail"
+            path="/partcategorydetail/:id"
             element={<PartCategoryDetail />}
+          ></Route>
+          <Route
+            path="/partcategoryedit/:id"
+            element={<PartCategoryEdit />}
           ></Route>
           <Route path="/vendordetail/:id" element={<VendorDetail />}></Route>
           <Route path="/vendoredit/:id" element={<VendorEdit />}></Route>

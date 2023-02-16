@@ -4,16 +4,19 @@ import { useGlobalContext } from "../../context";
 import { useState } from "react";
 const rootUrl = "http://localhost:5000";
 
-const PartCategoryForm = () => {
-  const { loading, selectPartCategoryID } = useGlobalContext();
+const PartCategoryEditForm = () => {
+  const { loading, selectPartCategoryID, partCategoryDetail } =
+    useGlobalContext();
   const [values, setValues] = useState({
-    name: "",
+    name: partCategoryDetail.name,
+    _id: partCategoryDetail._id,
   });
 
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
   const [responseTextError, setResponseTextError] = useState("");
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -22,14 +25,16 @@ const PartCategoryForm = () => {
     e.preventDefault();
     setResponse(false);
     setResponseError(false);
-    const { name } = values;
-    const partcategoryData = {
+
+    const { name, _id } = values;
+    const partCategoryData = {
       name,
+      _id,
     };
     try {
-      const url = `${rootUrl}/api/v1/erp/partcategory/create`;
+      const url = `${rootUrl}/api/v1/erp/partcategory/${partCategoryDetail._id}/edit`;
       axios
-        .post(url, partcategoryData)
+        .post(url, partCategoryData)
         .then(function (response) {
           setResponseText(response.data);
           setResponse(true);
@@ -49,6 +54,7 @@ const PartCategoryForm = () => {
       setResponseError(true);
     }
   };
+
   if (loading) {
     return (
       <section className="section">
@@ -59,7 +65,6 @@ const PartCategoryForm = () => {
 
   return (
     <div className="container-column">
-      <h3>New Part Category</h3>
       <form className="container-column gap" onSubmit={onSubmit}>
         <div className="container-column">
           <label htmlFor="name">Part Category Name</label>
@@ -77,22 +82,36 @@ const PartCategoryForm = () => {
         </button>
       </form>
       {response && (
-        <div>
-          {responseText.msg}
-          <Link
-            onClick={() => selectPartCategoryID(responseText.partcategory._id)}
-            to={`/partcategorydetail/${responseText.partcategory._id}`}
-          >
-            {" "}
-            {responseText.partcategory.name}
-          </Link>
+        <div className="container-column">
+          <h3>Part Category Edited</h3>
+          <div className="container-column">
+            <div className="container-row">
+              <div className="container-background">
+                <h3>Previous</h3>
+                <p>{responseText.updatedPartCategory.name}</p>
+              </div>
+              <div className="container-background">
+                <h3>New</h3>
+                <p>
+                  <Link
+                    onClick={() =>
+                      selectPartCategoryID(responseText.partcategory._id)
+                    }
+                    to={`/partcategorydetail/${responseText.partcategory._id}`}
+                  >
+                    {responseText.partcategory.name}
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
       {responseError && (
         <div>
           <p>
             {responseTextError.partcategory.name}
-            not created
+            not edited
           </p>
           {responseTextError.errors.map((error) => {
             const { msg, param, value } = error;
@@ -108,4 +127,4 @@ const PartCategoryForm = () => {
   );
 };
 
-export default PartCategoryForm;
+export default PartCategoryEditForm;

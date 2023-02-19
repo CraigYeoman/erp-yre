@@ -7,6 +7,7 @@ const AppProvider = ({ children }) => {
   const [customerDetail, setCustomerDetail] = useState([{}]);
   const [jobTypeDetail, setJobTypeDetail] = useState([{}]);
   const [laborDetail, setLaborDetail] = useState([{}]);
+  const [laborCategoryDetail, setLaborCategoryDetail] = useState([{}]);
   const [partDetail, setPartDetail] = useState([{}]);
   const [partCategoryDetail, setPartCategoryDetail] = useState([{}]);
   const [vendorDetail, setVendorDetail] = useState([{}]);
@@ -113,6 +114,22 @@ const AppProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const fetchLaborCategoryDetail = async (idPart) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`/api/v1/erp/laborcategory/${idPart}`);
+
+      if (data) {
+        setLaborCategoryDetail(data.labor_category_detail);
+      } else {
+        setLaborCategoryDetail([]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
   const fetchPartDetail = async (idPart) => {
     setLoading(true);
     try {
@@ -194,6 +211,10 @@ const AppProvider = ({ children }) => {
     fetchPartDetail(id);
   };
 
+  const selectLaborCategoryID = (id) => {
+    fetchLaborCategoryDetail(id);
+  };
+
   const selectPartCategoryID = (id) => {
     fetchPartCategoryDetail(id);
   };
@@ -233,6 +254,7 @@ const AppProvider = ({ children }) => {
         vendorDetail,
         workOrderDetail,
         partCategoryDetail,
+        laborCategoryDetail,
 
         selectCustomerID,
         selectJobTypeID,
@@ -242,6 +264,7 @@ const AppProvider = ({ children }) => {
         selectWorkOrderID,
         setListType,
         selectPartCategoryID,
+        selectLaborCategoryID,
 
         id,
         selectID,

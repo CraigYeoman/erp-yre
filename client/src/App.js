@@ -12,6 +12,10 @@ import LaborDetail from "./components/labor/LaborDetail";
 import LaborEditForm from "./components/labor/LaborEditForm";
 import LaborForm from "./components/labor/LaborForm";
 import LaborList from "./components/labor/LaborList";
+import LaborCategory from "./components/labor/LaborCategory";
+import LaborCategoryDetail from "./components/labor/LaborCategoryDetail";
+import LaborCategoryEdit from "./components/labor/LaborCategoryEditFrom";
+import LaborCategoryForm from "./components/labor/LaborCategoryForm";
 import PartDetail from "./components/parts/PartDetail";
 import PartEdit from "./components/parts/PartEditForm";
 import PartsList from "./components/parts/PartsList";
@@ -57,6 +61,19 @@ function App() {
           <Route path="/laboredit/:id" element={<LaborEditForm />}></Route>
           <Route path="/laborform" element={<LaborForm />}></Route>
           <Route path="/laborlist" element={<LaborList />}></Route>
+          <Route path="/laborcategory" element={<LaborCategory />}></Route>
+          <Route
+            path="/laborcategoryform"
+            element={<LaborCategoryForm />}
+          ></Route>
+          <Route
+            path="/laborcategorydetail/:id"
+            element={<LaborCategoryDetail />}
+          ></Route>
+          <Route
+            path="/laborcategoryedit/:id"
+            element={<LaborCategoryEdit />}
+          ></Route>
           <Route path="/partdetail/:id" element={<PartDetail />}></Route>
           <Route path="/partedit/:id" element={<PartEdit />}></Route>
           <Route path="/partslist" element={<PartsList />}></Route>

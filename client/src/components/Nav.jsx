@@ -47,6 +47,9 @@ function Nav() {
           Labor List
         </Link>
         <Link to="/laborform">New Labor</Link>
+        <Link onClick={() => setListType("laborcategory")} to="/laborcategory">
+          Labor Category
+        </Link>
       </div>
       <div className="nav-container">
         <h3>Job Types</h3>

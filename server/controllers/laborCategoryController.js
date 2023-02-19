@@ -85,7 +85,7 @@ const labor_category_create_post = [
       }
       // labor category saved.
       res.status(200).json({
-        msg: "labor Category created",
+        msg: "Labor Category created",
         laborcategory: laborcategory,
       });
     });

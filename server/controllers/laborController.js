@@ -84,7 +84,15 @@ const labor_detail = (req, res, next) => {
     });
 };
 
-// Display Labor create form on GET - not needed
+// Display Labor create form on GET
+const labor_create_get = async (res) => {
+  let result = Category.find().exec(callback);
+
+  const category = await result;
+  res.status(200).json({
+    category,
+  });
+};
 
 // Handle Labor create on POST.
 
@@ -92,6 +100,7 @@ const labor_create_post = [
   // Validate and sanitize the name field.
   body("name", "Labor name required").trim().isLength({ min: 1 }).escape(),
   body("price", "Labor price required").trim().isLength({ min: 1 }).escape(),
+  body("laborCategory").trim().isLength({ min: 1 }).escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -99,7 +108,11 @@ const labor_create_post = [
     const errors = validationResult(req);
 
     // Create a labor object with escaped and trimmed data.
-    const labor = new Labor({ name: req.body.name, price: req.body.price });
+    const labor = new Labor({
+      name: req.body.name,
+      price: req.body.price,
+      laborCategory: req.body.laborCategory,
+    });
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
       res.json({
@@ -186,6 +199,7 @@ const labor_edit_post = [
   // Validate and sanitize the name field.
   body("name", "Labor name required").trim().isLength({ min: 1 }).escape(),
   body("price", "Labor price required").trim().isLength({ min: 1 }).escape(),
+  body("laborCategory").trim().isLength({ min: 1 }).escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -205,6 +219,7 @@ const labor_edit_post = [
     const labor = new Labor({
       name: req.body.name,
       price: req.body.price,
+      laborCategory: req.body.laborCategory,
       _id: req.params.id,
     });
 
@@ -228,6 +243,7 @@ module.exports = {
   labor_detail,
   labor_create_post,
   labor_delete_post,
+  labor_create_get,
   labor_delete_get,
   labor_edit_post,
 };

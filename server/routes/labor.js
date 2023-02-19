@@ -5,6 +5,7 @@ const {
   getAllLabor,
   getAllLaborStatic,
   labor_detail,
+  labor_create_get,
   labor_create_post,
   labor_delete_get,
   labor_delete_post,
@@ -12,7 +13,7 @@ const {
 } = require("../controllers/laborController");
 
 // GET request for creating a Labor - not needed
-
+router.route("/create").get(labor_create_get);
 // POST request for creating Labor.
 router.route("/create").post(labor_create_post);
 // GET request to delete Labor.

@@ -10,6 +10,10 @@ const LaborSchema = new Schema({
     maxLength: 100,
   },
   price: { type: Number, required: [true, "Labor price must be provided"] },
+  laborCategory: {
+    type: Schema.Types.ObjectId,
+    ref: "LaborCategory",
+  },
 });
 
 LaborSchema.virtual("url").get(function () {

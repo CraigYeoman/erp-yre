@@ -9,7 +9,7 @@ const PartForm = () => {
     fetch("/api/v1/erp/parts/create")
       .then((response) => response.json())
       .then((data) => {
-        setVendorInfo(data);
+        setPartInfo(data);
       });
   }, []);
 
@@ -21,13 +21,14 @@ const PartForm = () => {
     part_number: "",
     vendor: "",
     manufacture: "",
+    partCategory: "",
   });
 
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
   const [responseTextError, setResponseTextError] = useState("");
-  const [vendorInfo, setVendorInfo] = useState("");
+  const [partInfo, setPartInfo] = useState("");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -37,8 +38,15 @@ const PartForm = () => {
     e.preventDefault();
     setResponse(false);
     setResponseError(false);
-    const { name, customer_price, cost, part_number, vendor, manufacture } =
-      values;
+    const {
+      name,
+      customer_price,
+      cost,
+      part_number,
+      vendor,
+      manufacture,
+      partCategory,
+    } = values;
     const partData = {
       name,
       customer_price,
@@ -46,6 +54,7 @@ const PartForm = () => {
       part_number,
       vendor,
       manufacture,
+      partCategory,
     };
 
     try {
@@ -69,6 +78,7 @@ const PartForm = () => {
         part_number: "",
         vendor: "",
         manufacture: "",
+        partCategory: "",
       });
     } catch (error) {
       setResponseTextError(error);
@@ -144,12 +154,12 @@ const PartForm = () => {
               value={values.vendor}
             >
               <option value="" disabled selected hidden>
-                Please Choose Vendor
+                Please Choose a Vendor
               </option>
-              {typeof vendorInfo.vendor_list === "undefined" ? (
+              {typeof partInfo.vendor_list === "undefined" ? (
                 <option>Loading...</option>
               ) : (
-                vendorInfo.vendor_list
+                partInfo.vendor_list
                   .sort((a, b) => {
                     let textA = a.name.toUpperCase();
                     let textB = b.name.toUpperCase();
@@ -159,6 +169,38 @@ const PartForm = () => {
                     return (
                       <option value={vendor._id} key={vendor._id}>
                         {vendor.name}
+                      </option>
+                    );
+                  })
+              )}
+            </select>
+          </div>
+          <div className="container-column">
+            <label htmlFor="partCategory">Category</label>
+            <select
+              type="select"
+              placeholder="partCategory"
+              name="partCategory"
+              required={true}
+              onChange={handleChange}
+              value={values.partCategory}
+            >
+              <option value="" disabled selected hidden>
+                Please Choose a Category
+              </option>
+              {typeof partInfo.part_category_list === "undefined" ? (
+                <option>Loading...</option>
+              ) : (
+                partInfo.part_category_list
+                  .sort((a, b) => {
+                    let textA = a.name.toUpperCase();
+                    let textB = b.name.toUpperCase();
+                    return textA < textB ? -1 : textA > textB ? 1 : 0;
+                  })
+                  .map((partCategory) => {
+                    return (
+                      <option value={partCategory._id} key={partCategory._id}>
+                        {partCategory.name}
                       </option>
                     );
                   })
@@ -183,12 +225,12 @@ const PartForm = () => {
       </form>
       {response && (
         <div>
-          {responseText.msg}
+          {responseText.msg}{" "}
           <Link
             onClick={() => selectPartID(responseText.part._id)}
             to={`/partdetail/${responseText.part._id}`}
           >
-            {responseText.part.name} {responseText.part.last_name}
+            {responseText.part.name}
           </Link>
         </div>
       )}

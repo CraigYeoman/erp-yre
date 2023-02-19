@@ -334,7 +334,7 @@ a:hover {
 
  .parts-container-title {
     display: grid;
-    grid-template-columns: 300px 100px 150px 100px 200px;
+    grid-template-columns: 300px 100px 100px 150px 100px 200px;
     align-items: center;
     height: 50px;
     margin-top: 5px;
@@ -347,7 +347,7 @@ a:hover {
 
  .parts-container {
     display: grid;
-    grid-template-columns: 300px 100px 150px 100px 200px;
+    grid-template-columns: 300px 100px 100px 150px 100px 200px;
     align-items: center;
     height: 50px;
     border: 1px solid #ccc;
@@ -355,6 +355,11 @@ a:hover {
     width: auto;
     padding-left: 15px;
     text-align: center;
+ }
+
+ .parts-container p{
+    margin-top: 0px;
+    margin-bottom: 0px;
  }
 
  .parts-container a {

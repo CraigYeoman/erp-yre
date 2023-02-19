@@ -108,15 +108,26 @@ const part_detail = (req, res, next) => {
 // Display parts create form on GET
 
 const parts_create_get = (req, res, next) => {
-  Vendor.find({}, "name").exec((err, vendors) => {
-    if (err) {
-      return next(err);
+  async.parallel(
+    {
+      vendor(callback) {
+        Vendor.find({}, "name").exec(callback);
+      },
+      partCategory(callback) {
+        Category.find({}, "name").exec(callback);
+      },
+    },
+    (err, results) => {
+      console.log(results);
+      if (err) {
+        return next(err);
+      }
+      res.status(200).json({
+        vendor_list: results.vendor,
+        part_category_list: results.partCategory,
+      });
     }
-    // Successful
-    res.status(200).json({
-      vendor_list: vendors,
-    });
-  });
+  );
 };
 
 const parts_create_post = [
@@ -142,7 +153,7 @@ const parts_create_post = [
     .isLength({ min: 1 })
     .escape()
     .withMessage("Manufacture must be specified."),
-  body("category").isLength({ min: 1 }),
+  body("partCategory").isLength({ min: 1 }),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -158,7 +169,7 @@ const parts_create_post = [
       part_number: req.body.part_number,
       vendor: req.body.vendor,
       manufacture: req.body.manufacture,
-      PartCategory: req.body.partCategory,
+      partCategory: req.body.category,
     });
 
     if (!errors.isEmpty()) {

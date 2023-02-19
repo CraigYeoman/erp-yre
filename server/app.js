@@ -14,6 +14,7 @@ const partsRouter = require("./routes/parts");
 const workOrdersRouter = require("./routes/workorders");
 const accessoriesRouter = require("./routes/accessories");
 const partCategoryRouter = require("./routes/partcategory");
+const laborCategoryRouter = require("./routes/laborcategory");
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use("/api/v1/erp/parts", partsRouter);
 app.use("/api/v1/erp/workorders", workOrdersRouter);
 app.use("/api/v1/erp/accessories", accessoriesRouter);
 app.use("/api/v1/erp/partcategory", partCategoryRouter);
+app.use("/api/v1/erp/laborcategory", laborCategoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

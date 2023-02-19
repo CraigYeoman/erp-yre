@@ -16,7 +16,6 @@ const PartsSchema = new Schema({
   },
   partCategory: {
     type: Schema.Types.ObjectId,
-    required: true,
     ref: "PartCategory",
   },
   manufacture: { type: String, required: true, minLength: 3, maxLength: 100 },

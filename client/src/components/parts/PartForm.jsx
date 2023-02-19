@@ -20,8 +20,8 @@ const PartForm = () => {
     cost: "",
     part_number: "",
     vendor: "",
-    manufacture: "",
     partCategory: "",
+    manufacture: "",
   });
 
   const [response, setResponse] = useState(false);
@@ -44,8 +44,8 @@ const PartForm = () => {
       cost,
       part_number,
       vendor,
-      manufacture,
       partCategory,
+      manufacture,
     } = values;
     const partData = {
       name,
@@ -53,12 +53,13 @@ const PartForm = () => {
       cost,
       part_number,
       vendor,
-      manufacture,
       partCategory,
+      manufacture,
     };
 
     try {
       const url = `${rootUrl}/api/v1/erp/parts/create`;
+      console.log(partData);
       axios
         .post(url, partData)
         .then(function (response) {
@@ -77,8 +78,8 @@ const PartForm = () => {
         cost: "",
         part_number: "",
         vendor: "",
-        manufacture: "",
         partCategory: "",
+        manufacture: "",
       });
     } catch (error) {
       setResponseTextError(error);

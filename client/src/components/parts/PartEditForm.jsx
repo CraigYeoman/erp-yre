@@ -9,7 +9,8 @@ const PartEditForm = () => {
     fetch("/api/v1/erp/parts/create")
       .then((response) => response.json())
       .then((data) => {
-        setVendorInfo(data);
+        console.log(data);
+        setPartInfo(data);
       });
   }, []);
 
@@ -21,6 +22,7 @@ const PartEditForm = () => {
     part_number: partDetail.part_number,
     vendor: partDetail.vendor,
     manufacture: partDetail.manufacture,
+    partCategory: partDetail.partCategory,
     _id: partDetail._id,
   });
 
@@ -28,7 +30,7 @@ const PartEditForm = () => {
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
   const [responseTextError, setResponseTextError] = useState("");
-  const [vendorInfo, setVendorInfo] = useState("");
+  const [partInfo, setPartInfo] = useState("");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -46,6 +48,7 @@ const PartEditForm = () => {
       vendor,
       manufacture,
       _id,
+      partCategory,
     } = values;
     const partData = {
       name,
@@ -55,6 +58,7 @@ const PartEditForm = () => {
       vendor,
       manufacture,
       _id,
+      partCategory,
     };
 
     try {
@@ -70,15 +74,6 @@ const PartEditForm = () => {
           console.log(error.response.data);
           setResponseError(true);
         });
-
-      setValues({
-        name: "",
-        customer_price: "",
-        cost: "",
-        part_number: "",
-        vendor: "",
-        manufacture: "",
-      });
     } catch (error) {
       setResponseTextError(error);
       console.log(error);
@@ -113,7 +108,7 @@ const PartEditForm = () => {
             <label htmlFor="customer_price">Customer Price</label>
             <input
               type="number"
-              placeholder="$$$"
+              placeholder={values.customer_price}
               name="customer_price"
               required={true}
               value={values.customer_price}
@@ -152,10 +147,13 @@ const PartEditForm = () => {
               onChange={handleChange}
               value={values.vendor}
             >
-              {typeof vendorInfo.vendor_list === "undefined" ? (
+              <option value={partDetail.vendor._id}>
+                {partDetail.vendor.name}
+              </option>
+              {typeof partInfo.vendor_list === "undefined" ? (
                 <option>Loading...</option>
               ) : (
-                vendorInfo.vendor_list
+                partInfo.vendor_list
                   .sort((a, b) => {
                     let textA = a.name.toUpperCase();
                     let textB = b.name.toUpperCase();
@@ -165,6 +163,38 @@ const PartEditForm = () => {
                     return (
                       <option value={vendor._id} key={vendor._id}>
                         {vendor.name}
+                      </option>
+                    );
+                  })
+              )}
+            </select>
+          </div>
+          <div className="container-column">
+            <label htmlFor="partCategory">Category</label>
+            <select
+              type="select"
+              placeholder="partCategory"
+              name="partCategory"
+              required={true}
+              onChange={handleChange}
+              value={values.partCategory}
+            >
+              <option value={partDetail.partCategory._id}>
+                {partDetail.partCategory.name}
+              </option>
+              {typeof partInfo.part_category_list === "undefined" ? (
+                <option>Loading...</option>
+              ) : (
+                partInfo.part_category_list
+                  .sort((a, b) => {
+                    let textA = a.name.toUpperCase();
+                    let textB = b.name.toUpperCase();
+                    return textA < textB ? -1 : textA > textB ? 1 : 0;
+                  })
+                  .map((partCategory) => {
+                    return (
+                      <option value={partCategory._id} key={partCategory._id}>
+                        {partCategory.name}
                       </option>
                     );
                   })

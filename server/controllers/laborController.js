@@ -2,6 +2,7 @@ const { body, validationResult } = require("express-validator");
 const Labor = require("../models/labor");
 const async = require("async");
 const WorkOrder = require("../models/workOrder");
+const Category = require("../models/laborCategory");
 const port = process.env.port || 3000;
 
 // Display list of all labor.
@@ -38,7 +39,7 @@ const getAllLabor = async (req, res) => {
     });
   }
 
-  let result = Labor.find(queryObject);
+  let result = Labor.find(queryObject).populate("laborCategory");
   // sort
   if (sort) {
     const sortList = sort.split(",").join(" ");
@@ -63,22 +64,24 @@ const getAllLabor = async (req, res) => {
 
 // Display labor page for a specific Labor.
 const labor_detail = (req, res, next) => {
-  Labor.findById(req.params.id).exec(function (err, results) {
-    if (err) {
-      // Error in API usage.
-      return next(err);
-    }
-    if (results == null) {
-      // No results.
-      const err = new Error("Labor not found");
-      err.status = 404;
-      return next(err);
-    }
-    // Successful, so render.
-    res.status(200).json({
-      labor_detail: results,
+  Labor.findById(req.params.id)
+    .populate("laborCategory")
+    .exec(function (err, results) {
+      if (err) {
+        // Error in API usage.
+        return next(err);
+      }
+      if (results == null) {
+        // No results.
+        const err = new Error("Labor not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      res.status(200).json({
+        labor_detail: results,
+      });
     });
-  });
 };
 
 // Display Labor create form on GET - not needed

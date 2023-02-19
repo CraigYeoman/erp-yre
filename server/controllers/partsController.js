@@ -118,10 +118,10 @@ const parts_create_get = (req, res, next) => {
       },
     },
     (err, results) => {
-      console.log(results);
       if (err) {
         return next(err);
       }
+
       res.status(200).json({
         vendor_list: results.vendor,
         part_category_list: results.partCategory,
@@ -148,12 +148,12 @@ const parts_create_post = [
     .escape()
     .withMessage("Part number must be specified."),
   body("vendor").trim().isLength({ min: 1 }).escape(),
+  body("partCategory").trim().isLength({ min: 1 }).escape(),
   body("manufacture")
     .trim()
     .isLength({ min: 1 })
     .escape()
     .withMessage("Manufacture must be specified."),
-  body("partCategory").isLength({ min: 1 }),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -169,7 +169,7 @@ const parts_create_post = [
       part_number: req.body.part_number,
       vendor: req.body.vendor,
       manufacture: req.body.manufacture,
-      partCategory: req.body.category,
+      partCategory: req.body.partCategory,
     });
 
     if (!errors.isEmpty()) {
@@ -260,12 +260,12 @@ const part_edit_post = [
     .escape()
     .withMessage("Part number must be specified."),
   body("vendor").trim().isLength({ min: 1 }).escape(),
+  body("partCategory").trim().isLength({ min: 1 }).escape(),
   body("manufacture")
     .trim()
     .isLength({ min: 1 })
     .escape()
     .withMessage("Manufacture must be specified."),
-  body("category").isLength({ min: 1 }),
 
   // Process request after validation and sanitization.
   (req, res, next) => {

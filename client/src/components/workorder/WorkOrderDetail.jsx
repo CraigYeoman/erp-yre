@@ -30,7 +30,6 @@ const WorkOrderDetail = () => {
     complete,
     date_finished,
     customer,
-    estimatedPrice,
     notes,
     accessories,
     labor,
@@ -38,6 +37,16 @@ const WorkOrderDetail = () => {
     deposit,
     _id,
   } = work_order;
+  console.log(workOrderDetail);
+
+  const sumTotal = (array, name) => {
+    let sum = 0;
+    for (let i = 0; i < array.length; i++) {
+      sum += array[i].name;
+    }
+    return sum;
+  };
+
   return (
     <div className="work-order-detail-container">
       <div className="work-order-detail-title">
@@ -100,14 +109,20 @@ const WorkOrderDetail = () => {
         <fieldset className="work-order-detail-info">
           <legend>Totals</legend>
           <div className="work-order-detail-name">
-            <p>Est. Total: </p>
+            <p>Labor Total</p>
+
+            <p>Parts Total</p>
+            <p>Grand Total</p>
+
             <p>Deposit: </p>
             <p>Est. Due: </p>
           </div>
           <div className="work-order-detail-value">
-            <p>${estimatedPrice}</p>
+            <p>${sumTotal(labor)}</p>
+            <p>${sumTotal(parts)}</p>
+            <p>${sumTotal(labor) + sumTotal(parts)}</p>
             <p>${deposit}</p>
-            <p>${estimatedPrice - deposit}</p>
+            <p>${deposit - sumTotal(labor) + sumTotal(parts)}</p>
           </div>
         </fieldset>
         <fieldset className="work-order-detail-info">
@@ -121,6 +136,7 @@ const WorkOrderDetail = () => {
         ) : (
           <fieldset className="work-order-detail-info">
             <legend>Labor</legend>
+
             <div className="work-order-detail-name">
               {labor.map((labor) => {
                 return (
@@ -147,6 +163,7 @@ const WorkOrderDetail = () => {
         ) : (
           <fieldset className="work-order-detail-info">
             <legend>Parts Needed</legend>
+
             <div className="work-order-detail-name">
               {parts.map((part) => {
                 return (

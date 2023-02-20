@@ -85,12 +85,22 @@ const labor_detail = (req, res, next) => {
 };
 
 // Display Labor create form on GET
-const labor_create_get = async (res) => {
-  let result = Category.find().exec(callback);
-
-  const category = await result;
-  res.status(200).json({
-    category,
+const labor_create_get = (req, res, next) => {
+  Category.find().exec(function (err, results) {
+    if (err) {
+      // Error in API usage.
+      return next(err);
+    }
+    if (results == null) {
+      // No results.
+      const err = new Error("Labor not found");
+      err.status = 404;
+      return next(err);
+    }
+    // Successful, so render.
+    res.status(200).json({
+      labor_category_list: results,
+    });
   });
 };
 

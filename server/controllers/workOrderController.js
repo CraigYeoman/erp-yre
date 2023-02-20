@@ -117,15 +117,13 @@ const index = async (req, res, next) => {
     .populate("customer")
     .populate("jobType");
 
-  res
-    .status(200)
-    .json({
-      countArray,
-      past_due,
-      due_this_week,
-      due_next_week,
-      due_week_three_four,
-    });
+  res.status(200).json({
+    countArray,
+    past_due,
+    due_this_week,
+    due_next_week,
+    due_week_three_four,
+  });
 };
 
 const getAllWorkOrders = async (req, res) => {
@@ -157,12 +155,7 @@ const getAllWorkOrders = async (req, res) => {
       regEx,
       (match) => `-${operatorMap[match]}-`
     );
-    const options = [
-      "date_received",
-      "date_due",
-      "estimatedPrice",
-      "work_order_number",
-    ];
+    const options = ["date_received", "date_due", "work_order_number"];
     filters = filters.split(",").forEach((item) => {
       const [field, operator, value] = item.split("-");
       if (options.includes(field)) {
@@ -223,7 +216,6 @@ const work_order_detail = (req, res, next) => {
         return next(err);
       }
       // Successful, so render.
-
       res.status(200).json({
         work_order: results.work_order,
       });
@@ -281,7 +273,6 @@ const work_order_create_post = [
       date_received: req.body.date_received,
       date_due: req.body.date_due,
       date_finished: req.body.date_finished,
-      estimatedPrice: req.body.estimatedPrice,
       complete: req.body.complete,
       jobType: req.body.jobtype,
       accessories: req.body.accessories,
@@ -402,7 +393,6 @@ const work_order_edit_post = [
       date_received: req.body.date_received,
       date_due: req.body.date_due,
       date_finished: req.body.date_finished,
-      estimatedPrice: req.body.estimatedPrice,
       complete: req.body.complete,
       jobType: req.body.jobtype,
       accessories: req.body.accessories,

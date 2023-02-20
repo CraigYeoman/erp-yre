@@ -11,7 +11,6 @@ const PartsList = () => {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        console.log(data);
       });
   }, []);
 

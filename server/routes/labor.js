@@ -12,7 +12,7 @@ const {
   labor_edit_post,
 } = require("../controllers/laborController");
 
-// GET request for creating a Labor - not needed
+// GET request for creating a Labor
 router.route("/create").get(labor_create_get);
 // POST request for creating Labor.
 router.route("/create").post(labor_create_post);

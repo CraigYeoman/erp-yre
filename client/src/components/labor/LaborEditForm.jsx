@@ -1,16 +1,27 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const rootUrl = "http://localhost:5000";
 
 const LaborEditForm = () => {
+  useEffect(() => {
+    fetch("/api/v1/erp/labor/create")
+      .then((response) => response.json())
+      .then((data) => {
+        setLaborInfo(data);
+        console.log(data);
+      });
+  }, []);
+
   const { loading, selectLaborID, laborDetail } = useGlobalContext();
   const [values, setValues] = useState({
     name: laborDetail.name,
     price: laborDetail.price,
     _id: laborDetail._id,
+    laborCategory: laborDetail.laborCategory,
   });
+  const [laborInfo, setLaborInfo] = useState("");
 
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
@@ -22,8 +33,9 @@ const LaborEditForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setResponse(false);
-    const { name, price, _id } = values;
-    const laborData = { name, price, _id };
+    const { name, price, _id, laborCategory } = values;
+    const laborData = { name, price, _id, laborCategory };
+
     try {
       const url = `${rootUrl}/api/v1/erp/labor/${laborDetail._id}/edit`;
       axios
@@ -76,6 +88,38 @@ const LaborEditForm = () => {
               onChange={handleChange}
             ></input>
           </div>
+        </div>
+        <div className="container-column">
+          <label htmlFor="laborCategory">Category</label>
+          <select
+            type="select"
+            placeholder="laborCategory"
+            name="laborCategory"
+            required={true}
+            onChange={handleChange}
+            value={values.laborCategory}
+          >
+            <option value={laborDetail.laborCategory._id}>
+              {laborDetail.laborCategory.name}
+            </option>
+            {typeof laborInfo.labor_category_list === "undefined" ? (
+              <option>Loading...</option>
+            ) : (
+              laborInfo.labor_category_list
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((laborCategory) => {
+                  return (
+                    <option value={laborCategory._id} key={laborCategory._id}>
+                      {laborCategory.name}
+                    </option>
+                  );
+                })
+            )}
+          </select>
         </div>
         <button className="buttons" type="submit">
           Submit

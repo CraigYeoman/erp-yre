@@ -20,10 +20,6 @@ const workOrderSchema = new Schema({
   date_finished: {
     type: Date,
   },
-  estimatedPrice: {
-    type: Number,
-    required: [true, "Workorder price must be provided"],
-  },
   deposit: {
     type: Number,
     default: 0,
@@ -45,13 +41,13 @@ const workOrderSchema = new Schema({
   ],
   parts: [
     {
-      type: Array,
+      type: Schema.Types.ObjectId,
       ref: "Parts",
     },
   ],
   labor: [
     {
-      type: Array,
+      type: Schema.Types.ObjectId,
       ref: "Labor",
     },
   ],

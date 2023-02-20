@@ -17,8 +17,8 @@ const jsonParts = require("./data/populateParts.json");
 const jsonWorkOrder = require("./data/populateWorkOrder.json");
 const jsonAccessories = require("./data/populateAccessories.json");
 
-let model = Parts;
-let data = jsonParts;
+let model = Labor;
+let data = jsonLabor;
 
 const start = async () => {
   try {

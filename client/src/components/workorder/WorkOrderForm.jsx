@@ -18,7 +18,6 @@ const WorkOrderForm = () => {
     customer: "",
     date_received: "",
     date_due: "",
-    estimatedPrice: "",
     jobtype: "",
     parts: "",
     labor: "",
@@ -57,7 +56,6 @@ const WorkOrderForm = () => {
       customer,
       date_received,
       date_due,
-      estimatedPrice,
       jobtype,
       work_order_number,
       notes,
@@ -69,7 +67,6 @@ const WorkOrderForm = () => {
       customer,
       date_received,
       date_due,
-      estimatedPrice,
       jobtype,
       accessories,
       parts,
@@ -97,7 +94,6 @@ const WorkOrderForm = () => {
         date_received: "",
         date_due: "",
         part_number: "",
-        estimatedPrice: "",
         jobtype: "",
         parts: "",
         labor: "",
@@ -190,17 +186,6 @@ const WorkOrderForm = () => {
               name="date_due"
               required={true}
               value={values.date_due}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="estimatedPrice">Estimated Price</label>
-            <input
-              type="number"
-              placeholder="$$$"
-              name="estimatedPrice"
-              required={true}
-              value={values.estimatedPrice}
               onChange={handleChange}
             ></input>
           </div>

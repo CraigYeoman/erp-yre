@@ -42,7 +42,6 @@ const WorkOrderList = () => {
           jobType,
           customer,
           work_order_number,
-          estimatedPrice,
         } = workOrder;
         return (
           <div className="work-order-container" key={_id}>
@@ -66,7 +65,7 @@ const WorkOrderList = () => {
               <p>{jobType.name}</p>
               <p>{DateTime.fromISO(date_received).toFormat("D")}</p>
               <p>{DateTime.fromISO(date_due).toFormat("D")}</p>
-              <p>${estimatedPrice}</p>
+              <p>$ estimatedPrice</p>
             </fieldset>
           </div>
         );

@@ -244,6 +244,14 @@ const AppProvider = ({ children }) => {
   //     });
   // });
 
+  const sumTotal = (array, name) => {
+    let sum = 0;
+    for (let i = 0; i < array.length; i++) {
+      sum += array[i][name];
+    }
+    return sum;
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -269,6 +277,7 @@ const AppProvider = ({ children }) => {
         id,
         selectID,
         formatPhoneNumber,
+        sumTotal,
 
         // data,
         loading,

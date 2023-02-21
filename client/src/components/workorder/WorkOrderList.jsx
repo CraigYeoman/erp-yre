@@ -4,7 +4,8 @@ import { useGlobalContext } from "../../context";
 const { DateTime } = require("luxon");
 
 const WorkOrderList = () => {
-  const { selectWorkOrderID, selectCustomerID, listType } = useGlobalContext();
+  const { selectWorkOrderID, selectCustomerID, listType, sumTotal } =
+    useGlobalContext();
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
@@ -42,7 +43,10 @@ const WorkOrderList = () => {
           jobType,
           customer,
           work_order_number,
+          labor,
+          parts,
         } = workOrder;
+        console.log(workOrder);
         return (
           <div className="work-order-container" key={_id}>
             <fieldset>
@@ -65,7 +69,14 @@ const WorkOrderList = () => {
               <p>{jobType.name}</p>
               <p>{DateTime.fromISO(date_received).toFormat("D")}</p>
               <p>{DateTime.fromISO(date_due).toFormat("D")}</p>
-              <p>$ estimatedPrice</p>
+              <p>
+                $
+                {(
+                  sumTotal(labor, "price") +
+                  sumTotal(parts, "customer_price") -
+                  0
+                ).toFixed(2)}
+              </p>
             </fieldset>
           </div>
         );

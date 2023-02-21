@@ -12,6 +12,7 @@ const WorkOrderDetail = () => {
     response,
     responseText,
     selectID,
+    sumTotal,
   } = useGlobalContext();
   const { work_order } = workOrderDetail;
 
@@ -37,15 +38,12 @@ const WorkOrderDetail = () => {
     deposit,
     _id,
   } = work_order;
-  console.log(workOrderDetail);
 
-  const sumTotal = (array, name) => {
-    let sum = 0;
-    for (let i = 0; i < array.length; i++) {
-      sum += array[i].name;
-    }
-    return sum;
-  };
+  let laborPrice = sumTotal(labor, "price");
+  let partsPrice = sumTotal(parts, "customer_price");
+  let total = laborPrice + partsPrice;
+  let tax = total * 0.09;
+  let grandTotal = total + tax;
 
   return (
     <div className="work-order-detail-container">
@@ -112,17 +110,21 @@ const WorkOrderDetail = () => {
             <p>Labor Total</p>
 
             <p>Parts Total</p>
+            <p>Total</p>
+            <p>Tax</p>
             <p>Grand Total</p>
 
             <p>Deposit: </p>
             <p>Est. Due: </p>
           </div>
           <div className="work-order-detail-value">
-            <p>${sumTotal(labor)}</p>
-            <p>${sumTotal(parts)}</p>
-            <p>${sumTotal(labor) + sumTotal(parts)}</p>
-            <p>${deposit}</p>
-            <p>${deposit - sumTotal(labor) + sumTotal(parts)}</p>
+            <p>${laborPrice.toFixed(2)}</p>
+            <p>${partsPrice.toFixed(2)}</p>
+            <p>${total.toFixed(2)}</p>
+            <p>${tax.toFixed(2)}</p>
+            <p>${grandTotal.toFixed(2)}</p>
+            <p>${deposit.toFixed(2)}</p>
+            <p>${(grandTotal - deposit).toFixed(2)}</p>
           </div>
         </fieldset>
         <fieldset className="work-order-detail-info">
@@ -150,7 +152,7 @@ const WorkOrderDetail = () => {
               {labor.map((labor) => {
                 return (
                   <div key={labor._id}>
-                    <p>${labor.price}</p>
+                    <p>${labor.price.toFixed(2)}</p>
                   </div>
                 );
               })}
@@ -177,7 +179,7 @@ const WorkOrderDetail = () => {
               {parts.map((part) => {
                 return (
                   <div key={part._id}>
-                    <p>${part.customer_price}</p>
+                    <p>${part.customer_price.toFixed(2)}</p>
                   </div>
                 );
               })}

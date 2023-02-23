@@ -38,14 +38,27 @@ const WorkOrderForm = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleChangeCheckBox = (id, array, func, event) => {
+  // const handleChangeCheckBox = (id, array, func, event) => {
+  //   if (event.target.checked === true) {
+  //     const updatedValues = [...array, id];
+  //     console.log(updatedValues);
+  //     func(updatedValues);
+  //   } else if (event.target.checked === false) {
+  //     const updatedValues = array.filter((a) => a !== id);
+  //     func(updatedValues);
+  //   }
+  // };
+
+  const handleChangeCheckBox = (array, func, event, info) => {
     if (event.target.checked === true) {
-      const updatedValues = [...array, id];
+      const updatedValues = [...array, info];
+      console.log(updatedValues);
       func(updatedValues);
     } else if (event.target.checked === false) {
-      const updatedValues = array.filter((a) => a !== id);
+      const updatedValues = array.filter((a) => a._id !== info._id);
       func(updatedValues);
     }
+    console.log(array);
   };
 
   const onSubmit = async (e) => {
@@ -233,20 +246,26 @@ const WorkOrderForm = () => {
                   return textA < textB ? -1 : textA > textB ? 1 : 0;
                 })
                 .map((part) => {
+                  let info = {
+                    name: part.name,
+                    customer_price: part.customer_price,
+                    _id: part._id,
+                  };
+
                   return (
                     <div key={part._id}>
                       <input
                         type="checkbox"
-                        name="accessories"
+                        name={part.name}
                         onChange={(event) =>
                           handleChangeCheckBox(
-                            part._id,
                             customerParts,
                             setCustomerParts,
-                            event
+                            event,
+                            info
                           )
                         }
-                        value={part._id}
+                        value={info}
                       ></input>
                       <label htmlFor={part.name}>
                         ${part.customer_price} - {part.name}
@@ -272,7 +291,7 @@ const WorkOrderForm = () => {
                     <div key={labor._id}>
                       <input
                         type="checkbox"
-                        name="accessories"
+                        name="labr"
                         onChange={(event) =>
                           handleChangeCheckBox(
                             labor._id,

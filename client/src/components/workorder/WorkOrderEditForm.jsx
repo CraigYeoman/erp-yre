@@ -2,11 +2,15 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState, useEffect } from "react";
+import FormDropDown from "../FormDropDown";
+import { MdDeleteOutline } from "react-icons/md";
 const rootUrl = "http://localhost:5000";
 const { DateTime } = require("luxon");
 
 const WorkOrderForm = () => {
   useEffect(() => {
+    setCustomerParts([]);
+    setCustomerLabor([]);
     setLoading(true);
     fetch(`/api/v1/erp/workorders/${id}/edit`)
       .then((response) => response.json())
@@ -26,25 +30,30 @@ const WorkOrderForm = () => {
           work_order_number: data.work_order.work_order_number,
           _id: data.work_order._id,
         });
-
+        setCustomerParts(data.work_order.parts);
+        setCustomerLabor(data.work_order.labor);
         checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
-        checkBoxLoad(data.work_order.parts, setCustomerParts);
-        checkBoxLoad(data.work_order.labor, setCustomerLabor);
-
         setLoading(false);
       });
   }, []);
 
   const [customerAccessories, setCustomerAccessories] = useState([]);
-  const [customerParts, setCustomerParts] = useState([]);
-  const [customerLabor, setCustomerLabor] = useState([]);
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
   const [responseTextError, setResponseTextError] = useState("");
   const [workOrderDetail, setWorkOrderDetail] = useState("");
-  const { selectWorkOrderID, id } = useGlobalContext();
+  const {
+    selectWorkOrderID,
+    id,
+    deleteItem,
+    sumTotal,
+    customerParts,
+    setCustomerParts,
+    customerLabor,
+    setCustomerLabor,
+  } = useGlobalContext();
   const [values, setValues] = useState({
     customer: "",
     date_received: "",
@@ -251,6 +260,61 @@ const WorkOrderForm = () => {
               )}
             </select>
           </div>
+          <FormDropDown
+            name="Parts"
+            array={workOrderDetail.parts}
+            category={workOrderDetail.partsCategory}
+          />
+          <FormDropDown
+            name="Labor"
+            array={workOrderDetail.labors}
+            category={workOrderDetail.laborCategory}
+          />
+          <div>
+            <h3>Parts Total: ${sumTotal(customerParts, "customer_price")}</h3>
+            {customerParts
+              .sort((a, b) => {
+                let textA = a.name.toUpperCase();
+                let textB = b.name.toUpperCase();
+                return textA < textB ? -1 : textA > textB ? 1 : 0;
+              })
+              .map((part) => {
+                return (
+                  <div key={part._id}>
+                    <p>Part#: {part.part_number}</p> <p>Name: {part.name}</p>{" "}
+                    <p>Manufacture: {part.manufacture}</p>
+                    <p>Price: ${part.customer_price}</p>
+                    <MdDeleteOutline
+                      onClick={() =>
+                        deleteItem(part._id, customerParts, setCustomerParts)
+                      }
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <div>
+            <h3>Labor Total: ${sumTotal(customerLabor, "price")}</h3>
+            {customerLabor
+              .sort((a, b) => {
+                let textA = a.name.toUpperCase();
+                let textB = b.name.toUpperCase();
+                return textA < textB ? -1 : textA > textB ? 1 : 0;
+              })
+              .map((labor) => {
+                return (
+                  <div key={labor._id}>
+                    <p>Labor: {labor.name}</p>
+                    <p>Price: ${labor.price}</p>
+                    <MdDeleteOutline
+                      onClick={() =>
+                        deleteItem(labor._id, customerLabor, setCustomerLabor)
+                      }
+                    />
+                  </div>
+                );
+              })}
+          </div>
           <fieldset>
             <legend>Customer Accessories</legend>
             {workOrderDetail.accessories
@@ -277,68 +341,6 @@ const WorkOrderForm = () => {
                       }
                     ></input>
                     <label htmlFor={accessory.name}>{accessory.name}</label>
-                  </div>
-                );
-              })}
-          </fieldset>
-          <fieldset>
-            <legend>Parts Needed</legend>
-            {workOrderDetail.parts
-              .sort((a, b) => {
-                let textA = a.name.toUpperCase();
-                let textB = b.name.toUpperCase();
-                return textA < textB ? -1 : textA > textB ? 1 : 0;
-              })
-              .map((part) => {
-                return (
-                  <div key={part._id}>
-                    <input
-                      type="checkbox"
-                      name={part._id}
-                      checked={customerParts.includes(part._id)}
-                      onChange={(event) =>
-                        handleChangeCheckBox(
-                          part._id,
-                          customerParts,
-                          setCustomerParts,
-                          event
-                        )
-                      }
-                    ></input>
-                    <label htmlFor={part.name}>
-                      ${part.customer_price} - {part.name}
-                    </label>
-                  </div>
-                );
-              })}
-          </fieldset>
-          <fieldset>
-            <legend>Labor Needed</legend>
-            {workOrderDetail.labors
-              .sort((a, b) => {
-                let textA = a.name.toUpperCase();
-                let textB = b.name.toUpperCase();
-                return textA < textB ? -1 : textA > textB ? 1 : 0;
-              })
-              .map((labor) => {
-                return (
-                  <div key={labor._id}>
-                    <input
-                      type="checkbox"
-                      name={labor._id}
-                      checked={customerLabor.includes(labor._id)}
-                      onChange={(event) =>
-                        handleChangeCheckBox(
-                          labor._id,
-                          customerLabor,
-                          setCustomerLabor,
-                          event
-                        )
-                      }
-                    ></input>
-                    <label htmlFor={labor.name}>
-                      ${labor.price} - {labor.name}
-                    </label>
                   </div>
                 );
               })}

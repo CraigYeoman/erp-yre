@@ -362,6 +362,12 @@ const work_order_edit_get = (req, res, next) => {
       accessories(callback) {
         Accessories.find(callback);
       },
+      partsCategory(callback) {
+        PartsCategory.find(callback);
+      },
+      laborCategory(callback) {
+        LaborCategory.find(callback);
+      },
     },
     (err, results) => {
       if (err) {
@@ -383,6 +389,8 @@ const work_order_edit_get = (req, res, next) => {
         parts: results.parts,
         labors: results.labor,
         accessories: results.accessories,
+        partsCategory: results.partsCategory,
+        laborCategory: results.laborCategory,
       });
     }
   );

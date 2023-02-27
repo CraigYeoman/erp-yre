@@ -4,6 +4,13 @@
     --main-border-color: #ccc;
     --secondary-background-color: rgb(22, 27, 34);
     --box-shadow: 0px 0px 3px #404040;
+    --bg:  #242526;
+    --bg-accent: #484a4d;
+    --text-color: #dadce1;
+    --nav-size: 60px;
+    --border: 1px solid #474a4d;
+    --border-radius: 8px;
+    --speed: 500ms; 
    
     
 }
@@ -418,6 +425,49 @@ a:hover {
 
 /* New Work Order Form */
 
+.dropdown {
+    position: relative;
+    top: 10px;
+    width: 300px;
+    text-align: center;
+    background-color: var(--bg);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: .5rem;
+    height: 20px;
+    margin-top: .2rem;
+    margin-bottom: .2rem;
+    
+  }
+
+.dropdown-item {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    grid-template-columns: 1fr 20px;
+    display: grid;
+    text-align: center;
+    position: relative;
+    top: -32px;
+    transform: translateX(110%);
+    background-color: var(--bg);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    
+ }
+
+
+.icon-add {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    padding-right: 5px;
+    
+}
+
+.icon-add svg{
+    height: 20px;
+    width: 20px;
+}
 /* New Customer Form */
 
 

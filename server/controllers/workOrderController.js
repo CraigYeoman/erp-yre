@@ -5,6 +5,8 @@ const JobType = require("../models/jobType");
 const Parts = require("../models/parts");
 const Labor = require("../models/labor");
 const Accessories = require("../models/accessories");
+const PartsCategory = require("../models/partCategory");
+const LaborCategory = require("../models/laborCategory");
 const async = require("async");
 const endOfWeek = require("date-fns/endOfWeek");
 const startOfWeek = require("date-fns/startOfWeek");
@@ -242,6 +244,12 @@ const work_order_create_get = (req, res, next) => {
       accessories(callback) {
         Accessories.find(callback);
       },
+      partsCategory(callback) {
+        PartsCategory.find(callback);
+      },
+      laborCategory(callback) {
+        LaborCategory.find(callback);
+      },
     },
     (err, results) => {
       if (err) {
@@ -253,6 +261,8 @@ const work_order_create_get = (req, res, next) => {
         parts: results.parts,
         labors: results.labor,
         accessories: results.accessories,
+        partsCategory: results.partsCategory,
+        laborCategory: results.laborCategory,
       });
     }
   );

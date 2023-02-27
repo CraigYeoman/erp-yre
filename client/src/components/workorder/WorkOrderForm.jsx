@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState, useEffect } from "react";
+import FormDropDown from "../FormDropDown";
+import { MdDeleteOutline } from "react-icons/md";
 const rootUrl = "http://localhost:5000";
 
 const WorkOrderForm = () => {
@@ -11,9 +13,21 @@ const WorkOrderForm = () => {
       .then((data) => {
         setWorkOrderInfo(data);
       });
+    setCustomerParts([]);
+    setCustomerLabor([]);
   }, []);
 
-  const { loading, selectWorkOrderID } = useGlobalContext();
+  const {
+    loading,
+    selectWorkOrderID,
+    customerParts,
+    setCustomerParts,
+    handleChangeArray,
+    customerLabor,
+    deleteItem,
+    setCustomerLabor,
+    sumTotal,
+  } = useGlobalContext();
   const [values, setValues] = useState({
     customer: "",
     date_received: "",
@@ -26,8 +40,8 @@ const WorkOrderForm = () => {
   });
 
   const [customerAccessories, setCustomerAccessories] = useState([]);
-  const [customerParts, setCustomerParts] = useState([]);
-  const [customerLabor, setCustomerLabor] = useState([]);
+  // const [customerParts, setCustomerParts] = useState([]);
+
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
@@ -135,6 +149,7 @@ const WorkOrderForm = () => {
       <form onSubmit={onSubmit}>
         <div className="container-column gap">
           <h2>New Work Order</h2>
+
           <div className="container-column">
             <label className="container-column" htmlFor="work_order_number">
               Work Order Number
@@ -235,83 +250,6 @@ const WorkOrderForm = () => {
             </select>
           </div>
           <fieldset>
-            <legend>Parts Needed</legend>
-            {typeof workOrderInfo.parts === "undefined" ? (
-              <option>Loading...</option>
-            ) : (
-              workOrderInfo.parts
-                .sort((a, b) => {
-                  let textA = a.name.toUpperCase();
-                  let textB = b.name.toUpperCase();
-                  return textA < textB ? -1 : textA > textB ? 1 : 0;
-                })
-                .map((part) => {
-                  let info = {
-                    name: part.name,
-                    customer_price: part.customer_price,
-                    _id: part._id,
-                  };
-
-                  return (
-                    <div key={part._id}>
-                      <input
-                        type="checkbox"
-                        name={part.name}
-                        onChange={(event) =>
-                          handleChangeCheckBox(
-                            customerParts,
-                            setCustomerParts,
-                            event,
-                            info
-                          )
-                        }
-                        value={info}
-                      ></input>
-                      <label htmlFor={part.name}>
-                        ${part.customer_price} - {part.name}
-                      </label>
-                    </div>
-                  );
-                })
-            )}
-          </fieldset>
-          <fieldset>
-            <legend>Labor Needed</legend>
-            {typeof workOrderInfo.labors === "undefined" ? (
-              <option>Loading...</option>
-            ) : (
-              workOrderInfo.labors
-                .sort((a, b) => {
-                  let textA = a.name.toUpperCase();
-                  let textB = b.name.toUpperCase();
-                  return textA < textB ? -1 : textA > textB ? 1 : 0;
-                })
-                .map((labor) => {
-                  return (
-                    <div key={labor._id}>
-                      <input
-                        type="checkbox"
-                        name="labr"
-                        onChange={(event) =>
-                          handleChangeCheckBox(
-                            labor._id,
-                            customerLabor,
-                            setCustomerLabor,
-                            event
-                          )
-                        }
-                        value={labor._id}
-                      ></input>
-                      <label htmlFor={labor.name}>
-                        ${labor.price} - {labor.name}
-                      </label>
-                    </div>
-                  );
-                })
-            )}
-          </fieldset>
-
-          <fieldset>
             <legend>Customer Accessories</legend>
             {typeof workOrderInfo.accessories === "undefined" ? (
               <option>Loading...</option>
@@ -323,6 +261,10 @@ const WorkOrderForm = () => {
                   return textA < textB ? -1 : textA > textB ? 1 : 0;
                 })
                 .map((accessory) => {
+                  let info = {
+                    name: accessory.name,
+                    _id: accessory._id,
+                  };
                   return (
                     <div key={accessory._id}>
                       <input
@@ -330,13 +272,13 @@ const WorkOrderForm = () => {
                         name="accessories"
                         onChange={(event) =>
                           handleChangeCheckBox(
-                            accessory._id,
                             customerAccessories,
                             setCustomerAccessories,
-                            event
+                            event,
+                            info
                           )
                         }
-                        value={accessory._id}
+                        value={info}
                       ></input>
                       <label htmlFor={accessory.name}>{accessory.name}</label>
                     </div>
@@ -354,6 +296,62 @@ const WorkOrderForm = () => {
               rows="10"
             ></textarea>
           </label>
+          <FormDropDown
+            name="Parts"
+            array={workOrderInfo.parts}
+            category={workOrderInfo.partsCategory}
+          />
+          <FormDropDown
+            name="Labor"
+            array={workOrderInfo.labors}
+            category={workOrderInfo.laborCategory}
+          />
+          <div>
+            <h3>Parts Total: ${sumTotal(customerParts, "customer_price")}</h3>
+            {customerParts
+              .sort((a, b) => {
+                let textA = a.name.toUpperCase();
+                let textB = b.name.toUpperCase();
+                return textA < textB ? -1 : textA > textB ? 1 : 0;
+              })
+              .map((part) => {
+                return (
+                  <div key={part._id}>
+                    <p>Part#: {part.part_number}</p> <p>Name: {part.name}</p>{" "}
+                    <p>Manufacture: {part.manufacture}</p>
+                    <p>Price: ${part.customer_price}</p>
+                    <MdDeleteOutline
+                      onClick={() =>
+                        deleteItem(part._id, customerParts, setCustomerParts)
+                      }
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <div>
+            <h3>Labor Total: ${sumTotal(customerLabor, "price")}</h3>
+            {customerLabor
+              .sort((a, b) => {
+                let textA = a.name.toUpperCase();
+                let textB = b.name.toUpperCase();
+                return textA < textB ? -1 : textA > textB ? 1 : 0;
+              })
+              .map((labor) => {
+                return (
+                  <div key={labor._id}>
+                    <p>Labor: {labor.name}</p>
+                    <p>Price: ${labor.price}</p>
+                    <MdDeleteOutline
+                      onClick={() =>
+                        deleteItem(labor._id, customerLabor, setCustomerLabor)
+                      }
+                    />
+                  </div>
+                );
+              })}
+          </div>
+
           <button className="buttons" type="submit">
             Submit
           </button>

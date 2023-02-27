@@ -32,7 +32,7 @@ import WorkOrderDetail from "./components/workorder/WorkOrderDetail";
 import WorkOrderEdit from "./components/workorder/WorkOrderEditForm";
 import WorkOrderList from "./components/workorder/WorkOrderList";
 import WorkOrderForm from "./components/workorder/WorkOrderForm";
-import Testing from "./testing";
+
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -102,7 +102,6 @@ function App() {
           <Route path="/workorderedit/:id" element={<WorkOrderEdit />}></Route>
           <Route path="/workorderlist" element={<WorkOrderList />}></Route>
           <Route path="/workorderform" element={<WorkOrderForm />}></Route>
-          <Route path="/testing" element={<Testing />}></Route>
         </Routes>
       </Router>
     </div>

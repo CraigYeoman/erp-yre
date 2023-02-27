@@ -46,7 +46,7 @@ const WorkOrderList = () => {
           labor,
           parts,
         } = workOrder;
-        console.log(workOrder);
+
         return (
           <div className="work-order-container" key={_id}>
             <fieldset>

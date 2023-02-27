@@ -19,6 +19,14 @@ const AppProvider = ({ children }) => {
   const [responseText, setResponseText] = useState("");
   const rootUrl = "http://localhost:5000";
   const [id, selectID] = useState("");
+  const [customerParts, setCustomerParts] = useState([]);
+  const [customerLabor, setCustomerLabor] = useState([]);
+
+  const handleChangeArray = (array, func, info) => {
+    const updatedValues = [...array, info];
+    func(updatedValues);
+    console.log(updatedValues);
+  };
 
   useEffect(() => {
     setResponse(false);
@@ -244,6 +252,11 @@ const AppProvider = ({ children }) => {
   //     });
   // });
 
+  const deleteItem = (id, array, func) => {
+    const updatedValues = array.filter((a) => a._id !== id);
+    func(updatedValues);
+  };
+
   const sumTotal = (array, name) => {
     let sum = 0;
     for (let i = 0; i < array.length; i++) {
@@ -278,6 +291,8 @@ const AppProvider = ({ children }) => {
         selectID,
         formatPhoneNumber,
         sumTotal,
+        handleChangeArray,
+        deleteItem,
 
         // data,
         loading,
@@ -289,6 +304,10 @@ const AppProvider = ({ children }) => {
         setResponse,
         setResponseText,
         rootUrl,
+        customerParts,
+        setCustomerParts,
+        customerLabor,
+        setCustomerLabor,
       }}
     >
       {children}

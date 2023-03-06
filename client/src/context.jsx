@@ -21,11 +21,35 @@ const AppProvider = ({ children }) => {
   const [id, selectID] = useState("");
   const [customerParts, setCustomerParts] = useState([]);
   const [customerLabor, setCustomerLabor] = useState([]);
+  const [data, setData] = useState([{}]);
+  const [values, setValues] = useState({
+    sort: "date_due",
+    complete: "false",
+    jobType: "all",
+  });
+
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+    console.log(values);
+  };
 
   const handleChangeArray = (array, func, info) => {
     const updatedValues = [...array, info];
     func(updatedValues);
     console.log(updatedValues);
+  };
+
+  const getWorkOrder = async () => {
+    const { sort, complete, jobType } = values;
+    let url = `/api/v1/erp/workorders?jobType=${jobType}&complete=${complete}&sort=${sort}`;
+    try {
+      const { data } = await axios.get(url);
+      if (data.workOrders) {
+        setData(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -265,6 +289,15 @@ const AppProvider = ({ children }) => {
     return sum;
   };
 
+  const clearFilters = () => {
+    setValues({
+      ...values,
+      sort: "date_due",
+      complete: "false",
+      jobType: "all",
+    });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -308,6 +341,13 @@ const AppProvider = ({ children }) => {
         setCustomerParts,
         customerLabor,
         setCustomerLabor,
+
+        handleChange,
+        values,
+        setValues,
+        clearFilters,
+        getWorkOrder,
+        data,
       }}
     >
       {children}

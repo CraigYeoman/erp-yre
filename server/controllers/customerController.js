@@ -33,7 +33,7 @@ const getAllCustomers = async (req, res) => {
     result = result.select(fieldsList);
   }
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+  const limit = Number(req.query.limit) || 100;
   const skip = (page - 1) * limit;
 
   result = result.skip(skip).limit(limit);
@@ -118,8 +118,8 @@ const customer_create_post = [
     }
     // Create a Customer object with escaped and trimmed data.
     const customer = new Customer({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
+      first_name: req.body.first_name.toLowerCase(),
+      last_name: req.body.last_name.toLowerCase(),
       phone_number: req.body.phone_number,
       email: req.body.email,
       address_line_1: req.body.address_line_1,
@@ -228,8 +228,8 @@ const customer_edit_post = [
     }
     // Create a Customer object with escaped and trimmed data.
     const customer = new Customer({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
+      first_name: req.body.first_name.toLowerCase(),
+      last_name: req.body.last_name.toLowerCase(),
       phone_number: req.body.phone_number,
       email: req.body.email,
       address_line_1: req.body.address_line_1,

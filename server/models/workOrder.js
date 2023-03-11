@@ -3,62 +3,68 @@ const { DateTime } = require("luxon");
 
 const Schema = mongoose.Schema;
 
-const workOrderSchema = new Schema({
-  customer: {
-    type: Schema.Types.ObjectId,
-    ref: "Customer",
-    required: [true, "Customer name must be provided"],
-  },
-  date_received: {
-    type: Date,
-    default: Date.now(),
-  },
-  date_due: {
-    type: Date,
-    required: [true, "Due date must be provided"],
-  },
-  date_finished: {
-    type: Date,
-  },
-  deposit: {
-    type: Number,
-    default: 0,
-  },
-  complete: {
-    type: Boolean,
-    default: false,
-  },
-  jobType: {
-    type: Schema.Types.ObjectId,
-    ref: "JobType",
-    required: [true, "Job type must be provided"],
-  },
-  accessories: [
-    {
+const workOrderSchema = new Schema(
+  {
+    customer: {
       type: Schema.Types.ObjectId,
-      ref: "Accessories",
+      ref: "Customer",
+      required: [true, "Customer name must be provided"],
     },
-  ],
-  parts: [
-    {
+    date_received: {
+      type: Date,
+      default: Date.now(),
+    },
+    date_due: {
+      type: Date,
+      required: [true, "Due date must be provided"],
+    },
+    date_finished: {
+      type: Date,
+    },
+    deposit: {
+      type: Number,
+      default: 0,
+    },
+    complete: {
+      type: Boolean,
+      default: false,
+    },
+    jobType: {
       type: Schema.Types.ObjectId,
-      ref: "Parts",
+      ref: "JobType",
+      required: [true, "Job type must be provided"],
     },
-  ],
-  labor: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Labor",
+    accessories: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Accessories",
+      },
+    ],
+    parts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Parts",
+      },
+    ],
+    labor: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Labor",
+      },
+    ],
+    notes: {
+      type: String,
     },
-  ],
-  notes: {
-    type: String,
+    work_order_number: {
+      type: Number,
+      require: true,
+    },
   },
-  work_order_number: {
-    type: Number,
-    require: true,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 workOrderSchema.virtual("url").get(function () {
   return `/api/v1/erp/workorders/${this._id}`;

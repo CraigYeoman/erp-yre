@@ -129,6 +129,14 @@ const index = async (req, res, next) => {
 };
 
 const getAllWorkOrders = async (req, res) => {
+  const sumTotal = (array, name) => {
+    let sum = 0;
+    for (let i = 0; i < array.length; i++) {
+      sum += array[i][name];
+    }
+    return sum;
+  };
+
   const { complete, jobType, sort } = req.query;
 
   const queryObject = {};
@@ -139,87 +147,93 @@ const getAllWorkOrders = async (req, res) => {
   if (jobType !== "all") {
     queryObject.jobType = jobType;
   }
-  // if (numericFilters) {
-  //   const operatorMap = {
-  //     ">": "$gt",
-  //     ">=": "$gte",
-  //     "=": "$eq",
-  //     "<": "$lt",
-  //     "<=": "$lte",
-  //   };
-  //   const regEx = /\b(<|>|>=|=|<|<=)\b/g;
-  //   let filters = numericFilters.replace(
-  //     regEx,
-  //     (match) => `-${operatorMap[match]}-`
-  //   );
-  //   const options = ["date_received", "date_due", "work_order_number"];
-  //   filters = filters.split(",").forEach((item) => {
-  //     const [field, operator, value] = item.split("-");
-  //     if (options.includes(field)) {
-  //       queryObject[field] = { [operator]: Number(value) };
-  //     }
-  //   });
-  // }
+
   let result = WorkOrder.find(queryObject)
+    // .populate("url")
     .populate("customer")
     .populate("jobType")
     .populate("parts")
     .populate("labor")
     .populate("accessories");
-  let jobTypeList = await JobType.find();
 
   if (sort === "date_due") {
-    result = result.sort("-date_due");
+    console.log(result);
+    result = result.sort("date_due");
   }
   if (sort === "date_received") {
     result = result.sort("date_received");
   }
-  if (sort === "estimated_price_>") {
-    result = result.sort();
-  }
-  if (sort === "estimated_price_<") {
-    result = result.sort();
-  }
-  if (sort === "customer_name_a") {
-    result = result.sort((a, b) => {
-      let last_name_a = a.customer.last_name.toLowerCase(),
-        last_name_b = b.customer.last_name.toLowerCase();
-
-      if (last_name_a < last_name_b) {
-        return -1;
-      }
-      if (last_name_a > last_name_b) {
-        return -1;
-      }
-      return 0;
-    });
-  }
-  if (sort === "customer_name_z") {
-    result = result.sort((a, b) => {
-      let last_name_a = a.customer.last_name.toLowerCase(),
-        last_name_b = b.customer.last_name.toLowerCase();
-
-      if (last_name_a > last_name_b) {
-        return -1;
-      }
-      if (last_name_a < last_name_b) {
-        return -1;
-      }
-      return 0;
-    });
-  }
   if (sort === "work_order_number") {
-    result = result.sort("work_order_number");
+    result = result.sort("-work_order_number");
   }
 
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+  const limit = Number(req.query.limit) || 100;
   const skip = (page - 1) * limit;
 
   result = result.skip(skip).limit(limit);
 
-  const workOrders = await result;
-  console.log(workOrders);
+  let workOrders = await result;
+
+  if (sort === "customer_name_a") {
+    workOrders = workOrders.sort((a, b) => {
+      if (a.customer.last_name < b.customer.last_name) {
+        return -1;
+      } else if (a.customer.last_name > b.customer.last_name) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    console.log(workOrders);
+  }
+  if (sort === "customer_name_z") {
+    workOrders = workOrders.sort((a, b) => {
+      if (a.customer.last_name > b.customer.last_name) {
+        return -1;
+      } else if (a.customer.last_name < b.customer.last_name) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+  if (sort === "estimated_price_>") {
+    workOrders = workOrders.sort((a, b) => {
+      let aTotal =
+        sumTotal(a.labor, "price") + sumTotal(a.parts, "customer_price");
+      let bTotal =
+        sumTotal(b.labor, "price") + sumTotal(b.parts, "customer_price");
+      console.log(aTotal);
+      console.log(bTotal);
+      if (aTotal > bTotal) {
+        return -1;
+      } else if (aTotal < bTotal) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+  if (sort === "estimated_price_<") {
+    workOrders = workOrders.sort((a, b) => {
+      let aTotal =
+        sumTotal(a.labor, "price") + sumTotal(a.parts, "customer_price");
+      let bTotal =
+        sumTotal(b.labor, "price") + sumTotal(b.parts, "customer_price");
+      console.log(aTotal);
+      console.log(bTotal);
+      if (aTotal < bTotal) {
+        return -1;
+      } else if (aTotal > bTotal) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  let jobTypeList = await JobType.find();
   res.status(200).json({ workOrders, jobTypeList, nbHits: workOrders.length });
 };
 

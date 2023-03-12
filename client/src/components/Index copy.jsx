@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../context";
-import { Box } from "@mui/material";
-
 const { DateTime } = require("luxon");
+import { Box } from "@mui/material";
 
 const Index = () => {
   const [data, setData] = useState([{}]);
@@ -26,7 +25,7 @@ const Index = () => {
   }
 
   return (
-    <Box width="100%" height="100%">
+    <div className="container-column">
       <h1>Erp App</h1>
       <div className="container-row top">
         <h4>
@@ -174,7 +173,7 @@ const Index = () => {
           </div>
         </div>
       </div>
-    </Box>
+    </div>
   );
 };
 

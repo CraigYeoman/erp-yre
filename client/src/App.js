@@ -32,77 +32,93 @@ import WorkOrderDetail from "./components/workorder/WorkOrderDetail";
 import WorkOrderEdit from "./components/workorder/WorkOrderEditForm";
 import WorkOrderList from "./components/workorder/WorkOrderList";
 import WorkOrderForm from "./components/workorder/WorkOrderForm";
-
-import "./App.css";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { useMemo } from "react";
+import { themeSettings } from "./components/theme";
+import { useGlobalContext } from "./context";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
+  const { mode } = useGlobalContext();
+
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div className="App">
       <Router>
-        <Nav />
-        <Routes>
-          <Route path="/" element={<Index />}></Route>
-          <Route
-            path="/customerdetail/:id"
-            element={<CustomerDetail />}
-          ></Route>
-          <Route
-            path="/customeredit/:id"
-            element={<CustomerEditForm />}
-          ></Route>
-          <Route path="/customerform" element={<CustomerForm />}></Route>
-          <Route path="/customerlist" element={<CustomerList />}></Route>
-          <Route path="/jobtypedetail/:id" element={<JobTypeDetail />}></Route>
-          <Route path="/jobtypeedit/:id" element={<JobTypeEdit />}></Route>
-          <Route path="/jobtypelist" element={<JobTypeList />}></Route>
-          <Route path="/jobtypeform" element={<JobTypeForm />}></Route>
-          <Route path="/labordetail/:id" element={<LaborDetail />}></Route>
-          <Route path="/laboredit/:id" element={<LaborEditForm />}></Route>
-          <Route path="/laborform" element={<LaborForm />}></Route>
-          <Route path="/laborlist" element={<LaborList />}></Route>
-          <Route path="/laborcategory" element={<LaborCategory />}></Route>
-          <Route
-            path="/laborcategoryform"
-            element={<LaborCategoryForm />}
-          ></Route>
-          <Route
-            path="/laborcategorydetail/:id"
-            element={<LaborCategoryDetail />}
-          ></Route>
-          <Route
-            path="/laborcategoryedit/:id"
-            element={<LaborCategoryEdit />}
-          ></Route>
-          <Route path="/partdetail/:id" element={<PartDetail />}></Route>
-          <Route path="/partedit/:id" element={<PartEdit />}></Route>
-          <Route path="/partslist" element={<PartsList />}></Route>
-          <Route path="/partform" element={<PartForm />}></Route>
-          <Route path="/partcategory" element={<PartCategory />}></Route>
-          <Route
-            path="/partcategoryform"
-            element={<PartCategoryForm />}
-          ></Route>
-          <Route
-            path="/partcategorydetail/:id"
-            element={<PartCategoryDetail />}
-          ></Route>
-          <Route
-            path="/partcategoryedit/:id"
-            element={<PartCategoryEdit />}
-          ></Route>
-          <Route path="/vendordetail/:id" element={<VendorDetail />}></Route>
-          <Route path="/vendoredit/:id" element={<VendorEdit />}></Route>
-          <Route path="/vendorform" element={<VendorForm />}></Route>
-          <Route path="/vendorlist" element={<VendorList />}></Route>
-          <Route
-            path="/workorderdetail/:id"
-            element={<WorkOrderDetail />}
-          ></Route>
-          <Route path="/workorderedit/:id" element={<WorkOrderEdit />}></Route>
-          <Route path="/workorderlist" element={<WorkOrderList />}></Route>
-          <Route path="/workorderform" element={<WorkOrderForm />}></Route>
-        </Routes>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+
+          <Nav />
+          <Routes>
+            <Route path="/" element={<Index />}></Route>
+            <Route
+              path="/customerdetail/:id"
+              element={<CustomerDetail />}
+            ></Route>
+            <Route
+              path="/customeredit/:id"
+              element={<CustomerEditForm />}
+            ></Route>
+            <Route path="/customerform" element={<CustomerForm />}></Route>
+            <Route path="/customerlist" element={<CustomerList />}></Route>
+            <Route
+              path="/jobtypedetail/:id"
+              element={<JobTypeDetail />}
+            ></Route>
+            <Route path="/jobtypeedit/:id" element={<JobTypeEdit />}></Route>
+            <Route path="/jobtypelist" element={<JobTypeList />}></Route>
+            <Route path="/jobtypeform" element={<JobTypeForm />}></Route>
+            <Route path="/labordetail/:id" element={<LaborDetail />}></Route>
+            <Route path="/laboredit/:id" element={<LaborEditForm />}></Route>
+            <Route path="/laborform" element={<LaborForm />}></Route>
+            <Route path="/laborlist" element={<LaborList />}></Route>
+            <Route path="/laborcategory" element={<LaborCategory />}></Route>
+            <Route
+              path="/laborcategoryform"
+              element={<LaborCategoryForm />}
+            ></Route>
+            <Route
+              path="/laborcategorydetail/:id"
+              element={<LaborCategoryDetail />}
+            ></Route>
+            <Route
+              path="/laborcategoryedit/:id"
+              element={<LaborCategoryEdit />}
+            ></Route>
+            <Route path="/partdetail/:id" element={<PartDetail />}></Route>
+            <Route path="/partedit/:id" element={<PartEdit />}></Route>
+            <Route path="/partslist" element={<PartsList />}></Route>
+            <Route path="/partform" element={<PartForm />}></Route>
+            <Route path="/partcategory" element={<PartCategory />}></Route>
+            <Route
+              path="/partcategoryform"
+              element={<PartCategoryForm />}
+            ></Route>
+            <Route
+              path="/partcategorydetail/:id"
+              element={<PartCategoryDetail />}
+            ></Route>
+            <Route
+              path="/partcategoryedit/:id"
+              element={<PartCategoryEdit />}
+            ></Route>
+            <Route path="/vendordetail/:id" element={<VendorDetail />}></Route>
+            <Route path="/vendoredit/:id" element={<VendorEdit />}></Route>
+            <Route path="/vendorform" element={<VendorForm />}></Route>
+            <Route path="/vendorlist" element={<VendorList />}></Route>
+            <Route
+              path="/workorderdetail/:id"
+              element={<WorkOrderDetail />}
+            ></Route>
+            <Route
+              path="/workorderedit/:id"
+              element={<WorkOrderEdit />}
+            ></Route>
+            <Route path="/workorderlist" element={<WorkOrderList />}></Route>
+            <Route path="/workorderform" element={<WorkOrderForm />}></Route>
+          </Routes>
+        </ThemeProvider>
       </Router>
     </div>
   );

@@ -27,6 +27,7 @@ const AppProvider = ({ children }) => {
     complete: "false",
     jobType: "all",
   });
+  const [mode, setMode] = useState("dark");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -348,6 +349,8 @@ const AppProvider = ({ children }) => {
         clearFilters,
         getWorkOrder,
         data,
+        mode,
+        setMode,
       }}
     >
       {children}

@@ -1,8 +1,7 @@
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context";
 import {
   Box,
-  Divider,
   Drawer,
   IconButton,
   List,
@@ -18,23 +17,12 @@ import { IoDocumentsOutline, IoDocumentOutline } from "react-icons/io5";
 import { GoGear } from "react-icons/go";
 import { GiGears } from "react-icons/gi";
 import { RiHomeGearFill, RiCarFill, RiCarWashingFill } from "react-icons/ri";
-import { BsFillBuildingFill, BsBuildingFillAdd } from "react-icons/bs";
 import {
-  SettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
   HomeOutlined,
-  ShoppingCartOutlined,
   Groups2Outlined,
   GroupAdd,
-  ReceiptLongOutlined,
-  PublicOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
-  CalendarMonthOutlined,
-  AdminPanelSettingsOutlined,
-  TrendingUpOutlined,
-  PieChartOutlined,
   Build,
   Construction,
   HomeRepairService,
@@ -62,6 +50,12 @@ function Nav() {
       listType: "none",
     },
     {
+      text: "Work Orders",
+      icon: null,
+      nav: "",
+      listType: "",
+    },
+    {
       text: "Work Order List",
       icon: <IoDocumentsOutline />,
       nav: "workorderlist",
@@ -71,6 +65,12 @@ function Nav() {
       text: "New Work Order",
       icon: <IoDocumentOutline />,
       nav: "workorderform",
+      listType: "",
+    },
+    {
+      text: "Customer",
+      icon: null,
+      nav: "",
       listType: "",
     },
     {
@@ -86,10 +86,16 @@ function Nav() {
       listType: "",
     },
     {
+      text: "Parts",
+      icon: null,
+      nav: "",
+      listType: "",
+    },
+    {
       text: "Parts List",
       icon: <GiGears />,
-      nav: "parts",
-      listType: "partslist",
+      nav: "partslist",
+      listType: "parts",
     },
     {
       text: "New Part",
@@ -102,6 +108,12 @@ function Nav() {
       icon: <RiHomeGearFill />,
       nav: "partcategory",
       listType: "partcategory",
+    },
+    {
+      text: "Labor",
+      icon: null,
+      nav: "",
+      listType: "",
     },
     {
       text: "Labor List",
@@ -122,6 +134,12 @@ function Nav() {
       listType: "laborcategory",
     },
     {
+      text: "Vendor",
+      icon: null,
+      nav: "",
+      listType: "",
+    },
+    {
       text: "Vendor List",
       icon: <Store />,
       nav: "vendorlist",
@@ -131,6 +149,12 @@ function Nav() {
       text: "New Vendor",
       icon: <AddBusiness />,
       nav: "vendorform",
+      listType: "",
+    },
+    {
+      text: "Job Type",
+      icon: null,
+      nav: "",
       listType: "",
     },
     {
@@ -153,89 +177,99 @@ function Nav() {
 
   return (
     <Box component="nav">
-      <Drawer
-        open={isSideBarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        variant="persistent"
-        anchor="left"
-        sx={{
-          width: drawerWidth,
-          "& .MuiDrawer-paper": {
-            color: theme.palette.secondary[200],
-            backgroundColor: theme.palette.background.alt,
-            boxSixing: "border-box",
-            borderWidth: isNonMobile ? 0 : "2px",
+      {isSideBarOpen && (
+        <Drawer
+          open={isSideBarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          variant="persistent"
+          anchor="left"
+          sx={{
             width: drawerWidth,
-          },
-        }}
-      >
-        <Box width="100%">
-          <Box m="1.5rem 2rem 2rem 3rem">
-            <FlexBetween color={theme.palette.secondary.main}>
-              <Box display="flex" alignItems="center" gap="0.5rem">
-                <Typography variant="h4" fontWeight="bold">
-                  Yeoman Race Engines
-                </Typography>
-              </Box>
-              {!isNonMobile && (
-                <IconButton onClick={() => setIsSidebarOpen(!isSideBarOpen)}>
-                  <ChevronLeft />
-                </IconButton>
-              )}
-            </FlexBetween>
-          </Box>
-          <List>
-            {navItems.map(({ text, icon, nav, listType }) => {
-              if (!icon) {
-                return (
-                  <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
-                    {text}
+            "& .MuiDrawer-paper": {
+              color: theme.palette.secondary[200],
+              backgroundColor: theme.palette.background.alt,
+              boxSixing: "border-box",
+              borderWidth: isNonMobile ? 0 : "2px",
+              width: drawerWidth,
+            },
+          }}
+        >
+          <Box width="100%">
+            <Box m="1.1rem 2rem 1.1rem 3rem">
+              <FlexBetween color={theme.palette.secondary.main}>
+                <Box display="flex" alignItems="center" gap="0.5rem">
+                  <Typography variant="h4" fontWeight="bold">
+                    Yeoman Race Engines
                   </Typography>
-                );
-              }
-              const lcText = nav.toLowerCase();
+                </Box>
+                {!isNonMobile && (
+                  <IconButton onClick={() => setIsSidebarOpen(!isSideBarOpen)}>
+                    <ChevronLeft />
+                  </IconButton>
+                )}
+              </FlexBetween>
+            </Box>
+            <List>
+              {navItems.map(({ text, icon, nav, listType }) => {
+                if (!icon) {
+                  return (
+                    <Typography
+                      key={text}
+                      fontWeight="bold"
+                      sx={{ m: ".75rem 0 .75rem 3rem" }}
+                    >
+                      {text}
+                    </Typography>
+                  );
+                }
+                const lcText = nav.toLowerCase();
 
-              return (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      navigate(`/${nav}`);
-                      setActive(lcText);
-                      setListType(listType);
-                    }}
-                    sx={{
-                      backgroundColor:
-                        active === lcText
-                          ? theme.palette.secondary[300]
-                          : "transparent",
-                      color:
-                        active === lcText
-                          ? theme.palette.primary[600]
-                          : theme.palette.secondary[100],
-                    }}
-                  >
-                    <ListItemIcon
+                return (
+                  <ListItem key={text} disablePadding sx={{ height: "30px" }}>
+                    <ListItemButton
+                      onClick={() => {
+                        navigate(`/${nav}`);
+                        setActive(lcText);
+                        setListType(listType);
+                      }}
                       sx={{
-                        ml: "2rem",
+                        backgroundColor:
+                          active === lcText
+                            ? theme.palette.secondary[300]
+                            : "transparent",
                         color:
                           active === lcText
                             ? theme.palette.primary[600]
-                            : theme.palette.secondary[200],
+                            : theme.palette.secondary[100],
+                        height: "30px",
                       }}
                     >
-                      {icon}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                    {active === lcText && (
-                      <ChevronRightOutlined sx={{ ml: "auto" }} />
-                    )}
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
-        </Box>
-      </Drawer>
+                      <ListItemIcon
+                        sx={{
+                          ml: "2rem",
+                          color:
+                            active === lcText
+                              ? theme.palette.primary[600]
+                              : theme.palette.secondary[200],
+                        }}
+                      >
+                        {icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={text}
+                        sx={{ m: ".5rem 0 .5rem 0rem" }}
+                      />
+                      {active === lcText && (
+                        <ChevronRightOutlined sx={{ ml: "auto" }} />
+                      )}
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Box>
+        </Drawer>
+      )}
     </Box>
   );
 }

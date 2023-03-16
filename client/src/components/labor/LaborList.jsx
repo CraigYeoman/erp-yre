@@ -1,17 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../context";
+import { Box, useTheme, Link } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import Header from "../Header";
 
 const LaborList = () => {
-  const { listType, selectLaborID } = useGlobalContext();
+  const { listType, selectLaborID, setLoading, loading } = useGlobalContext();
   const [data, setData] = useState([{}]);
+  const theme = useTheme();
 
   useEffect(() => {
+    setLoading(true);
     fetch(`/api/v1/erp/${listType}`)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        console.log(data);
+        setLoading(false);
       });
   }, []);
 
@@ -23,24 +28,76 @@ const LaborList = () => {
     );
   }
 
+  const columns = [
+    {
+      field: "_id",
+      headerName: "ID",
+      flex: 1.5,
+      renderCell: (params) => (
+        <Link
+          component={RouterLink}
+          color="inherit"
+          onClick={() => selectLaborID(params.row._id)}
+          to={`/labordetail/${params.row._id}`}
+        >
+          {params.row._id}
+        </Link>
+      ),
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      flex: 1,
+      renderCell: (params) => {
+        return <div className="rowitem">${params.row.price}</div>;
+      },
+    },
+  ];
+
   return (
-    <div className="labor-list-container">
-      <h3>Labor List</h3>
-      {data.labor.map((labor) => {
-        const { name, price, _id } = labor;
-        return (
-          <div className="labor-container" key={_id}>
-            <Link
-              onClick={() => selectLaborID(_id)}
-              to={`/labordetail/${labor._id}`}
-            >
-              {name}
-            </Link>
-            <p>${price}</p>
-          </div>
-        );
-      })}
-    </div>
+    <Box m="1.5rem 2.5rem">
+      <Header title="Labor" subtitle="List of Labor" />
+      <Box
+        mt="40px"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: theme.palette.primary.light,
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderTop: "none",
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${theme.palette.secondary[200]} !important`,
+          },
+        }}
+      >
+        <DataGrid
+          loading={loading || !data.labor}
+          rows={data.labor}
+          getRowId={(row) => row._id}
+          columns={columns}
+        />
+      </Box>
+    </Box>
   );
 };
 

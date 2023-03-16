@@ -351,6 +351,7 @@ const AppProvider = ({ children }) => {
         data,
         mode,
         setMode,
+        setLoading,
       }}
     >
       {children}

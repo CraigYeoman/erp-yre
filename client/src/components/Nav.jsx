@@ -118,8 +118,8 @@ function Nav() {
     {
       text: "Labor List",
       icon: <Construction />,
-      nav: "labor",
-      listType: "laborlist",
+      nav: "laborlist",
+      listType: "labor",
     },
     {
       text: "New Labor",

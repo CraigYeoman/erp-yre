@@ -1,19 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../context";
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, Link, InputAdornment } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import Header from "../Header";
 
 const PartsList = () => {
-  const { listType, selectPartID, selectVendorID } = useGlobalContext();
+  const { listType, selectPartID, selectVendorID, setLoading, loading } =
+    useGlobalContext();
   const [data, setData] = useState([{}]);
+  const [detailRow, setDetailRow] = useState([{}]);
   const theme = useTheme();
 
   useEffect(() => {
+    setLoading(true);
     fetch(`/api/v1/erp/${listType}`)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        console.log(data);
+        // let detailRow = data.parts.map((part) => {
+        //   return {
+        //     _id: part._id,
+        //     part_number: part.part_number,
+        //     partCategory: part.partCategory.name,
+        //     manufacture: part.manufacture,
+        //     vendor: part.vendor.name,
+        //     customer_price: part.customer_price,
+        //     name: part.name,
+        //   };
+        // });
+        setDetailRow(detailRow);
+
+        setLoading(false);
       });
   }, []);
 
@@ -29,7 +48,17 @@ const PartsList = () => {
     {
       field: "_id",
       headerName: "ID",
-      flex: 1,
+      flex: 1.5,
+      renderCell: (params) => (
+        <Link
+          component={RouterLink}
+          color="inherit"
+          onClick={() => selectPartID(params.row._id)}
+          to={`/partdetail/${params.row._id}`}
+        >
+          {params.row._id}
+        </Link>
+      ),
     },
     {
       field: "name",
@@ -42,9 +71,12 @@ const PartsList = () => {
       flex: 1,
     },
     {
-      field: "partCategory.name",
+      field: "partCategory",
       headerName: "Category",
       flex: 1,
+      renderCell: (params) => {
+        return <div className="rowitem">{params.row.partCategory.name}</div>;
+      },
     },
     {
       field: "manufacture",
@@ -55,19 +87,33 @@ const PartsList = () => {
       field: "customer_price",
       headerName: "Customer Price",
       flex: 1,
+      renderCell: (params) => {
+        return <div className="rowitem">${params.row.customer_price}</div>;
+      },
     },
     {
       field: "vendor",
       headerName: "Vendor Name",
       flex: 1,
+      renderCell: (params) => (
+        <Link
+          component={RouterLink}
+          color="inherit"
+          onClick={() => selectVendorID(params.row.vendor._id)}
+          to={`/vendordetail/${params.row.vendor._id}`}
+        >
+          {params.row.vendor.name}
+        </Link>
+      ),
     },
   ];
 
   return (
     <Box m="1.5rem 2.5rem">
+      <Header title="Parts" subtitle="List of Parts" />
       <Box
-        mt="40bx"
-        height="75%"
+        mt="40px"
+        height="75vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
@@ -94,6 +140,7 @@ const PartsList = () => {
         }}
       >
         <DataGrid
+          loading={loading || !data.parts}
           rows={data.parts}
           getRowId={(row) => row._id}
           columns={columns}

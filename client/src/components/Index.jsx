@@ -1,19 +1,27 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../context";
-import { Box } from "@mui/material";
+import { Box, useTheme, useMediaQuery, Typography } from "@mui/material";
+import IndexGrid from "./IndexGrid";
+import Header from "./Header";
+import FlexBetween from "./FlexBetween";
 
 const { DateTime } = require("luxon");
 
 const Index = () => {
   const [data, setData] = useState([{}]);
-  const { rootUrl, selectCustomerID, selectWorkOrderID } = useGlobalContext();
+  const { rootUrl, selectCustomerID, selectWorkOrderID, setLoading } =
+    useGlobalContext();
+  const theme = useTheme();
+  const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${rootUrl}/api/v1/erp/workorders/index`)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        setLoading(false);
       });
   }, []);
 
@@ -26,8 +34,53 @@ const Index = () => {
   }
 
   return (
-    <Box width="100%" height="100%">
-      <h1>Erp App</h1>
+    <Box m="1.5rem 2.5rem">
+      <FlexBetween>
+        <Header title="ERP APP" subtitle="Welcome" />
+        <Box>Search</Box>
+      </FlexBetween>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          mt="20px"
+          gap="1rem"
+          sx={{
+            flexDirection: "row",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          backgroundColor={theme.palette.background.alt}
+          borderRadius="0.55rem"
+          p="1.25rem 1rem"
+        >
+          {data.countArray.map((jobType) => (
+            <Box key={jobType.name}>
+              <Typography
+                variant="h4"
+                fontWeight="600"
+                sx={{ color: theme.palette.secondary[100] }}
+              >
+                {jobType.name}: {jobType.count}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+      <Box height="75vh">
+        <Box
+          sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+        >
+          <IndexGrid name="Past Due" data={data.past_due} />
+          <IndexGrid name="Due This Week" data={data.due_this_week} />
+          <IndexGrid name="Due Next Week" data={data.due_next_week} />
+          <IndexGrid name="Due in 30 Days" data={data.due_week_three_four} />
+        </Box>
+      </Box>
+      {/* <h1>Erp App</h1>
       <div className="container-row top">
         <h4>
           <p>Work Order Totals</p>
@@ -173,7 +226,7 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </Box>
   );
 };

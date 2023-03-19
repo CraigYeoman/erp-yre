@@ -31,8 +31,11 @@ const AppProvider = ({ children }) => {
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
-    console.log(values);
   };
+
+  // const handleChangeMui = (e) => {
+  //   setValues({ ...values, [e.target.name as string]: e.target.value })
+  // }
 
   const handleChangeArray = (array, func, info) => {
     const updatedValues = [...array, info];

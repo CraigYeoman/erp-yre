@@ -1,6 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useEffect } from "react";
 import { useGlobalContext } from "../../context";
+import {
+  Box,
+  useTheme,
+  Link,
+  InputLabel,
+  Button,
+  FormControl,
+  NativeSelect,
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import Header from "../Header";
+import FlexBetween from "../FlexBetween";
 
 const { DateTime } = require("luxon");
 
@@ -14,26 +26,18 @@ const WorkOrderList = () => {
     clearFilters,
     data,
     getWorkOrder,
+    loading,
   } = useGlobalContext();
+
+  const theme = useTheme();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     clearFilters();
   };
 
-  // let url = `/api/v1/erp/${listType}`;
-
-  // useEffect(() => {
-  //   getWorkOrder()
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setData(data);
-  //     });
-  // }, []);
-
   useEffect(() => {
     getWorkOrder();
-    console.log(data);
   }, [values]);
 
   if (!data.workOrders) {
@@ -43,13 +47,129 @@ const WorkOrderList = () => {
       </section>
     );
   }
+
+  const columns = [
+    {
+      field: "_id",
+      headerName: "ID",
+      flex: 1.5,
+      renderCell: (params) => (
+        <Link
+          component={RouterLink}
+          color="inherit"
+          onClick={() => selectWorkOrderID(params.row._id)}
+          to={`/workorderdetail/${params.row._id}`}
+        >
+          {params.row._id}
+        </Link>
+      ),
+    },
+    {
+      field: "work_order_number",
+      headerName: "Work Order Number",
+      flex: 1,
+    },
+    {
+      field: "jobType",
+      headerName: "Job Type",
+      flex: 1,
+      renderCell: (params) => {
+        return <div className="rowitem">{params.row.jobType.name}</div>;
+      },
+    },
+    {
+      field: "customer",
+      headerName: "Customer Name",
+      flex: 1,
+      renderCell: (params) => (
+        <Link
+          component={RouterLink}
+          color="inherit"
+          onClick={() => selectCustomerID(params.row.customer._id)}
+          to={`/customerdetail/${params.row.customer._id}`}
+        >
+          {params.row.customer.first_name} {params.row.customer.last_name}
+        </Link>
+      ),
+    },
+    {
+      field: "date_received",
+      headerName: "Date Received",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <div className="rowitem">
+            {DateTime.fromISO(params.row.date_received).toFormat("D")}
+          </div>
+        );
+      },
+    },
+    {
+      field: "date_due",
+      headerName: "Due Date",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <div className="rowitem">
+            {DateTime.fromISO(params.row.date_due).toFormat("D")}
+          </div>
+        );
+      },
+    },
+    {
+      field: "price",
+      headerName: "Estimated Rpice",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <div className="rowitem">
+            $
+            {(
+              sumTotal(params.row.labor, "price") +
+              sumTotal(params.row.parts, "customer_price") -
+              0
+            ).toFixed(2)}
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
-    <div className="work-order-list-container ">
-      <div className="work-order-container">
-        <div className="container-row">
-          <div className="container-column">
-            <label htmlFor="jobtype">Job Type</label>
-            <select
+    <Box m="1.5rem 2.5rem">
+      <Header title="Work Orders" subtitle="List of Work Orders" />
+      <Box
+        mt="40px"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: theme.palette.primary.light,
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderTop: "none",
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${theme.palette.secondary[200]} !important`,
+          },
+        }}
+      >
+        <FlexBetween m="1.5rem 2.5rem">
+          <FormControl sx={{ m: 1, minWidth: 80 }}>
+            <InputLabel id="jobtype">Job Type</InputLabel>
+            <NativeSelect
               type="select"
               placeholder="jobtype"
               name="jobType"
@@ -57,30 +177,25 @@ const WorkOrderList = () => {
               onChange={handleChange}
               value={values.jobType}
             >
-              <option value="all">All</option>
-              {typeof data.jobTypeList === "undefined" ? (
-                <option>Loading...</option>
-              ) : (
-                data.jobTypeList
-                  .sort((a, b) => {
-                    let textA = a.name.toUpperCase();
-                    let textB = b.name.toUpperCase();
-                    return textA < textB ? -1 : textA > textB ? 1 : 0;
-                  })
-                  .map((jobtype) => {
-                    return (
-                      <option value={jobtype._id} key={jobtype._id}>
-                        {jobtype.name}
-                      </option>
-                    );
-                  })
-              )}
-            </select>
-          </div>
+              {(data.jobTypeList || [])
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((jobType) => {
+                  return (
+                    <option key={jobType._id} value={jobType._id}>
+                      {jobType.name}
+                    </option>
+                  );
+                })}
+            </NativeSelect>
+          </FormControl>
 
-          <div className="container-column">
-            <label htmlFor="sort">Sort</label>
-            <select
+          <FormControl sx={{ m: 1, minWidth: 80 }}>
+            <InputLabel id="sort">Sort</InputLabel>
+            <NativeSelect
               type="select"
               placeholder="sort"
               name="sort"
@@ -97,11 +212,12 @@ const WorkOrderList = () => {
               <option value="estimated_price_<">
                 Estimated Price Smallest
               </option>
-            </select>
-          </div>
-          <div className="container-column">
-            <label htmlFor="complete">Status</label>
-            <select
+            </NativeSelect>
+          </FormControl>
+
+          <FormControl sx={{ m: 1, minWidth: 80 }}>
+            <InputLabel id="complete">Status</InputLabel>
+            <NativeSelect
               type="select"
               placeholder="complete"
               name="complete"
@@ -109,71 +225,23 @@ const WorkOrderList = () => {
               onChange={handleChange}
               value={values.complete}
             >
+              <option value="all">All</option>
               <option value="false">Incomplete</option>
               <option value="true">Complete</option>
-              <option value="all">All</option>
-            </select>
-          </div>
-          <button onClick={handleSubmit}>Clear Filters</button>
-        </div>
-      </div>
-      <div className="work-order-container">
-        <fieldset>
-          <legend>Work Order Number</legend>
-          <p>Customer Name</p>
-          <p>Job Type</p>
-          <p>Date Recieved</p>
-          <p>Due Date</p>
-          <p>Estimated Price</p>
-        </fieldset>
-      </div>
-      {data.workOrders.map((workOrder) => {
-        const {
-          _id,
-          date_received,
-          date_due,
-          jobType,
-          customer,
-          work_order_number,
-          labor,
-          parts,
-        } = workOrder;
-
-        return (
-          <div className="work-order-container" key={_id}>
-            <fieldset>
-              <legend>
-                <Link
-                  onClick={() => selectWorkOrderID(_id)}
-                  to={`/workorderdetail/${_id}`}
-                >
-                  {work_order_number}
-                </Link>
-              </legend>
-              <p>
-                <Link
-                  onClick={() => selectCustomerID(customer._id)}
-                  to={`/customerdetail/${customer._id}`}
-                >
-                  {customer.first_name} {customer.last_name}
-                </Link>
-              </p>
-              <p>{jobType.name}</p>
-              <p>{DateTime.fromISO(date_received).toFormat("D")}</p>
-              <p>{DateTime.fromISO(date_due).toFormat("D")}</p>
-              <p>
-                $
-                {(
-                  sumTotal(labor, "price") +
-                  sumTotal(parts, "customer_price") -
-                  0
-                ).toFixed(2)}
-              </p>
-            </fieldset>
-          </div>
-        );
-      })}
-    </div>
+            </NativeSelect>
+          </FormControl>
+          <Button variant="contained" onClick={handleSubmit}>
+            Clear Filters
+          </Button>
+        </FlexBetween>
+        <DataGrid
+          loading={loading || !data.workOrders}
+          rows={data.workOrders}
+          getRowId={(row) => row._id}
+          columns={columns}
+        />
+      </Box>
+    </Box>
   );
 };
 

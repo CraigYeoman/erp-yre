@@ -157,7 +157,6 @@ const getAllWorkOrders = async (req, res) => {
     .populate("accessories");
 
   if (sort === "date_due") {
-    console.log(result);
     result = result.sort("date_due");
   }
   if (sort === "date_received") {
@@ -185,7 +184,6 @@ const getAllWorkOrders = async (req, res) => {
         return 0;
       }
     });
-    console.log(workOrders);
   }
   if (sort === "customer_name_z") {
     workOrders = workOrders.sort((a, b) => {
@@ -204,8 +202,6 @@ const getAllWorkOrders = async (req, res) => {
         sumTotal(a.labor, "price") + sumTotal(a.parts, "customer_price");
       let bTotal =
         sumTotal(b.labor, "price") + sumTotal(b.parts, "customer_price");
-      console.log(aTotal);
-      console.log(bTotal);
       if (aTotal > bTotal) {
         return -1;
       } else if (aTotal < bTotal) {
@@ -221,8 +217,6 @@ const getAllWorkOrders = async (req, res) => {
         sumTotal(a.labor, "price") + sumTotal(a.parts, "customer_price");
       let bTotal =
         sumTotal(b.labor, "price") + sumTotal(b.parts, "customer_price");
-      console.log(aTotal);
-      console.log(bTotal);
       if (aTotal < bTotal) {
         return -1;
       } else if (aTotal > bTotal) {
@@ -233,7 +227,11 @@ const getAllWorkOrders = async (req, res) => {
     });
   }
 
+  let all = {};
+  all._id = "all";
+  all.name = "All";
   let jobTypeList = await JobType.find();
+  jobTypeList.push(all);
   res.status(200).json({ workOrders, jobTypeList, nbHits: workOrders.length });
 };
 

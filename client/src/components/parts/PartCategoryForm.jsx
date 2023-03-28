@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
+import Header from "../Header";
+import Response from "../Response";
+import { Box, useTheme, Button, TextField } from "@mui/material";
+
 const rootUrl = "http://localhost:5000";
 
 const PartCategoryForm = () => {
@@ -18,6 +22,7 @@ const PartCategoryForm = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const theme = useTheme();
   const onSubmit = async (e) => {
     e.preventDefault();
     setResponse(false);
@@ -58,53 +63,40 @@ const PartCategoryForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h3>New Part Category</h3>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column">
-          <label htmlFor="name">Part Category Name</label>
-          <input
-            type="text"
-            placeholder="name"
-            name="name"
-            required={true}
+    <Box m="1.5rem 2.5rem">
+      <Header title="New Part Category" subtitle="Fill out form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+          }}
+        >
+          <TextField
+            label="Part Category Name"
+            placeholder="Name"
+            margin={"normal"}
+            required
             value={values.name}
             onChange={handleChange}
-          ></input>
-        </div>
-        <button className="buttons" type="submit">
+            name="name"
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
-      {response && (
-        <div>
-          {responseText.msg}
-          <Link
-            onClick={() => selectPartCategoryID(responseText.partcategory._id)}
-            to={`/partcategorydetail/${responseText.partcategory._id}`}
-          >
-            {" "}
-            {responseText.partcategory.name}
-          </Link>
-        </div>
-      )}
-      {responseError && (
-        <div>
-          <p>
-            {responseTextError.partcategory.name}
-            not created
-          </p>
-          {responseTextError.errors.map((error) => {
-            const { msg, param, value } = error;
-            return (
-              <p key={error.value}>
-                {msg} in {param} value {value}
-              </p>
-            );
-          })}
-        </div>
-      )}
-    </div>
+      <Response
+        response={response}
+        responseText={responseText}
+        selectFunction={selectPartCategoryID}
+        item="partcategory"
+        path={"partcategorydetail"}
+        responseError={responseError}
+        responseTextError={responseTextError}
+      />
+    </Box>
   );
 };
 

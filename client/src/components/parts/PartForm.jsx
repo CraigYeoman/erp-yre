@@ -1,7 +1,18 @@
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState, useEffect } from "react";
+import {
+  Box,
+  useTheme,
+  Button,
+  TextField,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import Header from "../Header";
+import Response from "../Response";
 const rootUrl = "http://localhost:5000";
 
 const PartForm = () => {
@@ -29,6 +40,7 @@ const PartForm = () => {
   const [responseError, setResponseError] = useState(false);
   const [responseTextError, setResponseTextError] = useState("");
   const [partInfo, setPartInfo] = useState("");
+  const theme = useTheme();
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -96,159 +108,130 @@ const PartForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h3>Create Part</h3>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column gap">
-          <div className="container-column">
-            <label htmlFor="name">Part Name</label>
-            <input
-              type="text"
-              placeholder="3/8 8740 ARP Rod Bolt"
-              name="name"
-              required={true}
-              value={values.name}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="customer_price">Customer Price</label>
-            <input
-              type="number"
-              placeholder="$$$"
-              name="customer_price"
-              required={true}
-              value={values.customer_price}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="cost">Cost</label>
-            <input
-              type="number"
-              placeholder="$$$"
-              name="cost"
-              required={true}
-              value={values.cost}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="part_number">Part Number</label>
-            <input
-              type="text"
-              placeholder="XYZ"
-              name="part_number"
-              required={true}
-              value={values.part_number}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="vendor">Vendor</label>
-            <select
-              type="select"
-              placeholder="vendor"
+    <Box m="1.5rem 2.5rem">
+      <Header title="Create Part" subtitle="Fill out form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "240px",
+            gap: "5px;",
+          }}
+        >
+          <TextField
+            label="Part Name"
+            placeholder="3/8 8740 ARP Rod Bolt"
+            margin={"normal"}
+            required
+            value={values.name}
+            onChange={handleChange}
+            name="name"
+          />
+          <TextField
+            label="Customer Price"
+            placeholder="$$$"
+            margin={"normal"}
+            required
+            value={values.customer_price}
+            onChange={handleChange}
+            name="customer_price"
+            type="number"
+          />
+          <TextField
+            label="Cost"
+            placeholder="$$$"
+            margin={"normal"}
+            required
+            value={values.cost}
+            onChange={handleChange}
+            name="cost"
+            type="number"
+          />
+          <TextField
+            label="Part Number"
+            placeholder="XYZ"
+            margin={"normal"}
+            required
+            value={values.part_number}
+            onChange={handleChange}
+            name="part_number"
+          />
+          <FormControl sx={{ minWidth: 80, mt: "16px", mb: "8px" }}>
+            <InputLabel id="vendor">Vendor</InputLabel>
+            <Select
               name="vendor"
               required={true}
               onChange={handleChange}
               value={values.vendor}
+              labelId="vendor"
+              label="Vendor"
             >
-              <option value="" disabled selected hidden>
-                Please Choose a Vendor
-              </option>
-              {typeof partInfo.vendor_list === "undefined" ? (
-                <option>Loading...</option>
-              ) : (
-                partInfo.vendor_list
-                  .sort((a, b) => {
-                    let textA = a.name.toUpperCase();
-                    let textB = b.name.toUpperCase();
-                    return textA < textB ? -1 : textA > textB ? 1 : 0;
-                  })
-                  .map((vendor) => {
-                    return (
-                      <option value={vendor._id} key={vendor._id}>
-                        {vendor.name}
-                      </option>
-                    );
-                  })
-              )}
-            </select>
-          </div>
-          <div className="container-column">
-            <label htmlFor="partCategory">Category</label>
-            <select
-              type="select"
-              placeholder="partCategory"
+              {(partInfo.vendor_list || [])
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((vendor) => {
+                  return (
+                    <MenuItem value={vendor._id} key={vendor._id}>
+                      {vendor.name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ minWidth: 80, mt: "16px", mb: "8px" }}>
+            <InputLabel id="partCategory">Part Category</InputLabel>
+            <Select
               name="partCategory"
               required={true}
               onChange={handleChange}
               value={values.partCategory}
+              labelId="partCategory"
+              label="Part Category"
             >
-              <option value="" disabled selected hidden>
-                Please Choose a Category
-              </option>
-              {typeof partInfo.part_category_list === "undefined" ? (
-                <option>Loading...</option>
-              ) : (
-                partInfo.part_category_list
-                  .sort((a, b) => {
-                    let textA = a.name.toUpperCase();
-                    let textB = b.name.toUpperCase();
-                    return textA < textB ? -1 : textA > textB ? 1 : 0;
-                  })
-                  .map((partCategory) => {
-                    return (
-                      <option value={partCategory._id} key={partCategory._id}>
-                        {partCategory.name}
-                      </option>
-                    );
-                  })
-              )}
-            </select>
-          </div>
-          <div className="container-column">
-            <label htmlFor="manufacture">Manufacture</label>
-            <input
-              type="text"
-              placeholder="manufacture"
-              name="manufacture"
-              required={true}
-              value={values.manufacture}
-              onChange={handleChange}
-            ></input>
-          </div>
-        </div>
-        <button className="buttons" type="submit">
+              {(partInfo.part_category_list || [])
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((partCategory) => {
+                  return (
+                    <MenuItem value={partCategory._id} key={partCategory._id}>
+                      {partCategory.name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </FormControl>
+          <TextField
+            label="Manufacture"
+            placeholder="Manufacture"
+            margin={"normal"}
+            value={values.manufacture}
+            onChange={handleChange}
+            name="manufacture"
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
-      {response && (
-        <div>
-          {responseText.msg}{" "}
-          <Link
-            onClick={() => selectPartID(responseText.part._id)}
-            to={`/partdetail/${responseText.part._id}`}
-          >
-            {responseText.part.name}
-          </Link>
-        </div>
-      )}
-      {responseError && (
-        <div>
-          <p>{responseTextError.part.name} not created</p>
-          {responseTextError.errors.map((error) => {
-            const { msg, param, value } = error;
-            return (
-              <p key={error.param}>
-                {msg} in {param} value {value}
-              </p>
-            );
-          })}
-        </div>
-      )}
-    </div>
+      <Response
+        response={response}
+        responseText={responseText}
+        selectFunction={selectPartID}
+        item="part"
+        path={"partdetail"}
+        responseError={responseError}
+        responseTextError={responseTextError}
+      />
+    </Box>
   );
 };
 

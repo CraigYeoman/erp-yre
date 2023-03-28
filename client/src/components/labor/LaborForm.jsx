@@ -2,6 +2,18 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState, useEffect } from "react";
+import {
+  Box,
+  useTheme,
+  Button,
+  TextField,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import Header from "../Header";
+import Response from "../Response";
 const rootUrl = "http://localhost:5000";
 
 const LaborForm = () => {
@@ -22,6 +34,8 @@ const LaborForm = () => {
 
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
+  const [responseError, setResponseError] = useState(false);
+  const [responseTextError, setResponseTextError] = useState("");
   const [laborInfo, setLaborInfo] = useState("");
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -30,6 +44,7 @@ const LaborForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setResponse(false);
+    setResponseError(false);
     const { name, price, laborCategory } = values;
     const laborData = { name, price, laborCategory };
     try {
@@ -41,7 +56,8 @@ const LaborForm = () => {
           setResponse(true);
         })
         .catch(function (error) {
-          setResponseText(error.response.data.msg.message);
+          setResponseError(true);
+          setResponseTextError(error.response.data);
         });
 
       setValues({ name: "", price: "", laborCategory: "" });
@@ -58,50 +74,48 @@ const LaborForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h3>Create Labor</h3>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column gap">
-          <div className="container-column">
-            <label htmlFor="name">Labor Name</label>
-            <input
-              type="text"
-              placeholder="Labor Name"
-              name="name"
-              required={true}
-              value={values.name}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="price">Price</label>
-            <input
-              type="number"
-              placeholder="$$$"
-              name="price"
-              required={true}
-              value={values.price}
-              onChange={handleChange}
-            ></input>
-          </div>
-        </div>
-        <div className="container-column">
-          <label htmlFor="laborCategory">Category</label>
-          <select
-            type="select"
-            placeholder="laborCategory"
-            name="laborCategory"
-            required={true}
+    <Box m="1.5rem 2.5rem">
+      <Header title="New Labor" subtitle="Fill out form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "240px",
+          }}
+        >
+          <TextField
+            label="Labor Name"
+            placeholder="Labor Name"
+            margin={"normal"}
+            required
+            value={values.name}
             onChange={handleChange}
-            value={values.laborCategory}
-          >
-            <option value="" disabled selected hidden>
-              Please Choose a Category
-            </option>
-            {typeof laborInfo.labor_category_list === "undefined" ? (
-              <option>Loading...</option>
-            ) : (
-              laborInfo.labor_category_list
+            name="name"
+          />
+          <TextField
+            label="Price"
+            placeholder="$$$"
+            margin={"normal"}
+            required
+            value={values.price}
+            onChange={handleChange}
+            name="price"
+            type="number"
+          />
+          <FormControl sx={{ minWidth: 80, mt: "16px", mb: "8px" }}>
+            <InputLabel id="laborCategory">Labor Category</InputLabel>
+            <Select
+              name="laborCategory"
+              required={true}
+              onChange={handleChange}
+              value={values.laborCategory}
+              labelId="laborCategory"
+              label="Labor Category"
+            >
+              {(laborInfo.labor_category_list || [])
                 .sort((a, b) => {
                   let textA = a.name.toUpperCase();
                   let textB = b.name.toUpperCase();
@@ -109,30 +123,28 @@ const LaborForm = () => {
                 })
                 .map((laborCategory) => {
                   return (
-                    <option value={laborCategory._id} key={laborCategory._id}>
+                    <MenuItem value={laborCategory._id} key={laborCategory._id}>
                       {laborCategory.name}
-                    </option>
+                    </MenuItem>
                   );
-                })
-            )}
-          </select>
-        </div>
-        <button className="buttons" type="submit">
+                })}
+            </Select>
+          </FormControl>
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
-      {response && (
-        <div>
-          {responseText.msg}{" "}
-          <Link
-            onClick={() => selectLaborID(responseText.labor._id)}
-            to={`/labordetail/${responseText.labor._id}`}
-          >
-            {responseText.labor.name}
-          </Link>
-        </div>
-      )}
-    </div>
+      <Response
+        response={response}
+        responseText={responseText}
+        selectFunction={selectLaborID}
+        item="labor"
+        path={"labordetail"}
+        responseError={responseError}
+        responseTextError={responseTextError}
+      />
+    </Box>
   );
 };
 

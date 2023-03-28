@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
+import { Box, useTheme, Button, TextField } from "@mui/material";
+import Header from "../Header";
+import Response from "../Response";
 const rootUrl = "http://localhost:5000";
 
 const VendorForm = () => {
@@ -19,6 +22,7 @@ const VendorForm = () => {
     customer_number: "",
   });
 
+  const theme = useTheme();
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
@@ -96,157 +100,122 @@ const VendorForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h3>Create Vendor</h3>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column gap">
-          <div className="container-column">
-            <label htmlFor="name">Company Name</label>
-            <input
-              type="text"
-              placeholder="Company LLC"
-              name="name"
-              required={true}
-              value={values.name}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="main_contact">Main Contact</label>
-            <input
-              type="text"
-              placeholder="Don John"
-              name="main_contact"
-              required={true}
-              value={values.main_contact}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="phone_number">Phone Number</label>
-            <input
-              type="tel"
-              placeholder="9999999999"
-              name="phone_number"
-              required={true}
-              value={values.phone_number}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              placeholder="joe@gmail.com"
-              name="email"
-              required={true}
-              value={values.email}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="address_line_1">Address line 1</label>
-            <input
-              type="text"
-              placeholder="Address"
-              name="address_line_1"
-              required={true}
-              value={values.address_line_1}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="address_line_2">Address line 2</label>
-            <input
-              type="text"
-              placeholder="Address line 2"
-              name="address_line_2"
-              value={values.address_line_2}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="city">City</label>
-            <input
-              type="text"
-              placeholder="City"
-              name="city"
-              required={true}
-              value={values.city}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="state">State</label>
-            <input
-              type="text"
-              placeholder="state"
-              name="state"
-              required={true}
-              value={values.state}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="zip_code">Zip Code</label>
-            <input
-              type="text"
-              placeholder="Zip Code"
-              name="zip_code"
-              required={true}
-              value={values.zip_code}
-              onChange={handleChange}
-            ></input>
-          </div>
-
-          <div className="container-column">
-            <label htmlFor="customer_number">Customer Number</label>
-            <input
-              type="text"
-              placeholder="Customer Number"
-              name="customer_number"
-              required={true}
-              value={values.customer_number}
-              onChange={handleChange}
-            ></input>
-          </div>
-        </div>
-        <button className="buttons" type="submit">
+    <Box m="1.5rem 2.5rem">
+      <Header title="New Vendor" subtitle="Fill out form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "240px",
+          }}
+        >
+          <TextField
+            label="Company Name"
+            placeholder="Company LLC"
+            margin={"normal"}
+            required
+            value={values.name}
+            onChange={handleChange}
+            name="name"
+          />
+          <TextField
+            label="Main Contact"
+            placeholder="Don John"
+            margin={"normal"}
+            required
+            value={values.main_contact}
+            onChange={handleChange}
+            name="main_contact"
+          />
+          <TextField
+            label="Phone Number"
+            placeholder="9999999999"
+            margin={"normal"}
+            required
+            value={values.phone_number}
+            onChange={handleChange}
+            name="phone_number"
+          />
+          <TextField
+            label="Email"
+            placeholder="blank@blankmail.com"
+            margin={"normal"}
+            required
+            value={values.email}
+            onChange={handleChange}
+            name="email"
+          />
+          <TextField
+            label="Address Line 1"
+            placeholder="Address"
+            margin={"normal"}
+            required
+            value={values.address_line_1}
+            onChange={handleChange}
+            name="address_line_1"
+          />
+          <TextField
+            label="Address Line 2"
+            placeholder="Address Line 2"
+            margin={"normal"}
+            value={values.address_line_2}
+            onChange={handleChange}
+            name="address_line_2"
+          />
+          <TextField
+            label="City"
+            placeholder="City"
+            margin={"normal"}
+            required
+            value={values.city}
+            onChange={handleChange}
+            name="city"
+          />
+          <TextField
+            label="State Abbreviation"
+            placeholder="MO, KS, CO"
+            margin={"normal"}
+            required
+            value={values.state}
+            onChange={handleChange}
+            name="state"
+          />
+          <TextField
+            label="Zip Code"
+            placeholder="Zip Code"
+            margin={"normal"}
+            required
+            value={values.zip_code}
+            onChange={handleChange}
+            name="zip_code"
+          />
+          <TextField
+            label="Customer Number"
+            placeholder="Customer Number"
+            margin={"normal"}
+            required
+            value={values.customer_number}
+            onChange={handleChange}
+            name="customer_number"
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
-      {response && (
-        <div>
-          {responseText.msg}
-          <Link
-            onClick={() => selectVendorID(responseText.vendor._id)}
-            to={`/vendordetail/${responseText.vendor._id}`}
-          >
-            {responseText.vendor.name}
-          </Link>
-        </div>
-      )}
-      {responseError && (
-        <div>
-          <p>{responseTextError.vendor.name} not created</p>
-          {responseTextError.errors.map((error) => {
-            const { msg, param, value } = error;
-            return (
-              <p key={error.value}>
-                {msg} in {param} value {value}
-              </p>
-            );
-          })}
-        </div>
-      )}
-    </div>
+      <Response
+        response={response}
+        responseText={responseText}
+        selectFunction={selectVendorID}
+        item="vendor"
+        path={"vendordetail"}
+        responseError={responseError}
+        responseTextError={responseTextError}
+      />
+    </Box>
   );
 };
 

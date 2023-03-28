@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
+import Header from "../Header";
+import Response from "../Response";
+import { Box, useTheme, Button, TextField } from "@mui/material";
 const rootUrl = "http://localhost:5000";
 
 const JobTypeForm = () => {
@@ -9,7 +12,7 @@ const JobTypeForm = () => {
   const [values, setValues] = useState({
     name: "",
   });
-
+  const theme = useTheme();
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
@@ -58,52 +61,39 @@ const JobTypeForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h3>New Job Type</h3>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column">
-          <label htmlFor="name">Job Type Name</label>
-          <input
-            type="text"
-            placeholder="name"
+    <Box m="1.5rem 2.5rem">
+      <Header title="New Job Type" subtitle="Fill out form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+          }}
+        >
+          <TextField
+            label="Job Type Name"
+            placeholder="Name"
             name="name"
-            required={true}
-            value={values.first_name}
+            required
+            value={values.name}
             onChange={handleChange}
-          ></input>
-        </div>
-        <button className="buttons" type="submit">
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
-      {response && (
-        <div>
-          {responseText.msg}
-          <Link
-            onClick={() => selectJobTypeID(responseText.jobtype._id)}
-            to={`/jobtypedetail/${responseText.jobtype._id}`}
-          >
-            {responseText.jobtype.name}
-          </Link>
-        </div>
-      )}
-      {responseError && (
-        <div>
-          <p>
-            {responseTextError.jobtype.name}
-            not created
-          </p>
-          {responseTextError.errors.map((error) => {
-            const { msg, param, value } = error;
-            return (
-              <p key={error.value}>
-                {msg} in {param} value {value}
-              </p>
-            );
-          })}
-        </div>
-      )}
-    </div>
+      <Response
+        response={response}
+        responseText={responseText}
+        selectFunction={selectJobTypeID}
+        item="jobtype"
+        path={"jobtypedetail"}
+        responseError={responseError}
+        responseTextError={responseTextError}
+      />
+    </Box>
   );
 };
 

@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
+import { Box, Button, TextField } from "@mui/material";
+import Header from "../Header";
+import Response from "../Response";
 const rootUrl = "http://localhost:5000";
 
 const CustomerForm = () => {
@@ -92,141 +94,113 @@ const CustomerForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h2>New Customer</h2>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column gap">
-          <div className="container-column">
-            <label htmlFor="first_name">Customer First Name</label>
-            <input
-              type="text"
-              placeholder="First Name"
-              name="first_name"
-              required={true}
-              value={values.first_name}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="last_name">Last Name</label>
-            <input
-              type="text"
-              placeholder="Last Name"
-              name="last_name"
-              required={true}
-              value={values.last_name}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="phone_number">Phone Number</label>
-            <input
-              type="tel"
-              placeholder="9999999999"
-              name="phone_number"
-              required={true}
-              value={values.phone_number}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              placeholder="joe@gmail.com"
-              name="email"
-              required={true}
-              value={values.email}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="address_line_1">Address line 1</label>
-            <input
-              type="text"
-              placeholder="Address"
-              name="address_line_1"
-              required={true}
-              value={values.address_line_1}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="address_line_2">Address line 2</label>
-            <input
-              type="text"
-              placeholder="Address line 2"
-              name="address_line_2"
-              value={values.address_line_2}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="city">City</label>
-            <input
-              type="text"
-              placeholder="City"
-              name="city"
-              required={true}
-              value={values.city}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="state">State</label>
-            <input
-              type="text"
-              placeholder="state"
-              name="state"
-              required={true}
-              value={values.state}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="zip_code">Zip Code</label>
-            <input
-              type="text"
-              placeholder="Zip Code"
-              name="zip_code"
-              required={true}
-              value={values.zip_code}
-              onChange={handleChange}
-            ></input>
-          </div>
-        </div>
-        <button className="buttons" type="submit">
+    <Box m="1.5rem 2.5rem">
+      <Header title="New Customer" subtitle="Fill out form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "240px",
+          }}
+        >
+          <TextField
+            label="First Name"
+            placeholder="First Name"
+            margin={"normal"}
+            required
+            value={values.first_name}
+            onChange={handleChange}
+            name="first_name"
+          />
+          <TextField
+            label="Last Name"
+            placeholder="Last Name"
+            margin={"normal"}
+            required
+            value={values.last_name}
+            onChange={handleChange}
+            name="last_name"
+          />
+          <TextField
+            label="Phone Number"
+            placeholder="9999999999"
+            margin={"normal"}
+            required
+            value={values.phone_number}
+            onChange={handleChange}
+            name="phone_number"
+          />
+          <TextField
+            label="Email"
+            placeholder="blank@blankmail.com"
+            margin={"normal"}
+            required
+            value={values.email}
+            onChange={handleChange}
+            name="email"
+          />
+          <TextField
+            label="Address Line 1"
+            placeholder="Address"
+            margin={"normal"}
+            required
+            value={values.address_line_1}
+            onChange={handleChange}
+            name="address_line_1"
+          />
+          <TextField
+            label="Address Line 2"
+            placeholder="Address Line 2"
+            margin={"normal"}
+            value={values.address_line_2}
+            onChange={handleChange}
+            name="address_line_2"
+          />
+          <TextField
+            label="City"
+            placeholder="City"
+            margin={"normal"}
+            required
+            value={values.city}
+            onChange={handleChange}
+            name="city"
+          />
+          <TextField
+            label="State Abbreviation"
+            placeholder="MO, KS, CO"
+            margin={"normal"}
+            required
+            value={values.state}
+            onChange={handleChange}
+            name="state"
+          />
+          <TextField
+            label="Zip Code"
+            placeholder="Zip Code"
+            margin={"normal"}
+            required
+            value={values.zip_code}
+            onChange={handleChange}
+            name="zip_code"
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
-      {response && (
-        <div>
-          {responseText.msg}
-          <Link
-            onClick={() => selectCustomerID(responseText.customer._id)}
-            to={`/customerdetail/${responseText.customer._id}`}
-          >
-            {responseText.customer.first_name} {responseText.customer.last_name}
-          </Link>
-        </div>
-      )}
-      {responseError && (
-        <div>
-          <p>
-            {responseTextError.customer.first_name}{" "}
-            {responseTextError.customer.last_name} not created
-          </p>
-          {responseTextError.errors.map((error) => {
-            const { msg, param, value } = error;
-            return (
-              <p key={error.value}>
-                {msg} in {param} value {value}
-              </p>
-            );
-          })}
-        </div>
-      )}
-    </div>
+      <Response
+        response={response}
+        responseText={responseText}
+        selectFunction={selectCustomerID}
+        item="customer"
+        path={"customerdetail"}
+        responseError={responseError}
+        responseTextError={responseTextError}
+      />
+    </Box>
   );
 };
 

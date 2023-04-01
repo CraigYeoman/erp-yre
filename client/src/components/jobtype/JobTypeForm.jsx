@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
 import Header from "../Header";
 import Response from "../Response";
-import { Box, useTheme, Button, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 const rootUrl = "http://localhost:5000";
 
 const JobTypeForm = () => {
@@ -12,7 +11,7 @@ const JobTypeForm = () => {
   const [values, setValues] = useState({
     name: "",
   });
-  const theme = useTheme();
+
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);

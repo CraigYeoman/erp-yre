@@ -1,7 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Link,
+  useTheme,
+} from "@mui/material";
+import Header from "../Header";
 const rootUrl = "http://localhost:5000";
 
 const CustomerEditForm = () => {
@@ -24,6 +33,7 @@ const CustomerEditForm = () => {
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
   const [responseTextError, setResponseTextError] = useState("");
+  const theme = useTheme();
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -70,18 +80,6 @@ const CustomerEditForm = () => {
           console.log(error.response.data);
           setResponseError(true);
         });
-
-      setValues({
-        first_name: "",
-        last_name: "",
-        phone_number: "",
-        email: "",
-        address_line_1: "",
-        address_line_2: "",
-        city: "",
-        state: "",
-        zip_code: "",
-      });
     } catch (error) {
       setResponseTextError(error);
       console.log(error);
@@ -98,161 +96,199 @@ const CustomerEditForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h3>Edit Customer</h3>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column gap">
-          <div className="container-column">
-            <label htmlFor="first_name">Customer First Name</label>
-            <input
-              type="text"
-              placeholder="First Name"
-              name="first_name"
-              required={true}
-              value={values.first_name}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="last_name">Last Name</label>
-            <input
-              type="text"
-              placeholder="Last Name"
-              name="last_name"
-              required={true}
-              value={values.last_name}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="phone_number">Phone Number</label>
-            <input
-              type="tel"
-              placeholder="9999999999"
-              name="phone_number"
-              required={true}
-              value={values.phone_number}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              placeholder="joe@gmail.com"
-              name="email"
-              required={true}
-              value={values.email}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="address_line_1">Address line 1</label>
-            <input
-              type="text"
-              placeholder="Address"
-              name="address_line_1"
-              required={true}
-              value={values.address_line_1}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="address_line_2">Address line 2</label>
-            <input
-              type="text"
-              placeholder="Address line 2"
-              name="address_line_2"
-              value={values.address_line_2}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="city">City</label>
-            <input
-              type="text"
-              placeholder="City"
-              name="city"
-              required={true}
-              value={values.city}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="state">State</label>
-            <input
-              type="text"
-              placeholder="state"
-              name="state"
-              required={true}
-              value={values.state}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="zip_code">Zip Code</label>
-            <input
-              type="text"
-              placeholder="Zip Code"
-              name="zip_code"
-              required={true}
-              value={values.zip_code}
-              onChange={handleChange}
-            ></input>
-          </div>
-        </div>
-        <button className="buttons" type="submit">
+    <Box m="1.5rem 2.5rem">
+      <Header title="Edit Customer" subtitle="Edit form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "240px",
+          }}
+        >
+          <TextField
+            label="First Name"
+            placeholder="First Name"
+            margin={"normal"}
+            required
+            value={values.first_name}
+            onChange={handleChange}
+            name="first_name"
+          />
+          <TextField
+            label="Last Name"
+            placeholder="Last Name"
+            margin={"normal"}
+            required
+            value={values.last_name}
+            onChange={handleChange}
+            name="last_name"
+          />
+          <TextField
+            label="Phone Number"
+            placeholder="9999999999"
+            margin={"normal"}
+            required
+            value={values.phone_number}
+            onChange={handleChange}
+            name="phone_number"
+          />
+          <TextField
+            label="Email"
+            placeholder="blank@blankmail.com"
+            margin={"normal"}
+            required
+            value={values.email}
+            onChange={handleChange}
+            name="email"
+          />
+          <TextField
+            label="Address Line 1"
+            placeholder="Address"
+            margin={"normal"}
+            required
+            value={values.address_line_1}
+            onChange={handleChange}
+            name="address_line_1"
+          />
+          <TextField
+            label="Address Line 2"
+            placeholder="Address Line 2"
+            margin={"normal"}
+            value={values.address_line_2}
+            onChange={handleChange}
+            name="address_line_2"
+          />
+          <TextField
+            label="City"
+            placeholder="City"
+            margin={"normal"}
+            required
+            value={values.city}
+            onChange={handleChange}
+            name="city"
+          />
+          <TextField
+            label="State Abbreviation"
+            placeholder="MO, KS, CO"
+            margin={"normal"}
+            required
+            value={values.state}
+            onChange={handleChange}
+            name="state"
+          />
+          <TextField
+            label="Zip Code"
+            placeholder="Zip Code"
+            margin={"normal"}
+            required
+            value={values.zip_code}
+            onChange={handleChange}
+            name="zip_code"
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
       {response && (
-        <div className="container-column">
-          <h3>{responseText.msg}</h3>
-          <div className="container-row">
-            <div className="container-background">
-              <h3>Previous</h3>
-              <p>
-                {responseText.updatedCustomer.first_name}{" "}
-                {responseText.updatedCustomer.last_name}
-              </p>
-              <p>
-                {formatPhoneNumber(responseText.updatedCustomer.phone_number)}
-              </p>
-              <p>{responseText.updatedCustomer.email}</p>
-              <p>{responseText.updatedCustomer.address_line_1}</p>
-              <p>{responseText.updatedCustomer.address_line_2}</p>
-              <p>{responseText.updatedCustomer.city}</p>
-              <p>{responseText.updatedCustomer.state}</p>
-              <p>{responseText.updatedCustomer.zip_code}</p>
-            </div>
-            <div className="container-background">
-              <h3>Updated</h3>
-              <p>
-                <Link
-                  onClick={() => selectCustomerID(responseText.customer._id)}
-                  to={`/customerdetail/${responseText.customer._id}`}
+        <Box mt="20px">
+          <Typography
+            variant="h3"
+            color={theme.palette.secondary[300]}
+            fontWeight="bold"
+            sx={{ mb: "5px" }}
+          >
+            Customer Updated
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              mt="10px"
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "20px",
+              }}
+            >
+              <Box
+                sx={{
+                  bgcolor: theme.palette.background.alt,
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: 1,
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  color={theme.palette.secondary[100]}
+                  fontWeight="bold"
+                  sx={{ mb: "5px" }}
                 >
-                  {responseText.customer.first_name}{" "}
-                  {responseText.customer.last_name}
-                </Link>
-              </p>
-              <p>{formatPhoneNumber(responseText.customer.phone_number)}</p>
-              <p>{responseText.customer.email}</p>
-              <p>{responseText.customer.address_line_1}</p>
-              <p>{responseText.customer.address_line_2}</p>
-              <p>{responseText.customer.city}</p>
-              <p>{responseText.customer.state}</p>
-              <p>{responseText.customer.zip_code}</p>
-            </div>
-          </div>
-        </div>
+                  Previous
+                </Typography>
+                <p>
+                  {responseText.updatedCustomer.first_name}{" "}
+                  {responseText.updatedCustomer.last_name}
+                </p>
+                <p>
+                  {formatPhoneNumber(responseText.updatedCustomer.phone_number)}
+                </p>
+                <p>{responseText.updatedCustomer.email}</p>
+                <p>{responseText.updatedCustomer.address_line_1}</p>
+                <p>{responseText.updatedCustomer.address_line_2}</p>
+                <p>{responseText.updatedCustomer.city}</p>
+                <p>{responseText.updatedCustomer.state}</p>
+                <p>{responseText.updatedCustomer.zip_code}</p>
+              </Box>
+              <Box
+                sx={{
+                  bgcolor: theme.palette.background.alt,
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: 1,
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  color={theme.palette.secondary[100]}
+                  fontWeight="bold"
+                  sx={{ mb: "5px" }}
+                >
+                  Updated
+                </Typography>
+                <p>
+                  <Link
+                    component={RouterLink}
+                    color="inherit"
+                    onClick={() => selectCustomerID(responseText.customer._id)}
+                    to={`/customerdetail/${responseText.customer._id}`}
+                  >
+                    {responseText.customer.first_name}{" "}
+                    {responseText.customer.last_name}
+                  </Link>
+                </p>
+                <p>{formatPhoneNumber(responseText.customer.phone_number)}</p>
+                <p>{responseText.customer.email}</p>
+                <p>{responseText.customer.address_line_1}</p>
+                <p>{responseText.customer.address_line_2}</p>
+                <p>{responseText.customer.city}</p>
+                <p>{responseText.customer.state}</p>
+                <p>{responseText.customer.zip_code}</p>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       )}
       {responseError && (
-        <div>
-          <p>
-            {responseTextError.customer.first_name}{" "}
-            {responseTextError.customer.last_name} not created
-          </p>
+        <Box>
+          <p>{responseTextError.customer.first_name} not updated</p>
           {responseTextError.errors.map((error) => {
             const { msg, param, value } = error;
             return (
@@ -261,9 +297,9 @@ const CustomerEditForm = () => {
               </p>
             );
           })}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

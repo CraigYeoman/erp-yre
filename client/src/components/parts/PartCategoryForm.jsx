@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
 import Header from "../Header";
 import Response from "../Response";
-import { Box, useTheme, Button, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 
 const rootUrl = "http://localhost:5000";
 
@@ -22,7 +21,6 @@ const PartCategoryForm = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const theme = useTheme();
   const onSubmit = async (e) => {
     e.preventDefault();
     setResponse(false);

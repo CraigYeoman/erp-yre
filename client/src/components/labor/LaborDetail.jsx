@@ -21,13 +21,16 @@ const LaborDetail = () => {
     );
   }
 
-  const { name, price, _id } = laborDetail;
+  const { name, price, _id, laborCategory } = laborDetail;
+
+  console.log(laborDetail);
 
   return (
     <div className="container-column">
       <div className="container-column" key={_id}>
         <h3>{name}</h3>
         <p>Customer Cost: ${price}</p>
+        <p>{laborCategory.name}</p>
       </div>
       <div className="container-row">
         <button className="buttons">

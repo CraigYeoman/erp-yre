@@ -1,7 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
+import Header from "../Header";
+import {
+  Box,
+  useTheme,
+  Button,
+  TextField,
+  Typography,
+  Link,
+} from "@mui/material";
 const rootUrl = "http://localhost:5000";
 
 const LaborCategoryEditForm = () => {
@@ -11,7 +20,7 @@ const LaborCategoryEditForm = () => {
     name: laborCategoryDetail.name,
     _id: laborCategoryDetail._id,
   });
-
+  const theme = useTheme();
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
@@ -64,36 +73,92 @@ const LaborCategoryEditForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column">
-          <label htmlFor="name">Labor Category Name</label>
-          <input
-            type="text"
-            placeholder="name"
-            name="name"
-            required={true}
+    <Box m="1.5rem 2.5rem">
+      <Header title="Edit Labor Category" subtitle="Fill out form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+          }}
+        >
+          <TextField
+            label="Labor Category Name"
+            placeholder="Name"
+            margin={"normal"}
+            required
             value={values.name}
             onChange={handleChange}
-          ></input>
-        </div>
-        <button className="buttons" type="submit">
+            name="name"
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
       {response && (
-        <div className="container-column">
-          <h3>Labor Category Edited</h3>
-          <div className="container-column">
-            <div className="container-row">
-              <div className="container-background">
-                <h3>Previous</h3>
+        <Box mt="20px">
+          <Typography
+            variant="h3"
+            color={theme.palette.secondary[300]}
+            fontWeight="bold"
+            sx={{ mb: "5px" }}
+          >
+            Labor Category Edited
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              mt="10px"
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "20px",
+              }}
+            >
+              <Box
+                sx={{
+                  bgcolor: theme.palette.background.alt,
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: 1,
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  color={theme.palette.secondary[100]}
+                  fontWeight="bold"
+                  sx={{ mb: "5px" }}
+                >
+                  Previous
+                </Typography>
                 <p>{responseText.updatedLaborCategory.name}</p>
-              </div>
-              <div className="container-background">
-                <h3>New</h3>
+              </Box>
+              <Box
+                sx={{
+                  bgcolor: theme.palette.background.alt,
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: 1,
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  color={theme.palette.secondary[100]}
+                  fontWeight="bold"
+                  sx={{ mb: "5px" }}
+                >
+                  New
+                </Typography>
                 <p>
                   <Link
+                    component={RouterLink}
+                    color="inherit"
                     onClick={() =>
                       selectLaborCategoryID(responseText.laborcategory._id)
                     }
@@ -102,10 +167,10 @@ const LaborCategoryEditForm = () => {
                     {responseText.laborcategory.name}
                   </Link>
                 </p>
-              </div>
-            </div>
-          </div>
-        </div>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       )}
       {responseError && (
         <div>
@@ -123,7 +188,7 @@ const LaborCategoryEditForm = () => {
           })}
         </div>
       )}
-    </div>
+    </Box>
   );
 };
 

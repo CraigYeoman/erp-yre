@@ -1,9 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../context";
 import { useState, useEffect } from "react";
-import FormDropDown from "../FormDropDown";
+import { MdAddCircleOutline } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
+import {
+  Box,
+  useTheme,
+  Button,
+  TextField,
+  InputLabel,
+  FormControl,
+  NativeSelect,
+  Checkbox,
+  FormLabel,
+  FormGroup,
+  FormControlLabel,
+  Typography,
+  Link,
+} from "@mui/material";
+import ListSubheader from "@mui/material/ListSubheader";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
+import Header from "../Header";
 const rootUrl = "http://localhost:5000";
 const { DateTime } = require("luxon");
 
@@ -17,13 +42,13 @@ const WorkOrderForm = () => {
       .then((data) => {
         setWorkOrderDetail(data);
         setValues({
-          customer: data.work_order.customer,
+          customer: data.work_order.customer._id,
           date_received: DateTime.fromISO(
             data.work_order.date_received
           ).toISODate(),
           date_due: DateTime.fromISO(data.work_order.date_due).toISODate(),
           part_number: data.work_order.part_number,
-          jobtype: data.work_order.jobtype,
+          jobtype: data.work_order.jobType._id,
           parts: data.work_order.parts,
           labor: data.work_order.labor,
           notes: data.work_order.notes,
@@ -33,12 +58,16 @@ const WorkOrderForm = () => {
         setCustomerParts(data.work_order.parts);
         setCustomerLabor(data.work_order.labor);
         checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
+        console.log(customerAccessories);
         setLoading(false);
       });
   }, []);
 
   const [customerAccessories, setCustomerAccessories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const [selectedIndex, setSelectedIndex] = useState("");
   const [response, setResponse] = useState(false);
   const [responseText, setResponseText] = useState("");
   const [responseError, setResponseError] = useState(false);
@@ -53,6 +82,7 @@ const WorkOrderForm = () => {
     setCustomerParts,
     customerLabor,
     setCustomerLabor,
+    handleChangeArray,
   } = useGlobalContext();
   const [values, setValues] = useState({
     customer: "",
@@ -71,13 +101,21 @@ const WorkOrderForm = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleChangeCheckBox = (id, array, func, event) => {
+  const handleChangeCheckBox = (array, func, event, info) => {
     if (event.target.checked === true) {
-      const updatedValues = [...array, id];
+      const updatedValues = [...array, info];
       func(updatedValues);
     } else if (event.target.checked === false) {
-      const updatedValues = array.filter((a) => a !== id);
+      const updatedValues = array.filter((a) => a !== info);
       func(updatedValues);
+    }
+  };
+
+  const handleClick = (index) => {
+    if (selectedIndex === index) {
+      setSelectedIndex("");
+    } else {
+      setSelectedIndex(index);
     }
   };
 
@@ -128,18 +166,6 @@ const WorkOrderForm = () => {
           console.log(error.response.data);
           setResponseError(true);
         });
-
-      setValues({
-        customer: "",
-        date_received: "",
-        date_due: "",
-        part_number: "",
-        jobtype: "",
-        parts: "",
-        labor: "",
-        notes: "",
-        work_order_number: "",
-      });
     } catch (error) {
       setResponseTextError(error);
       console.log(error);
@@ -156,122 +182,220 @@ const WorkOrderForm = () => {
   }
 
   return (
-    <div className="container-column">
-      <h3>Edit Work Order</h3>
-      <form className="container-column gap" onSubmit={onSubmit}>
-        <div className="container-column gap">
-          <div className="container-column">
-            <label htmlFor="work_order_number">Work Order Number</label>
-            <input
-              type="number"
-              placeholder="XXXXX"
-              name="work_order_number"
-              required={true}
-              value={values.work_order_number}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="customer">Customer</label>
-            <select
-              type="select"
-              placeholder="customer"
+    <Box m="1.5rem 2.5rem">
+      <Header title="Edit Work Order" subtitle="Edit form below" />
+      <form onSubmit={onSubmit}>
+        <Box
+          mt="1rem"
+          mb="1rem"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "240px",
+            gap: "5px;",
+          }}
+        >
+          <TextField
+            label="Work Order Number"
+            placeholder="XXXXX"
+            margin={"normal"}
+            required
+            value={values.work_order_number}
+            onChange={handleChange}
+            name="work_order_number"
+          />
+          <FormControl sx={{ minWidth: 80, mt: "16px", mb: "8px" }}>
+            <InputLabel id="customer">Customer</InputLabel>
+            <NativeSelect
               name="customer"
               required={true}
               onChange={handleChange}
               value={values.customer}
+              labelId="customer"
+              label="Customer"
             >
               <option value={workOrderDetail.work_order.customer._id}>
                 {workOrderDetail.work_order.customer.first_name}{" "}
                 {workOrderDetail.work_order.customer.last_name}
               </option>
-              {workOrderDetail.customers
-                .filter(
-                  (a) => a._id !== workOrderDetail.work_order.customer._id
-                )
+              {(workOrderDetail.customers || [])
                 .sort((a, b) => {
                   let textA = a.first_name.toUpperCase();
                   let textB = b.first_name.toUpperCase();
                   return textA < textB ? -1 : textA > textB ? 1 : 0;
                 })
                 .map((customer) => {
-                  return (
-                    <option value={customer._id} key={customer._id}>
-                      {customer.first_name} {customer.last_name}
-                    </option>
-                  );
+                  if (
+                    customer._id !== workOrderDetail.work_order.customer._id
+                  ) {
+                    return (
+                      <option value={customer._id} key={customer._id}>
+                        {customer.first_name} {customer.last_name}
+                      </option>
+                    );
+                  }
+                  return "";
                 })}
-            </select>
-          </div>
-          <div className="container-column">
-            <label htmlFor="date_received">Date Received</label>
-            <input
-              type="date"
-              placeholder={values.date_received}
-              name="date_received"
-              required={true}
-              value={values.date_received}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="date_due">Due date</label>
-            <input
-              type="date"
-              placeholder="XX/XX/XXXX"
-              name="date_due"
-              required={true}
-              value={values.date_due}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="container-column">
-            <label htmlFor="jobtype">Job Type</label>
-            <select
-              type="select"
-              placeholder="jobtype"
+            </NativeSelect>
+          </FormControl>
+          <TextField
+            label="Date Received"
+            margin={"normal"}
+            required
+            value={values.date_received}
+            onChange={handleChange}
+            name="date_received"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Due Date"
+            margin={"normal"}
+            required
+            value={values.date_due}
+            onChange={handleChange}
+            name="date_due"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+          />
+          <FormControl sx={{ minWidth: 80, mt: "16px", mb: "8px" }}>
+            <InputLabel id="jobtype">Job Type</InputLabel>
+            <NativeSelect
               name="jobtype"
               required={true}
               onChange={handleChange}
               value={values.jobtype}
+              labelId="jobtype"
+              label="Job Type"
             >
               <option value={workOrderDetail.work_order.jobType._id}>
                 {workOrderDetail.work_order.jobType.name}
               </option>
-              {loading === true ? (
-                <option>Loading...</option>
-              ) : (
-                workOrderDetail.jobtypes
-                  .filter(
-                    (a) => a.name !== workOrderDetail.work_order.jobType.name
-                  )
-                  .sort((a, b) => {
-                    let textA = a.name.toUpperCase();
-                    let textB = b.name.toUpperCase();
-                    return textA < textB ? -1 : textA > textB ? 1 : 0;
-                  })
-                  .map((jobtype) => {
+              {(workOrderDetail.jobtypes || [])
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((jobtype) => {
+                  if (jobtype._id !== workOrderDetail.work_order.jobType._id) {
                     return (
                       <option value={jobtype._id} key={jobtype._id}>
                         {jobtype.name}
                       </option>
                     );
-                  })
-              )}
-            </select>
-          </div>
-          <FormDropDown
-            name="Parts"
-            array={workOrderDetail.parts}
-            category={workOrderDetail.partsCategory}
-          />
-          <FormDropDown
-            name="Labor"
-            array={workOrderDetail.labors}
-            category={workOrderDetail.laborCategory}
-          />
-          <div>
-            <h3>Parts Total: ${sumTotal(customerParts, "customer_price")}</h3>
+                  }
+                  return "";
+                })}
+            </NativeSelect>
+          </FormControl>
+          {workOrderDetail.partsCategory && (
+            <List
+              sx={{
+                width: "100%",
+                maxWidth: 360,
+                bgcolor: theme.palette.background.default,
+              }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader
+                  component="div"
+                  id="nested-list-subheader"
+                  sx={{
+                    bgcolor: theme.palette.background.default,
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    paddingLeft: "0px",
+                  }}
+                  color="inherit"
+                >
+                  Parts
+                </ListSubheader>
+              }
+            >
+              {workOrderDetail.partsCategory.map((category) => {
+                return (
+                  <>
+                    <ListItemButton
+                      key={category._id}
+                      onClick={() => {
+                        handleClick(category._id);
+                      }}
+                    >
+                      <ListItemText primary={category.name} />
+                      {open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+
+                    <Collapse
+                      in={category._id === selectedIndex}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      <List component="div" disablePadding>
+                        {workOrderDetail.parts
+                          .filter(
+                            ({ partCategory }) => partCategory === category._id
+                          )
+                          .map((part) => {
+                            let info = {
+                              name: part.name,
+                              customer_price: part.customer_price,
+                              _id: part._id,
+                              manufacture: part.manufacture,
+                              part_number: part.part_number,
+                            };
+                            return (
+                              <ListItemButton key={part._id} sx={{ pl: 4 }}>
+                                <ListItemIcon>
+                                  <MdAddCircleOutline
+                                    onClick={() =>
+                                      handleChangeArray(
+                                        customerParts,
+                                        setCustomerParts,
+                                        info
+                                      )
+                                    }
+                                  />
+                                </ListItemIcon>
+                                <ListItemText
+                                  sx={{
+                                    alignContent: "",
+                                    display: "block",
+                                  }}
+                                  primary={part.name}
+                                  secondary={
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                      }}
+                                    >
+                                      <Typography
+                                        component="span"
+                                        variant="body2"
+                                        color="text.primary"
+                                      >
+                                        {`$${part.customer_price}`}
+                                      </Typography>
+                                      <Typography>{`Part #:${part.part_number}`}</Typography>
+                                      <Typography>
+                                        {part.manufacture}
+                                      </Typography>
+                                    </Box>
+                                  }
+                                />
+                              </ListItemButton>
+                            );
+                          })}
+                      </List>
+                    </Collapse>
+                  </>
+                );
+              })}
+            </List>
+          )}
+          <Box>
             {customerParts
               .sort((a, b) => {
                 let textA = a.name.toUpperCase();
@@ -280,21 +404,132 @@ const WorkOrderForm = () => {
               })
               .map((part) => {
                 return (
-                  <div key={part._id}>
-                    <p>Part#: {part.part_number}</p> <p>Name: {part.name}</p>{" "}
-                    <p>Manufacture: {part.manufacture}</p>
-                    <p>Price: ${part.customer_price}</p>
+                  <Box
+                    mb="15px"
+                    ml="16px"
+                    key={part._id}
+                    sx={{ borderRadius: "4px", border: 1, padding: "8px" }}
+                  >
+                    <Typography variant="body1">
+                      Part#: {part.part_number}
+                    </Typography>
+                    <Typography variant="body1">Name: {part.name}</Typography>{" "}
+                    <Typography variant="body1">
+                      Manufacture: {part.manufacture}
+                    </Typography>
+                    <Typography variant="body1">
+                      Price: ${part.customer_price}
+                    </Typography>
                     <MdDeleteOutline
                       onClick={() =>
                         deleteItem(part._id, customerParts, setCustomerParts)
                       }
                     />
-                  </div>
+                  </Box>
                 );
               })}
-          </div>
-          <div>
-            <h3>Labor Total: ${sumTotal(customerLabor, "price")}</h3>
+            <Typography
+              variant="h6"
+              color={theme.palette.secondary[300]}
+              sx={{ mb: "10px", ml: "15px" }}
+              fontWeight="bold"
+            >
+              Parts Total: ${sumTotal(customerParts, "customer_price")}
+            </Typography>
+          </Box>
+
+          {workOrderDetail.laborCategory && (
+            <List
+              sx={{
+                width: "100%",
+                maxWidth: 360,
+                bgcolor: theme.palette.background.default,
+              }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader
+                  component="div"
+                  id="nested-list-subheader"
+                  sx={{
+                    bgcolor: theme.palette.background.default,
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    paddingLeft: "0px",
+                  }}
+                  color="inherit"
+                >
+                  Labor
+                </ListSubheader>
+              }
+            >
+              {workOrderDetail.laborCategory.map((category) => {
+                return (
+                  <>
+                    <ListItemButton
+                      key={category._id}
+                      onClick={() => {
+                        handleClick(category._id);
+                      }}
+                    >
+                      <ListItemText primary={category.name} />
+                      {open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+
+                    <Collapse
+                      in={category._id === selectedIndex}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      <List component="div" disablePadding>
+                        {workOrderDetail.labors
+                          .filter(
+                            ({ laborCategory }) =>
+                              laborCategory === category._id
+                          )
+                          .map((labor) => {
+                            let info = {
+                              name: labor.name,
+                              price: labor.price,
+                              _id: labor._id,
+                            };
+                            return (
+                              <ListItemButton key={labor._id} sx={{ pl: 4 }}>
+                                <ListItemIcon>
+                                  <MdAddCircleOutline
+                                    onClick={() =>
+                                      handleChangeArray(
+                                        customerLabor,
+                                        setCustomerLabor,
+                                        info
+                                      )
+                                    }
+                                  />
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={labor.name}
+                                  secondary={`$${labor.price}`}
+                                />
+                              </ListItemButton>
+                            );
+                          })}
+                      </List>
+                    </Collapse>
+                  </>
+                );
+              })}
+            </List>
+          )}
+          <Box mb="5px">
+            <Typography
+              variant="h6"
+              color={theme.palette.secondary[300]}
+              sx={{ mb: "10px", ml: "15px" }}
+              fontWeight="bold"
+            >
+              Labor Total: ${sumTotal(customerLabor, "price")}
+            </Typography>
+
             {customerLabor
               .sort((a, b) => {
                 let textA = a.name.toUpperCase();
@@ -303,80 +538,96 @@ const WorkOrderForm = () => {
               })
               .map((labor) => {
                 return (
-                  <div key={labor._id}>
-                    <p>Labor: {labor.name}</p>
-                    <p>Price: ${labor.price}</p>
+                  <Box
+                    mb="15px"
+                    ml="16px"
+                    sx={{ borderRadius: "4px", border: 1, padding: "8px" }}
+                    key={labor._id}
+                  >
+                    <Typography variant="body1">Labor: {labor.name}</Typography>
+                    <Typography variant="body1">
+                      Price: ${labor.price}
+                    </Typography>
                     <MdDeleteOutline
                       onClick={() =>
                         deleteItem(labor._id, customerLabor, setCustomerLabor)
                       }
                     />
-                  </div>
+                  </Box>
                 );
               })}
-          </div>
-          <fieldset>
-            <legend>Customer Accessories</legend>
-            {workOrderDetail.accessories
-              .sort((a, b) => {
-                let textA = a.name.toUpperCase();
-                let textB = b.name.toUpperCase();
-                return textA < textB ? -1 : textA > textB ? 1 : 0;
-              })
-              .map((accessory) => {
-                return (
-                  <div key={accessory._id}>
-                    <input
-                      type="checkbox"
-                      name="accessories"
-                      id={accessory._id}
-                      checked={customerAccessories.includes(accessory._id)}
-                      onChange={(event) =>
-                        handleChangeCheckBox(
-                          accessory._id,
-                          customerAccessories,
-                          setCustomerAccessories,
-                          event
-                        )
+          </Box>
+          <FormControl
+            sx={{ minWidth: 80, mt: "16px", mb: "8px" }}
+            component="fieldset"
+          >
+            <FormLabel component="legend">Customer Accessories</FormLabel>
+            <FormGroup>
+              {(workOrderDetail.accessories || [])
+                .sort((a, b) => {
+                  let textA = a.name.toUpperCase();
+                  let textB = b.name.toUpperCase();
+                  return textA < textB ? -1 : textA > textB ? 1 : 0;
+                })
+                .map((accessory) => {
+                  return (
+                    <FormControlLabel
+                      key={accessory._id}
+                      control={
+                        <Checkbox
+                          checked={
+                            !!customerAccessories.includes(accessory._id)
+                          }
+                          onChange={(event) =>
+                            handleChangeCheckBox(
+                              customerAccessories,
+                              setCustomerAccessories,
+                              event,
+                              accessory._id
+                            )
+                          }
+                          name={accessory.name}
+                        />
                       }
-                    ></input>
-                    <label htmlFor={accessory.name}>{accessory.name}</label>
-                  </div>
-                );
-              })}
-          </fieldset>
-          <label htmlFor="notes">
-            <textarea
-              placeholder="Notes"
-              name="notes"
-              value={values.notes}
-              onChange={handleChange}
-              cols="30"
-              rows="10"
-            ></textarea>
-          </label>
-        </div>
-        <button className="buttons" type="submit">
+                      label={accessory.name}
+                    />
+                  );
+                })}
+            </FormGroup>
+          </FormControl>
+          <TextareaAutosize
+            aria-label="minimum height"
+            minRows={3}
+            placeholder="Notes"
+            style={{ width: 200 }}
+            name="notes"
+            value={values.notes}
+            onChange={handleChange}
+          />
+        </Box>
+        <Button variant="contained" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
       {response && (
-        <div>
-          {responseText.msg}
+        <Box mt="15px">
+          {responseText.msg}{" "}
           <Link
+            component={RouterLink}
+            color="inherit"
             onClick={() => selectWorkOrderID(responseText.workOrder._id)}
             to={`/workorderdetail/${responseText.workOrder._id}`}
           >
             {responseText.workOrder.work_order_number}
           </Link>
-        </div>
+        </Box>
       )}
       {responseError && (
         <div>
           <p>
             {responseText.workOrder.first_name}{" "}
             {responseText.workOrder.last_name}{" "}
-            {responseText.workOrder.work_order_number}not created
+            {responseText.workOrder.work_order_number}not updated
           </p>
           {responseTextError.errors.map((error) => {
             const { msg, param, value } = error;
@@ -388,7 +639,7 @@ const WorkOrderForm = () => {
           })}
         </div>
       )}
-    </div>
+    </Box>
   );
 };
 

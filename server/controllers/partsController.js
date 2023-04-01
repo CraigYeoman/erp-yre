@@ -299,12 +299,38 @@ const part_edit_post = [
       if (err) {
         return next(err);
       }
-      // jobtype saved.
-      res.status(200).json({
-        msg: "part edited",
-        part: part,
-        updatedPart: updatedPart,
-      });
+      async.parallel(
+        {
+          vendorPart(callback) {
+            Vendor.findById(part.vendor).exec(callback);
+          },
+          vendorUpdatedPart(callback) {
+            Vendor.findById(updatedPart.vendor).exec(callback);
+          },
+          categoryPart(callback) {
+            Category.findById(part.partCategory).exec(callback);
+          },
+          categoryUpdatedPart(callback) {
+            Category.findById(updatedPart.partCategory).exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+          // Success
+          part.vendor = results.vendorPart;
+          updatedPart.vendor = results.vendorUpdatedPart;
+          part.partCategory = results.categoryPart;
+          updatedPart.partCategory = results.categoryUpdatedPart;
+          // part saved.
+          res.status(200).json({
+            msg: "part edited",
+            part: part,
+            updatedPart: updatedPart,
+          });
+        }
+      );
     });
   },
 ];

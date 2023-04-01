@@ -237,12 +237,31 @@ const labor_edit_post = [
       if (err) {
         return next(err);
       }
+      async.parallel(
+        {
+          categoryLabor(callback) {
+            Category.findById(labor.laborCategory).exec(callback);
+          },
+          categoryUpdatedLabor(callback) {
+            Category.findById(updatedLabor.laborCategory).exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+          // Success
+
+          labor.laborCategory = results.categoryLabor;
+          updatedLabor.laborCategory = results.categoryUpdatedLabor;
+          res.status(200).json({
+            msg: "labor edited",
+            labor: labor,
+            updatedLabor: updatedLabor,
+          });
+        }
+      );
       // jobtype saved.
-      res.status(200).json({
-        msg: "labor edited",
-        labor: labor,
-        updatedLabor: updatedLabor,
-      });
     });
   },
 ];

@@ -118,8 +118,8 @@ const customer_create_post = [
     }
     // Create a Customer object with escaped and trimmed data.
     const customer = new Customer({
-      first_name: req.body.first_name.toLowerCase(),
-      last_name: req.body.last_name.toLowerCase(),
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
       phone_number: req.body.phone_number,
       email: req.body.email,
       address_line_1: req.body.address_line_1,
@@ -228,8 +228,8 @@ const customer_edit_post = [
     }
     // Create a Customer object with escaped and trimmed data.
     const customer = new Customer({
-      first_name: req.body.first_name.toLowerCase(),
-      last_name: req.body.last_name.toLowerCase(),
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
       phone_number: req.body.phone_number,
       email: req.body.email,
       address_line_1: req.body.address_line_1,

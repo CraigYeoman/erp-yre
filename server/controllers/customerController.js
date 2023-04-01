@@ -50,7 +50,9 @@ const customer_detail = (req, res, next) => {
         Customer.findById(req.params.id).exec(callback);
       },
       customer_workorders(callback) {
-        WorkOrder.find({ customer: req.params.id }).exec(callback);
+        WorkOrder.find({ customer: req.params.id })
+          .populate("jobType")
+          .exec(callback);
       },
     },
     (err, results) => {

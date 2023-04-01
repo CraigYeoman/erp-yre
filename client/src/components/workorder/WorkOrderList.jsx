@@ -118,7 +118,7 @@ const WorkOrderList = () => {
     },
     {
       field: "price",
-      headerName: "Estimated Rpice",
+      headerName: "Estimated Price",
       flex: 1,
       renderCell: (params) => {
         return (

@@ -1,8 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+import Header from "../Header";
+import {
+  Box,
+  useTheme,
+  Link,
+  Button,
+  Typography,
+  Card,
+  CardContent,
+} from "@mui/material";
 const { DateTime } = require("luxon");
 
 const CustomerDetail = () => {
+  const theme = useTheme();
   const {
     customerDetail,
     loading,
@@ -37,57 +48,60 @@ const CustomerDetail = () => {
   } = customerDetail.customer;
 
   return (
-    <div className="container-column">
-      <h2>Customer</h2>
-      <div className="container-background">
-        <div key={_id}>
-          <p>
-            {first_name} {last_name}
-          </p>
-          <p>{formatPhoneNumber(phone_number)}</p>
-          <p>{email}</p>
-          <p>
-            {address_line_1}, {city}, {state} {zip_code}
-          </p>
-          <p>{address_line_2}</p>
-        </div>
-        <div className="container-row gap">
-          <button className="buttons dark">
-            <Link
-              onClick={() => selectCustomerID(_id)}
-              to={`/customeredit/${_id}`}
-            >
-              Edit
-            </Link>
-          </button>
-          <button
-            className="buttons dark"
-            onClick={() => onSubmitGet(_id, "customers")}
-          >
-            Delete{" "}
-          </button>
-        </div>
+    <Box m="1.5rem 2.5rem">
+      <Header title={"Customer"} subtitle={first_name + " " + last_name} />
 
-        {response &&
-        typeof responseText.customer_work_orders === "undefined" ? (
-          <div>
+      <Box>
+        <p>{formatPhoneNumber(phone_number)}</p>
+        <p>{email}</p>
+        <p>
+          {address_line_1}, {city}, {state} {zip_code}
+        </p>
+        <p>{address_line_2}</p>
+      </Box>
+      <Box mt="15px">
+        <Button variant="contained">
+          <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
+            onClick={() => selectCustomerID(_id)}
+            to={`/customeredit/${_id}`}
+          >
+            Edit
+          </Link>
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => onSubmitGet(_id, "customers")}
+          sx={{ marginLeft: "15px" }}
+        >
+          Delete
+        </Button>
+        {response && (
+          <Box mt="15px">
             Are you sure you want to delete?
-            <button onClick={() => onSubmitPost(_id, "customers")}>
+            <Button
+              variant="contained"
+              onClick={() => onSubmitPost(_id, "customers")}
+              sx={{ marginLeft: "15px" }}
+            >
               Delete
-            </button>
-            {responseText === "Complete" && <div>Deleted</div>}
-          </div>
-        ) : (
-          <div>
-            {response && (
-              <div> Please edit the work orders below before deleting.</div>
-            )}
-          </div>
+            </Button>
+          </Box>
         )}
-      </div>
-      <div>
-        <h3>Work Orders</h3>
+        {responseText === "Complete" && "Deleted"}
+      </Box>
+      <Box mt="15px">
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          color={theme.palette.secondary[300]}
+        >
+          Work Orders
+        </Typography>
         {customerDetail.customer_workorders.map((workOrder) => {
+          console.log(workOrder);
           const {
             _id,
             date_received,
@@ -95,44 +109,50 @@ const CustomerDetail = () => {
             date_finished,
             jobType,
             work_order_number,
-            estimatedPrice,
             notes,
             complete,
           } = workOrder;
           return (
-            <fieldset className="customer-detail-work-order" key={_id}>
-              <legend>
+            <Card
+              variant="outlined"
+              sx={{
+                bgcolor: theme.palette.background.alt,
+                marginTop: "15px",
+                marginBottom: "15px",
+              }}
+            >
+              <CardContent>
                 <Link
+                  component={RouterLink}
+                  color="inherit"
                   onClick={() => selectWorkOrderID(_id)}
                   to={`/workorderdetail/${_id}`}
                 >
                   {work_order_number}
                 </Link>
-              </legend>
-              <p>{jobType.name}</p>
-              <p>
-                Date Recieved: {DateTime.fromISO(date_received).toFormat("D")}
-              </p>
-              <p>Date Due: {DateTime.fromISO(date_due).toFormat("D")}</p>
-              {complete === false ? (
-                <p>Status: Inprocess</p>
-              ) : (
-                <div>
-                  <p>Status: Complete</p>
-                  <p>
-                    Date Completed:{" "}
-                    {DateTime.fromISO(date_finished).toFormat("D")}
-                  </p>
-                </div>
-              )}
-
-              <p>Estimated Total: ${estimatedPrice}</p>
-              <p>{notes}</p>
-            </fieldset>
+                <p>{jobType.name}</p>
+                <p>
+                  Date Recieved: {DateTime.fromISO(date_received).toFormat("D")}
+                </p>
+                <p>Date Due: {DateTime.fromISO(date_due).toFormat("D")}</p>
+                {complete === false ? (
+                  <p>Status: Inprocess</p>
+                ) : (
+                  <div>
+                    <p>Status: Complete</p>
+                    <p>
+                      Date Completed:{" "}
+                      {DateTime.fromISO(date_finished).toFormat("D")}
+                    </p>
+                  </div>
+                )}
+                <p>{notes}</p>
+              </CardContent>
+            </Card>
           );
         })}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

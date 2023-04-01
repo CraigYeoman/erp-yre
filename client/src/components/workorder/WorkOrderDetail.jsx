@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+import Header from "../Header";
+import { Box, useTheme, Link, Button, Typography } from "@mui/material";
 const { DateTime } = require("luxon");
 
 const WorkOrderDetail = () => {
@@ -13,9 +15,10 @@ const WorkOrderDetail = () => {
     responseText,
     selectID,
     sumTotal,
+    formatPhoneNumber,
   } = useGlobalContext();
   const { work_order } = workOrderDetail;
-
+  const theme = useTheme();
   if (loading) {
     return (
       <section className="section">
@@ -46,158 +49,215 @@ const WorkOrderDetail = () => {
   let grandTotal = total + tax;
 
   return (
-    <div className="work-order-detail-container">
-      <div className="work-order-detail-title">
-        <h2>
-          {work_order_number} {jobType.name}
-        </h2>
-        <div className="work-order-detail-button-container">
-          <button className="buttons">
-            <Link onClick={() => selectID(_id)} to={`/workorderedit/${_id}`}>
-              Edit
-            </Link>
-          </button>
-          <button
-            className="buttons"
-            onClick={() => onSubmitGet(_id, "workorders")}
+    <Box m="1.5rem 2.5rem">
+      <Header title={work_order_number} subtitle={jobType.name} />
+      <Box mt="15px">
+        <Button variant="contained">
+          <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
+            onClick={() => selectID(_id)}
+            to={`/workorderedit/${_id}`}
           >
-            Delete
-          </button>
-          {response && (
-            <div>
-              Are you sure you want to delete?
-              <button onClick={() => onSubmitPost(_id, "workorders")}>
-                Delete
-              </button>
-            </div>
-          )}
-          {responseText === "Complete" && "Deleted"}
-        </div>
-      </div>
-      <div className="work-order-detail-info-container">
-        <fieldset className="work-order-detail-info">
-          <legend>Dates</legend>
-          <div className="work-order-detail-name">
-            <p>Date Received: </p>
-            <p>Date Due: </p>
-            <p>Status: </p>
-          </div>
-          <div className="work-order-detail-value">
-            <p>{DateTime.fromISO(date_received).toFormat("D")}</p>
-            <p>{DateTime.fromISO(date_due).toFormat("D")}</p>
-            <p>{complete ? "Complete" : "In Process"}</p>
-            {complete ? <p>{date_finished}</p> : ""}
-          </div>
-        </fieldset>
-        <fieldset className="work-order-detail-info customer">
-          <legend>Customer</legend>
-          <p>
-            <Link
-              onClick={() => selectCustomerID(customer._id)}
-              to={`/customerdetail/${customer._id}`}
+            Edit
+          </Link>
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => onSubmitGet(_id, "workorders")}
+          sx={{ marginLeft: "15px" }}
+        >
+          Delete
+        </Button>
+        {response && (
+          <Box mt="15px">
+            Are you sure you want to delete?
+            <Button
+              variant="contained"
+              onClick={() => onSubmitPost(_id, "workorders")}
+              sx={{ marginLeft: "15px" }}
             >
-              {customer.first_name} {customer.last_name}
-            </Link>
-          </p>
-          <p>Phone Number :{customer.phone_number}</p>
-          <p>Email: {customer.email}</p>
-        </fieldset>
-      </div>
-      <div className="work-order-detail-info-container">
-        <fieldset className="work-order-detail-info">
-          <legend>Totals</legend>
-          <div className="work-order-detail-name">
-            <p>Labor Total</p>
-
-            <p>Parts Total</p>
-            <p>Total</p>
-            <p>Tax</p>
-            <p>Grand Total</p>
-
-            <p>Deposit: </p>
-            <p>Est. Due: </p>
-          </div>
-          <div className="work-order-detail-value">
-            <p>${laborPrice.toFixed(2)}</p>
-            <p>${partsPrice.toFixed(2)}</p>
-            <p>${total.toFixed(2)}</p>
-            <p>${tax.toFixed(2)}</p>
-            <p>${grandTotal.toFixed(2)}</p>
-            <p>${deposit.toFixed(2)}</p>
-            <p>${(grandTotal - deposit).toFixed(2)}</p>
-          </div>
-        </fieldset>
-        <fieldset className="work-order-detail-info">
-          <legend>Notes</legend>
-          <p>{notes}</p>
-        </fieldset>
-      </div>
-      <div className="work-order-detail-info-container">
-        {labor.length === 0 ? (
-          <option></option>
-        ) : (
-          <fieldset className="work-order-detail-info">
-            <legend>Labor</legend>
-
-            <div className="work-order-detail-name">
-              {labor.map((labor) => {
-                return (
-                  <div key={labor.name}>
-                    <p>{labor.name}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="work-order-detail-value">
-              {labor.map((labor) => {
-                return (
-                  <div key={labor._id}>
-                    <p>${labor.price.toFixed(2)}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </fieldset>
+              Delete
+            </Button>
+          </Box>
         )}
+        {responseText === "Complete" && "Deleted"}
+      </Box>
+      <Box
+        mt="15px"
+        sx={{
+          borderRadius: "5px",
+          border: 1,
+          padding: "8px",
+          bgcolor: theme.palette.background.alt,
+        }}
+      >
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          color={theme.palette.secondary[300]}
+        >
+          Dates
+        </Typography>
 
-        {parts.length === 0 ? (
-          <option></option>
-        ) : (
-          <fieldset className="work-order-detail-info">
-            <legend>Parts Needed</legend>
-
-            <div className="work-order-detail-name">
-              {parts.map((part) => {
-                return (
-                  <div key={part.name}>
-                    <p>{part.name}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="work-order-detail-value">
-              {parts.map((part) => {
-                return (
-                  <div key={part._id}>
-                    <p>${part.customer_price.toFixed(2)}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </fieldset>
-        )}
-      </div>
+        <p>Date Received: {DateTime.fromISO(date_received).toFormat("D")}</p>
+        <p>Date Due: {DateTime.fromISO(date_due).toFormat("D")}</p>
+        <p>Status: {complete ? "Complete" : "In Process"}</p>
+        {complete ? <p>{date_finished}</p> : ""}
+      </Box>
+      <Box
+        mt="15px"
+        sx={{
+          borderRadius: "5px",
+          border: 1,
+          padding: "8px",
+          bgcolor: theme.palette.background.alt,
+        }}
+      >
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          color={theme.palette.secondary[300]}
+        >
+          Customer
+        </Typography>
+        <p>
+          <Link
+            component={RouterLink}
+            color="inherit"
+            onClick={() => selectCustomerID(customer._id)}
+            to={`/customerdetail/${customer._id}`}
+          >
+            {customer.first_name} {customer.last_name}
+          </Link>
+        </p>
+        <p>Phone Number : {formatPhoneNumber(customer.phone_number)}</p>
+        <p>Email: {customer.email}</p>
+      </Box>
+      <Box
+        mt="15px"
+        sx={{
+          borderRadius: "5px",
+          border: 1,
+          padding: "8px",
+          bgcolor: theme.palette.background.alt,
+        }}
+      >
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          color={theme.palette.secondary[300]}
+        >
+          Totals
+        </Typography>
+        <p>Labor Total - ${laborPrice.toFixed(2)}</p>
+        <p>Parts Total - ${partsPrice.toFixed(2)}</p>
+        <p>Total - ${total.toFixed(2)}</p>
+        <p>Tax - ${tax.toFixed(2)}</p>
+        <p>Grand Total - ${grandTotal.toFixed(2)}</p>
+        <p>Deposit - ${deposit.toFixed(2)}</p>
+        <p>Est. Due - ${(grandTotal - deposit).toFixed(2)}</p>
+      </Box>
+      <Box
+        mt="15px"
+        sx={{
+          borderRadius: "5px",
+          border: 1,
+          padding: "8px",
+          bgcolor: theme.palette.background.alt,
+        }}
+      >
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          color={theme.palette.secondary[300]}
+        >
+          Notes
+        </Typography>
+        <p>{notes}</p>
+      </Box>
+      {labor.length === 0 ? (
+        <option></option>
+      ) : (
+        <Box
+          mt="15px"
+          sx={{
+            borderRadius: "5px",
+            border: 1,
+            padding: "8px",
+            bgcolor: theme.palette.background.alt,
+          }}
+        >
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color={theme.palette.secondary[300]}
+          >
+            Labor
+          </Typography>
+          {labor.map((labor) => {
+            return (
+              <p key={labor.name}>
+                {labor.name} - ${labor.price.toFixed(2)}
+              </p>
+            );
+          })}
+        </Box>
+      )}
+      {parts.length === 0 ? (
+        <option></option>
+      ) : (
+        <Box
+          mt="15px"
+          sx={{
+            borderRadius: "5px",
+            border: 1,
+            padding: "8px",
+            bgcolor: theme.palette.background.alt,
+          }}
+        >
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color={theme.palette.secondary[300]}
+          >
+            Parts
+          </Typography>
+          {parts.map((part) => {
+            return (
+              <p key={parts.name}>
+                {part.name} - ${part.customer_price.toFixed(2)}
+              </p>
+            );
+          })}
+        </Box>
+      )}
       {accessories.length === 0 ? (
         <option></option>
       ) : (
-        <fieldset className="work-order-detail-info">
-          <legend>Customer Accessories</legend>
+        <Box
+          mt="15px"
+          sx={{
+            borderRadius: "5px",
+            border: 1,
+            padding: "8px",
+            bgcolor: theme.palette.background.alt,
+          }}
+        >
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color={theme.palette.secondary[300]}
+          >
+            Customer Accessories
+          </Typography>
           {accessories.map((accessory) => {
             return <p key={accessory._id}>{accessory.name}</p>;
           })}
-        </fieldset>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

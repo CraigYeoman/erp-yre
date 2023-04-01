@@ -1,7 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+import Header from "../Header";
+import {
+  Box,
+  useTheme,
+  Link,
+  Button,
+  Typography,
+  Card,
+  CardContent,
+} from "@mui/material";
 
 const PartDetail = () => {
+  const theme = useTheme();
   const {
     partDetail,
     selectVendorID,
@@ -24,74 +35,76 @@ const PartDetail = () => {
   const { name, part_number, manufacture, customer_price, cost, _id, vendor } =
     partDetail;
   return (
-    <div className="container-column">
-      <h3>Part Detail</h3>
-      <div className="container-background" key={_id}>
-        <h3>{name}</h3>
-        <div className="container-row">
-          <div className="align-right">
-            <p>Part Number:</p>
-            <p>Manufacture:</p>
-            <p>Customer Price:</p>
-            <p>Cost:</p>
-            <p>Vendor:</p>
-          </div>
-          <div>
-            <p>{part_number}</p>
-            <p>{manufacture}</p>
-            <p>{customer_price}</p>
-            <p>{cost}</p>
-            <p>
-              <Link
-                onClick={() => selectVendorID(vendor._id)}
-                to={`/vendordetail/${vendor._id}`}
-              >
-                {vendor.name}
-              </Link>
-            </p>
-          </div>
-        </div>
-        <div className="container-row">
-          <button className="buttons dark">
-            <Link onClick={() => selectPartID(_id)} to={`/partedit/${_id}`}>
-              Edit
-            </Link>
-          </button>
-          <button
-            className="buttons dark"
-            onClick={() => onSubmitGet(_id, "parts")}
+    <Box m="1.5rem 2.5rem">
+      <Header title={"Part Detail"} />
+      <Card
+        variant="outlined"
+        sx={{
+          bgcolor: theme.palette.background.alt,
+          marginTop: "15px",
+          marginBottom: "15px",
+        }}
+      >
+        <CardContent>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            color={theme.palette.secondary[300]}
           >
-            Delete{" "}
-          </button>
-        </div>
+            {name}
+          </Typography>
 
-        {response && typeof responseText.part_work_orders === "undefined" ? (
-          <div>
+          <p>Part Number: {part_number}</p>
+          <p>Manufacture: {manufacture}</p>
+          <p>Customer Price: ${customer_price}</p>
+          <p>Cost: ${cost}</p>
+          <p>
+            Vendor:{" "}
+            <Link
+              component={RouterLink}
+              color="inherit"
+              onClick={() => selectVendorID(vendor._id)}
+              to={`/vendordetail/${vendor._id}`}
+            >
+              {vendor.name}
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+      <Box mt="15px">
+        <Button variant="contained">
+          <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
+            onClick={() => selectPartID(_id)}
+            to={`/partedit/${_id}`}
+          >
+            Edit
+          </Link>
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => onSubmitGet(_id, "parts")}
+          sx={{ marginLeft: "15px" }}
+        >
+          Delete
+        </Button>
+        {response && (
+          <Box mt="15px">
             Are you sure you want to delete?
-            <button onClick={() => onSubmitPost(_id, "parts")}>Delete</button>
-            {responseText === "Complete" && <div>Deleted</div>}
-          </div>
-        ) : (
-          <div>
-            {response &&
-              responseText.part_work_orders.map((workOrder) => {
-                return (
-                  <div>
-                    Please edit the following work order before deleting
-                    <Link
-                      onClick={() => selectWorkOrderID(workOrder._id)}
-                      to={`/workorderdetail/${workOrder._id}`}
-                      key={workOrder._id}
-                    >
-                      {workOrder.work_order_number}
-                    </Link>
-                  </div>
-                );
-              })}
-          </div>
+            <Button
+              variant="contained"
+              onClick={() => onSubmitPost(_id, "parts")}
+              sx={{ marginLeft: "15px" }}
+            >
+              Delete
+            </Button>
+          </Box>
         )}
-      </div>
-    </div>
+        {responseText === "Complete" && "Deleted"}
+      </Box>
+    </Box>
   );
 };
 

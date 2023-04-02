@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+import Header from "../Header";
+import { Box, useTheme, Link, Button, Typography } from "@mui/material";
 
 const JobTypeDetail = () => {
+  const theme = useTheme();
+
   const {
     jobTypeDetail,
     loading,
@@ -24,51 +28,71 @@ const JobTypeDetail = () => {
   const { name, _id } = jobTypeDetail;
 
   return (
-    <div className="container-column">
-      <div key={_id}>
-        <h3>{name}</h3>
-      </div>
-
-      <div className="container-row">
-        <button className="buttons">
-          <Link onClick={() => selectJobTypeID(_id)} to={`/jobtypeedit/${_id}`}>
+    <Box m="1.5rem 2.5rem">
+      <Header title={"Job Type"} subtitle={"Detail"} />
+      <Box mt="15px">
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          color={theme.palette.secondary[100]}
+        >
+          {name}
+        </Typography>
+      </Box>
+      <Box mt="15px">
+        <Button variant="contained">
+          <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
+            onClick={() => selectJobTypeID(_id)}
+            to={`/jobtypeedit/${_id}`}
+          >
             Edit
           </Link>
-        </button>
-        <button
-          className="buttons"
-          onClick={() => onSubmitGet(_id, "jobtypes")}
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => onSubmitGet(_id, "customers")}
+          sx={{ marginLeft: "15px" }}
         >
-          Delete{" "}
-        </button>
-      </div>
+          Delete
+        </Button>
+      </Box>
 
       {response && typeof responseText.job_type_work_orders === "undefined" ? (
-        <div>
+        <Box mt="15px">
           Are you sure you want to delete?
-          <button onClick={() => onSubmitPost(_id, "jobtypes")}>Delete </button>
-          {responseText === "Complete" && <div>Deleted</div>}
-        </div>
+          <Button
+            variant="contained"
+            onClick={() => onSubmitGet(_id, "jobtypes")}
+            sx={{ marginLeft: "15px" }}
+          >
+            Delete
+          </Button>
+        </Box>
       ) : (
         <div>
           {response &&
             responseText.job_type_work_orders.map((workOrder) => {
               return (
-                <div>
-                  Please edit the following work order before deleting
+                <Box mt="15px">
+                  Please edit the following work order before deleting{" "}
                   <Link
+                    component={RouterLink}
                     onClick={() => selectWorkOrderID(workOrder._id)}
                     to={`/workorderdetail/${workOrder._id}`}
                     key={workOrder._id}
                   >
                     {workOrder.work_order_number}
                   </Link>
-                </div>
+                </Box>
               );
             })}
         </div>
       )}
-    </div>
+      {responseText === "Complete" && "Deleted"}
+    </Box>
   );
 };
 

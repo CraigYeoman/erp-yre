@@ -1,7 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+import Header from "../Header";
+import {
+  Box,
+  useTheme,
+  Link,
+  Button,
+  Typography,
+  Card,
+  CardContent,
+} from "@mui/material";
 
 const VendorDetail = () => {
+  const theme = useTheme();
   const {
     vendorDetail,
     loading,
@@ -35,83 +46,98 @@ const VendorDetail = () => {
     customer_number,
   } = vendorDetail.vendor;
   return (
-    <div className="container-column">
-      <h3>Vendor</h3>
-      <div className="container-background">
-        <div key={_id}>
-          <p>{name}</p>
-          <p>{main_contact}</p>
-          <p>{formatPhoneNumber(phone_number)}</p>
-          <p>{email}</p>
-          <p>
-            {address_line_1}, {city}, {state} {zip_code}
-          </p>
-          <p>{address_line_2}</p>
-          <p>Customer Number: {customer_number}</p>
-        </div>
-        <div className="container-row">
-          <button className="buttons dark">
-            <Link onClick={() => selectVendorID(_id)} to={`/vendoredit/${_id}`}>
-              Edit
-            </Link>
-          </button>
-          <div>
-            <div>
-              <button
-                className="buttons dark"
-                onClick={() => onSubmitGet(_id, "vendors")}
-              >
-                Delete{" "}
-              </button>
-            </div>
-            {response && typeof responseText.vendor_parts === "undefined" ? (
-              <div>
-                Are you sure you want to delete?
-                <button onClick={() => onSubmitPost(_id, "vendors")}>
-                  Delete
-                </button>
-                {responseText === "Complete" && <div>Deleted</div>}
-              </div>
-            ) : (
-              <div>
-                {response && (
-                  <div> Please edit the parts below before deleting</div>
-                )}
-              </div>
+    <Box m="1.5rem 2.5rem">
+      <Header title={"Vendor"} subtitle={name} />
+      <Box>
+        <p>{main_contact}</p>
+        <p>{formatPhoneNumber(phone_number)}</p>
+        <p>{email}</p>
+        <p>
+          {address_line_1}, {city}, {state} {zip_code}
+        </p>
+        <p>{address_line_2}</p>
+        <p>Customer Number: {customer_number}</p>
+      </Box>
+      <Box mt="15px">
+        <Button variant="contained">
+          <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
+            onClick={() => selectVendorID(_id)}
+            to={`/vendoredit/${_id}`}
+          >
+            Edit
+          </Link>
+        </Button>
+        <Button
+          variant="contained"
+          component={RouterLink}
+          onClick={() => onSubmitGet(_id, "vendors")}
+          sx={{ marginLeft: "15px" }}
+        >
+          Delete
+        </Button>
+        {response && typeof responseText.vendor_parts === "undefined" ? (
+          <Box mt="15px">
+            Are you sure you want to delete?
+            <Button
+              variant="contained"
+              component={RouterLink}
+              onClick={() => onSubmitPost(_id, "vendors")}
+              sx={{ marginLeft: "15px" }}
+            >
+              Delete
+            </Button>
+          </Box>
+        ) : (
+          <Box>
+            {response && (
+              <Box mt="10px"> Please edit the parts below before deleting</Box>
             )}
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3>Parts</h3>
+          </Box>
+        )}
+        {responseText === "Complete" && "Deleted"}
+      </Box>
+      <Box mt="15px">
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          color={theme.palette.secondary[300]}
+        >
+          Parts
+        </Typography>
         {vendorDetail.vendor_parts.map((part) => {
           const { _id, name, customer_price, cost, part_number, manufacture } =
             part;
           return (
-            <div className="container-background" key={_id}>
-              <Link onClick={() => selectPartID(_id)} to={`/partdetail/${_id}`}>
-                {name}
-              </Link>
-              <div className="container-row">
-                <div className="align-right">
-                  <p>Cost:</p>
-                  <p>Customer Price:</p>
-                  <p>Part Number:</p>
-                  <p>Manufacture:</p>
-                </div>
-                <div>
-                  <p>${cost}</p>
-                  <p>${customer_price}</p>
-                  <p>{part_number}</p>
-                  <p>{manufacture}</p>
-                </div>
-              </div>
-            </div>
+            <Card
+              variant="outlined"
+              sx={{
+                bgcolor: theme.palette.background.alt,
+                marginTop: "15px",
+                marginBottom: "15px",
+              }}
+            >
+              <CardContent>
+                <Link
+                  component={RouterLink}
+                  color="inherit"
+                  onClick={() => selectPartID(_id)}
+                  to={`/partdetail/${_id}`}
+                >
+                  {name}
+                </Link>
+                <p>Cost: ${cost}</p>
+                <p>Customer Price: ${customer_price}</p>
+                <p>Part Number: {part_number}</p>
+                <p>Manufacture: {manufacture}</p>
+              </CardContent>
+            </Card>
           );
         })}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

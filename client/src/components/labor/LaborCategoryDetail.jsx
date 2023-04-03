@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+import Header from "../Header";
+import { Box, Link, Button } from "@mui/material";
 
 const LaborCategoryDetail = () => {
   const {
@@ -9,7 +11,6 @@ const LaborCategoryDetail = () => {
     onSubmitPost,
     response,
     responseText,
-    selectLaborID,
     selectLaborCategoryID,
   } = useGlobalContext();
 
@@ -24,56 +25,44 @@ const LaborCategoryDetail = () => {
   const { name, _id } = laborCategoryDetail;
 
   return (
-    <div className="container-column">
-      <div key={_id}>
-        <h3>{name}</h3>
-      </div>
+    <Box m="1.5rem 2.5rem">
+      <Header title={name} subtitle={""} />
 
-      <div className="container-row">
-        <button className="buttons">
+      <Box mt="15px">
+        <Button variant="contained">
           <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
             onClick={() => selectLaborCategoryID(_id)}
             to={`/laborcategoryedit/${_id}`}
           >
             Edit
           </Link>
-        </button>
-        <button
-          className="buttons"
+        </Button>
+        <Button
+          variant="contained"
           onClick={() => onSubmitGet(_id, "laborcategory")}
+          sx={{ marginLeft: "15px" }}
         >
-          Delete{" "}
-        </button>
-      </div>
+          Delete
+        </Button>
 
-      {response && typeof responseText.labor_category_labors === "undefined" ? (
-        <div>
-          Are you sure you want to delete?
-          <button onClick={() => onSubmitPost(_id, "laborcategory")}>
-            Delete{" "}
-          </button>
-          {responseText === "Complete" && <div>Deleted</div>}
-        </div>
-      ) : (
-        <div>
-          {response &&
-            responseText.labor_category_labors.map((labor) => {
-              return (
-                <div>
-                  Please edit the following labor before deleting
-                  <Link
-                    onClick={() => selectLaborID(labor._id)}
-                    to={`/labordetail/${labor._id}`}
-                    key={labor._id}
-                  >
-                    {labor.name}
-                  </Link>
-                </div>
-              );
-            })}
-        </div>
-      )}
-    </div>
+        {response && (
+          <Box mt="15px">
+            Are you sure you want to delete?
+            <Button
+              variant="contained"
+              onClick={() => onSubmitPost(_id, "laborcategory")}
+              sx={{ marginLeft: "15px" }}
+            >
+              Delete
+            </Button>
+          </Box>
+        )}
+      </Box>
+      {responseText === "Complete" && "Deleted"}
+    </Box>
   );
 };
 

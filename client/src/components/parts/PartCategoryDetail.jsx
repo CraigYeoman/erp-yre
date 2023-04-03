@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useGlobalContext } from "../../context";
+import Header from "../Header";
+import { Box, Link, Button } from "@mui/material";
 
 const PartCategoryDetail = () => {
   const {
@@ -24,56 +26,43 @@ const PartCategoryDetail = () => {
   const { name, _id } = partCategoryDetail;
 
   return (
-    <div className="container-column">
-      <div key={_id}>
-        <h3>{name}</h3>
-      </div>
-
-      <div className="container-row">
-        <button className="buttons">
+    <Box m="1.5rem 2.5rem">
+      <Header title={name} subtitle={""} />
+      <Box mt="15px">
+        <Button variant="contained">
           <Link
+            component={RouterLink}
+            color="inherit"
+            underline="none"
             onClick={() => selectPartCategoryID(_id)}
             to={`/partcategoryedit/${_id}`}
           >
             Edit
           </Link>
-        </button>
-        <button
-          className="buttons"
+        </Button>
+        <Button
+          variant="contained"
           onClick={() => onSubmitGet(_id, "partcategory")}
+          sx={{ marginLeft: "15px" }}
         >
-          Delete{" "}
-        </button>
-      </div>
+          Delete
+        </Button>
 
-      {response && typeof responseText.part_category_parts === "undefined" ? (
-        <div>
-          Are you sure you want to delete?
-          <button onClick={() => onSubmitPost(_id, "partcategory")}>
-            Delete{" "}
-          </button>
-          {responseText === "Complete" && <div>Deleted</div>}
-        </div>
-      ) : (
-        <div>
-          {response &&
-            responseText.part_category_parts.map((part) => {
-              return (
-                <div>
-                  Please edit the following part before deleting
-                  <Link
-                    onClick={() => selectPartID(part._id)}
-                    to={`/partdetail/${part._id}`}
-                    key={part._id}
-                  >
-                    {part.name}
-                  </Link>
-                </div>
-              );
-            })}
-        </div>
-      )}
-    </div>
+        {response && (
+          <Box mt="15px">
+            Are you sure you want to delete?
+            <Button
+              variant="contained"
+              onClick={() => onSubmitPost(_id, "partcategory")}
+              sx={{ marginLeft: "15px" }}
+            >
+              Delete
+            </Button>
+          </Box>
+        )}
+      </Box>
+      {responseText === "Complete" && "Deleted"}
+    </Box>
   );
 };
 

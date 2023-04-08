@@ -1,9 +1,27 @@
-const { CustomAPIError } = require("../errors/custom-error");
+const { StatusCodes } = require("http-status-codes");
+
 const errorHandlerMiddleware = (err, req, res, next) => {
-  if (err instanceof CustomAPIError) {
-    return res.status(err.statusCode).json({ msg: err.message });
+  console.log(err);
+
+  const defaultError = {
+    statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+    msg: err.message || "Something went wrong, try again later",
+  };
+
+  if (err.name === "ValidationError") {
+    defaultError.statusCode = StatusCodes.BAD_REQUEST;
+    // defaultError.msg = err.message;
+    defaultError.msg = Object.values(err.errors)
+      .map((item) => item.message)
+      .join(",");
   }
-  return res.status(err).json({ msg: err });
+
+  if (err.code && err.code === 11000) {
+    defaultError.statusCode = StatusCodes.BAD_REQUEST;
+    defaultError.msg = `${Ojbect.keys(err.keyValue)} field has to be unique`;
+  }
+
+  res.status(defaultError.statusCode).json({ msg: defaultError.msg });
 };
 
 module.exports = errorHandlerMiddleware;

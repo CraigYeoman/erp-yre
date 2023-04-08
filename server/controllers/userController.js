@@ -1,12 +1,25 @@
 const User = require("../models/user");
+const { StatusCodes } = require("http-status-codes");
+const { BadRequestError } = require("../errors/index.js");
 
-const register = async (req, res, next) => {
-  try {
-    const user = await User.create(req.body);
-    res.status(201).json({ user });
-  } catch (error) {
-    next(error);
+const register = async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    throw new BadRequestError("please provide all values");
   }
+
+  const userAlreadyExits = await User.findOne({ email });
+  if (userAlreadyExits) {
+    throw new BadRequestError("Email already in use");
+  }
+
+  const user = await User.create(name, email, password);
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({
+    user: { email: user.email, name: user.name, location: user.location },
+    token,
+  });
 };
 
 const login = async (req, res) => {
@@ -16,3 +29,13 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   res.send("updateUser");
 };
+
+const getCurrentUser = async (req, res) => {
+  res.send("getCurrentUser");
+};
+
+const logout = async (req, res) => {
+  res.send("logout");
+};
+
+module.exports = { register, login, updateUser, getCurrentUser, logout };

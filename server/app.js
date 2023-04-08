@@ -16,9 +16,10 @@ const workOrdersRouter = require("./routes/workorders");
 const accessoriesRouter = require("./routes/accessories");
 const partCategoryRouter = require("./routes/partcategory");
 const laborCategoryRouter = require("./routes/laborcategory");
+const userRouter = require("./routes/user");
 
 const app = express();
-
+console.log("hello");
 const connectDB = require("./db/connect");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorMiddleware = require("./middleware/error-handler");
@@ -54,6 +55,7 @@ app.use("/api/v1/erp/workorders", workOrdersRouter);
 app.use("/api/v1/erp/accessories", accessoriesRouter);
 app.use("/api/v1/erp/partcategory", partCategoryRouter);
 app.use("/api/v1/erp/laborcategory", laborCategoryRouter);
+app.use("/api/v1/erp/user", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

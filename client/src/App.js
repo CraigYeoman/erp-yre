@@ -1,5 +1,6 @@
 import Nav from "./components/Nav";
 import Index from "./components/Index";
+import Landing from "./components/Landing";
 import CustomerDetail from "./components/customer/CustomerDetail";
 import CustomerEditForm from "./components/customer/CustomerEditForm";
 import CustomerForm from "./components/customer/CustomerForm";
@@ -50,6 +51,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
+            <Route path="/landing" element={<Landing />} />
             <Route element={<Format />}>
               <Route path="/" element={<Index />}></Route>
               <Route

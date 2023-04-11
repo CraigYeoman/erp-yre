@@ -1,6 +1,7 @@
 import Nav from "./components/Nav";
 import Index from "./components/Index";
 import Landing from "./components/Landing";
+import Login from "./components/Login";
 import CustomerDetail from "./components/customer/CustomerDetail";
 import CustomerEditForm from "./components/customer/CustomerEditForm";
 import CustomerForm from "./components/customer/CustomerForm";
@@ -38,12 +39,13 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { themeSettings } from "./components/theme";
-import { useGlobalContext } from "./context";
+// import { useGlobalContext } from "./context";
+import { useAppContext } from "./context/appContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  const { mode } = useGlobalContext();
-
+  // const { mode } = useGlobalContext();
+  const { mode } = useAppContext();
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div className="App">
@@ -52,6 +54,7 @@ function App() {
           <CssBaseline />
           <Routes>
             <Route path="/landing" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
             <Route element={<Format />}>
               <Route path="/" element={<Index />}></Route>
               <Route

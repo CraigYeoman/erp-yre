@@ -1,7 +1,7 @@
 import logo from "../assets/img/yeomanRaceEnginesLogo.svg";
 
+import { Link as RouterLink } from "react-router-dom";
 import { Box, useTheme, Link, Button, Typography } from "@mui/material";
-import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 const Landing = () => {
   const theme = useTheme();
@@ -66,7 +66,14 @@ const Landing = () => {
               }}
             >
               <Button variant="contained" type="submit">
-                Login/Register
+                <Link
+                  component={RouterLink}
+                  color="inherit"
+                  underline="none"
+                  to={`/login`}
+                >
+                  Login/Register
+                </Link>
               </Button>
               <Button variant="contained" type="submit">
                 Guest

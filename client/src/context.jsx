@@ -4,9 +4,6 @@ import axios from "axios";
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  // const initialState= {
-
-  // }
   const [customerDetail, setCustomerDetail] = useState([{}]);
   const [jobTypeDetail, setJobTypeDetail] = useState([{}]);
   const [laborDetail, setLaborDetail] = useState([{}]);

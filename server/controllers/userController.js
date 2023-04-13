@@ -1,10 +1,11 @@
 const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError } = require("../errors/index.js");
+const BadRequestError = require("../errors/index").BadRequestError;
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
-
+  console.log(req.body);
+  console.log(BadRequestError);
   if (!name || !email || !password) {
     throw new BadRequestError("please provide all values");
   }

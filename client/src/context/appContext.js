@@ -35,7 +35,7 @@ const AppProvider = ({ children }) => {
       dispatch({
         type: CLEAR_ALERT,
       });
-    }, 3000);
+    }, 8000);
   };
 
   const registerUser = async (currentUser) => {

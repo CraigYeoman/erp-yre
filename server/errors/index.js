@@ -1,4 +1,4 @@
-module.exports = Promise.all([
-  import("./bad-request.mjs"),
-  import("./notfound.mjs"),
-]);
+const BadRequestError = require("./bad-request.js");
+const NotFoundError = require("./notfound.js");
+
+module.exports = { BadRequestError, NotFoundError };

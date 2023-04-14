@@ -3,9 +3,9 @@ const { StatusCodes } = require("http-status-codes");
 const BadRequestError = require("../errors/index").BadRequestError;
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password } = req.body.currentUser;
   console.log(req.body);
-  console.log(BadRequestError);
+  console.log(name);
   if (!name || !email || !password) {
     throw new BadRequestError("please provide all values");
   }
@@ -14,8 +14,7 @@ const register = async (req, res) => {
   if (userAlreadyExits) {
     throw new BadRequestError("Email already in use");
   }
-  console.log(typeof req.body);
-  const user = await User.create(name, email, password);
+  const user = await User.create({ name, email, password });
   const token = user.createJWT();
   res.status(StatusCodes.OK).json({
     user: { email: user.email, name: user.name, location: user.location },

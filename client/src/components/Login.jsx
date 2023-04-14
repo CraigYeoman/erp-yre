@@ -23,11 +23,12 @@ const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
+  const { user, isLoading, showAlert, displayAlert, registerUser } =
+    useAppContext();
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-  const { user, isLoading, showAlert, displayAlert, registerUser } =
-    useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -52,7 +53,7 @@ const Login = () => {
     if (user) {
       setTimeout(() => {
         navigate("/");
-      }, 10000);
+      }, 3000);
     }
   }, [user, navigate]);
 

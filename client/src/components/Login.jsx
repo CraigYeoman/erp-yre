@@ -23,8 +23,15 @@ const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
-  const { user, isLoading, showAlert, displayAlert, registerUser } =
-    useAppContext();
+  const {
+    user,
+    isLoading,
+    showAlert,
+    displayAlert,
+    registerUser,
+    loginUser,
+    setupUser,
+  } = useAppContext();
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -43,9 +50,17 @@ const Login = () => {
     }
     const currentUser = { name, email, password };
     if (isMember) {
-      registerUser({ currentUser });
+      setupUser({
+        currentUser,
+        endPoint: "login",
+        alertText: "Login Successful! Redirecting...",
+      });
     } else {
-      registerUser({ currentUser });
+      setupUser({
+        currentUser,
+        endPoint: "register",
+        alertText: "User Created! Redirecting...",
+      });
     }
   };
 

@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
-import { useGlobalContext } from "../context";
+import { useAppContext } from "../context/appContext";
 import { Box, useTheme, Typography } from "@mui/material";
 import IndexGrid from "./IndexGrid";
 import Header from "./Header";
 import FlexBetween from "./FlexBetween";
 
 const Index = () => {
-  const [data, setData] = useState([{}]);
-  const { rootUrl, setLoading } = useGlobalContext();
+  const { getWorkOrders, data } = useAppContext();
   const theme = useTheme();
+  // const [loading, setLoading] = useState(false);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch(`${rootUrl}/api/v1/erp/workorders/index`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setData(data);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`${rootUrl}/api/v1/erp/workorders/index`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      });
+    getWorkOrders();
   }, []);
 
   if (data.countArray == null) {
@@ -30,10 +34,8 @@ const Index = () => {
 
   return (
     <Box m="1.5rem 2.5rem">
-      <FlexBetween>
-        <Header title="ERP APP" subtitle="Welcome" />
-        <Box>Search</Box>
-      </FlexBetween>
+      <Header title="ERP APP" subtitle="Welcome" />
+
       <Box
         sx={{
           display: "flex",

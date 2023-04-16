@@ -1,5 +1,5 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../context";
+import { useAppContext } from "../context/appContext";
 import { Box, useTheme, Link, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import FlexBetween from "./FlexBetween";
@@ -12,7 +12,7 @@ const IndexGrid = ({ name, data }) => {
     selectCustomerID,
     // sumTotal,
     loading,
-  } = useGlobalContext();
+  } = useAppContext();
 
   const theme = useTheme();
 

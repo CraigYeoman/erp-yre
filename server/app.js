@@ -19,10 +19,11 @@ const laborCategoryRouter = require("./routes/laborcategory");
 const userRouter = require("./routes/user");
 
 const app = express();
-console.log("hello");
 const connectDB = require("./db/connect");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorMiddleware = require("./middleware/error-handler");
+const authenticateUser = require("./middleware/auth");
+
 // Set up mongoose connection
 const port = process.env.port || 5000;
 
@@ -48,15 +49,15 @@ app.get("/", (req, res) => {
   res.send('<h1>Erp API</h1><a href="/api/v1/erp">erp route</a>');
 });
 
-app.use("/api/v1/erp/vendors", vendorsRouter);
-app.use("/api/v1/erp/jobtypes", jobTypeRouter);
-app.use("/api/v1/erp/customers", customerRouter);
-app.use("/api/v1/erp/labor", laborRouter);
-app.use("/api/v1/erp/parts", partsRouter);
-app.use("/api/v1/erp/workorders", workOrdersRouter);
-app.use("/api/v1/erp/accessories", accessoriesRouter);
-app.use("/api/v1/erp/partcategory", partCategoryRouter);
-app.use("/api/v1/erp/laborcategory", laborCategoryRouter);
+app.use("/api/v1/erp/vendors", authenticateUser, vendorsRouter);
+app.use("/api/v1/erp/jobtypes", authenticateUser, jobTypeRouter);
+app.use("/api/v1/erp/customers", authenticateUser, customerRouter);
+app.use("/api/v1/erp/labor", authenticateUser, laborRouter);
+app.use("/api/v1/erp/parts", authenticateUser, partsRouter);
+app.use("/api/v1/erp/workorders", authenticateUser, workOrdersRouter);
+app.use("/api/v1/erp/accessories", authenticateUser, accessoriesRouter);
+app.use("/api/v1/erp/partcategory", authenticateUser, partCategoryRouter);
+app.use("/api/v1/erp/laborcategory", authenticateUser, laborCategoryRouter);
 app.use("/api/v1/erp/user", userRouter);
 
 // catch 404 and forward to error handler

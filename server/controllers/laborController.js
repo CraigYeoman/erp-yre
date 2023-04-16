@@ -3,7 +3,6 @@ const Labor = require("../models/labor");
 const async = require("async");
 const WorkOrder = require("../models/workOrder");
 const Category = require("../models/laborCategory");
-const port = process.env.port || 3000;
 
 // Display list of all labor.
 const getAllLaborStatic = async (req, res) => {

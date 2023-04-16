@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  accessories_create_get,
   accessories_create_post,
   getAllAccessoriesStatic,
   getAllAccessories,

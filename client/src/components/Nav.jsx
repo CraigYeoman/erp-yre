@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useGlobalContext } from "../context";
+import { useAppContext } from "../context/appContext";
 import {
   Box,
   Drawer,
@@ -33,11 +33,10 @@ import FlexBetween from "./FlexBetween";
 import { useEffect, useState } from "react";
 
 function Nav() {
-  const { setListType } = useGlobalContext();
+  const { setListType, showSideBar } = useAppContext();
   const theme = useTheme();
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
-  const [isSideBarOpen, setIsSidebarOpen] = useState(true);
   const isNonMobile = useMediaQuery("(min-width: 600px");
   const drawerWidth = "250px";
   const navigate = useNavigate();
@@ -177,10 +176,9 @@ function Nav() {
 
   return (
     <Box component="nav">
-      {isSideBarOpen && (
+      {showSideBar && (
         <Drawer
-          open={isSideBarOpen}
-          onClose={() => setIsSidebarOpen(false)}
+          open={showSideBar}
           variant="persistent"
           anchor="left"
           sx={{
@@ -202,11 +200,6 @@ function Nav() {
                     Yeoman Race Engines
                   </Typography>
                 </Box>
-                {!isNonMobile && (
-                  <IconButton onClick={() => setIsSidebarOpen(!isSideBarOpen)}>
-                    <ChevronLeft />
-                  </IconButton>
-                )}
               </FlexBetween>
             </Box>
             <List>

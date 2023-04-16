@@ -23,15 +23,8 @@ const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
-  const {
-    user,
-    isLoading,
-    showAlert,
-    displayAlert,
-    registerUser,
-    loginUser,
-    setupUser,
-  } = useAppContext();
+  const { user, isLoading, showAlert, displayAlert, setupUser } =
+    useAppContext();
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });

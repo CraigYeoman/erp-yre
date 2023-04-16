@@ -1,39 +1,51 @@
-import Nav from "./components/Nav";
 import Index from "./components/Index";
 import Landing from "./components/Landing";
 import Login from "./components/Login";
-import CustomerDetail from "./components/customer/CustomerDetail";
-import CustomerEditForm from "./components/customer/CustomerEditForm";
-import CustomerForm from "./components/customer/CustomerForm";
-import CustomerList from "./components/customer/CustomerList";
-import JobTypeDetail from "./components/jobtype/JobTypeDetail";
-import JobTypeEdit from "./components/jobtype/JobTypeEditForm";
-import JobTypeList from "./components/jobtype/JobTypeList";
-import JobTypeForm from "./components/jobtype/JobTypeForm";
-import LaborDetail from "./components/labor/LaborDetail";
-import LaborEditForm from "./components/labor/LaborEditForm";
-import LaborForm from "./components/labor/LaborForm";
-import LaborList from "./components/labor/LaborList";
-import LaborCategory from "./components/labor/LaborCategory";
-import LaborCategoryDetail from "./components/labor/LaborCategoryDetail";
-import LaborCategoryEdit from "./components/labor/LaborCategoryEditFrom";
-import LaborCategoryForm from "./components/labor/LaborCategoryForm";
-import PartDetail from "./components/parts/PartDetail";
-import PartEdit from "./components/parts/PartEditForm";
-import PartsList from "./components/parts/PartsList";
-import PartForm from "./components/parts/PartForm";
-import PartCategory from "./components/parts/PartCategory";
-import PartCategoryDetail from "./components/parts/PartCategoryDetail";
-import PartCategoryEdit from "./components/parts/PartCategoryEditFrom";
-import PartCategoryForm from "./components/parts/PartCategoryForm";
-import VendorDetail from "./components/vendor/VendorDetail";
-import VendorEdit from "./components/vendor/VendorEditForm";
-import VendorForm from "./components/vendor/VendorForm";
-import VendorList from "./components/vendor/VendorList";
-import WorkOrderDetail from "./components/workorder/WorkOrderDetail";
-import WorkOrderEdit from "./components/workorder/WorkOrderEditForm";
-import WorkOrderList from "./components/workorder/WorkOrderList";
-import WorkOrderForm from "./components/workorder/WorkOrderForm";
+import ProtectedRoute from "./components/ProtectedRoute";
+import {
+  CustomerDetail,
+  CustomerEditForm,
+  CustomerForm,
+  CustomerList,
+} from "./components/customer/";
+import {
+  JobTypeDetail,
+  JobTypeEditForm,
+  JobTypeList,
+  JobTypeForm,
+} from "./components/jobtype";
+import {
+  LaborDetail,
+  LaborEditForm,
+  LaborList,
+  LaborForm,
+  LaborCategory,
+  LaborCategoryDetail,
+  LaborCategoryEditForm,
+  LaborCategoryForm,
+} from "./components/labor";
+import {
+  PartDetail,
+  PartEditForm,
+  PartsList,
+  PartForm,
+  PartCategory,
+  PartCategoryDetail,
+  PartCategoryEditForm,
+  PartCategoryForm,
+} from "./components/parts";
+import {
+  VendorDetail,
+  VendorEditForm,
+  VendorForm,
+  VendorList,
+} from "./components/vendor";
+import {
+  WorkOrderDetail,
+  WorkOrderEditForm,
+  WorkOrderList,
+  WorkOrderForm,
+} from "./components/workorder/";
 import Format from "./components/Format";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
@@ -55,8 +67,14 @@ function App() {
           <Routes>
             <Route path="/landing" element={<Landing />} />
             <Route path="/login" element={<Login />} />
-            <Route element={<Format />}>
-              <Route path="/" element={<Index />}></Route>
+            <Route
+              element={
+                <ProtectedRoute>
+                  <Format />
+                </ProtectedRoute>
+              }
+            >
+              <Route index path="/" element={<Index />}></Route>
               <Route
                 path="/customerdetail/:id"
                 element={<CustomerDetail />}
@@ -71,7 +89,10 @@ function App() {
                 path="/jobtypedetail/:id"
                 element={<JobTypeDetail />}
               ></Route>
-              <Route path="/jobtypeedit/:id" element={<JobTypeEdit />}></Route>
+              <Route
+                path="/jobtypeeditform/:id"
+                element={<JobTypeEditForm />}
+              ></Route>
               <Route path="/jobtypelist" element={<JobTypeList />}></Route>
               <Route path="/jobtypeform" element={<JobTypeForm />}></Route>
               <Route path="/labordetail/:id" element={<LaborDetail />}></Route>
@@ -89,10 +110,13 @@ function App() {
               ></Route>
               <Route
                 path="/laborcategoryedit/:id"
-                element={<LaborCategoryEdit />}
+                element={<LaborCategoryEditForm />}
               ></Route>
               <Route path="/partdetail/:id" element={<PartDetail />}></Route>
-              <Route path="/partedit/:id" element={<PartEdit />}></Route>
+              <Route
+                path="/parteditform/:id"
+                element={<PartEditForm />}
+              ></Route>
               <Route path="/partslist" element={<PartsList />}></Route>
               <Route path="/partform" element={<PartForm />}></Route>
               <Route path="/partcategory" element={<PartCategory />}></Route>
@@ -105,14 +129,17 @@ function App() {
                 element={<PartCategoryDetail />}
               ></Route>
               <Route
-                path="/partcategoryedit/:id"
-                element={<PartCategoryEdit />}
+                path="/partcategoryeditform/:id"
+                element={<PartCategoryEditForm />}
               ></Route>
               <Route
                 path="/vendordetail/:id"
                 element={<VendorDetail />}
               ></Route>
-              <Route path="/vendoredit/:id" element={<VendorEdit />}></Route>
+              <Route
+                path="/vendoreditform/:id"
+                element={<VendorEditForm />}
+              ></Route>
               <Route path="/vendorform" element={<VendorForm />}></Route>
               <Route path="/vendorlist" element={<VendorList />}></Route>
               <Route
@@ -120,8 +147,8 @@ function App() {
                 element={<WorkOrderDetail />}
               ></Route>
               <Route
-                path="/workorderedit/:id"
-                element={<WorkOrderEdit />}
+                path="/workordereditform/:id"
+                element={<WorkOrderEditForm />}
               ></Route>
               <Route path="/workorderlist" element={<WorkOrderList />}></Route>
               <Route path="/workorderform" element={<WorkOrderForm />}></Route>

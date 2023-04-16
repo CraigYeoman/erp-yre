@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
+const user = require("../models/user");
 const BadRequestError = require("../errors/index").BadRequestError;
 const UnAuthenticatedError = require("../errors/index").UnAuthenticatedError;
 
@@ -44,13 +45,28 @@ const login = async (req, res) => {
   }
   const token = user.createJWT();
   res.status(StatusCodes.OK).json({
-    user: { email: user.email, name: user.name, location: user.location },
+    user: { email: user.email, name: user.name },
     token,
   });
 };
 
 const updateUser = async (req, res) => {
-  res.send("updateUser");
+  const { name, email } = req.body;
+
+  if (!email || !name) {
+    throw new BadRequestError("please provide all values");
+  }
+
+  const user = await User.findOneAndDelete({ _id: req.user.userId });
+
+  user.email = email;
+  user.name = name;
+
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({
+    user: { email: user.email, name: user.name },
+    token,
+  });
 };
 
 const getCurrentUser = async (req, res) => {

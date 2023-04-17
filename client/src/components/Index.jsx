@@ -6,7 +6,7 @@ import Header from "./Header";
 import FlexBetween from "./FlexBetween";
 
 const Index = () => {
-  const { getWorkOrders, data } = useAppContext();
+  const { getData, data } = useAppContext();
   const theme = useTheme();
   // const [loading, setLoading] = useState(false);
 
@@ -21,7 +21,7 @@ const Index = () => {
   // }, []);
 
   useEffect(() => {
-    getWorkOrders();
+    getData();
   }, []);
 
   if (data.countArray == null) {

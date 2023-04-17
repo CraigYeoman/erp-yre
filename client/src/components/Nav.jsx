@@ -33,7 +33,7 @@ import FlexBetween from "./FlexBetween";
 import { useEffect, useState } from "react";
 
 function Nav() {
-  const { setListType, showSideBar } = useAppContext();
+  const { updatePath, showSideBar, jobType, complete, sort } = useAppContext();
   const theme = useTheme();
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
@@ -46,7 +46,7 @@ function Nav() {
       text: "Dashboard",
       icon: <HomeOutlined />,
       nav: "",
-      listType: "none",
+      listType: "/workorders/index",
     },
     {
       text: "Work Orders",
@@ -58,7 +58,7 @@ function Nav() {
       text: "Work Order List",
       icon: <IoDocumentsOutline />,
       nav: "workorderlist",
-      listType: "workorders",
+      listType: `/workorders?jobType=${jobType}&complete=${complete}&sort=${sort}`,
     },
     {
       text: "New Work Order",
@@ -76,7 +76,7 @@ function Nav() {
       text: "Customer List",
       icon: <Groups2Outlined />,
       nav: "customerlist",
-      listType: "customers",
+      listType: "/customers",
     },
     {
       text: "New Customer",
@@ -221,9 +221,9 @@ function Nav() {
                   <ListItem key={text} disablePadding sx={{ height: "30px" }}>
                     <ListItemButton
                       onClick={() => {
+                        updatePath(listType);
                         navigate(`/${nav}`);
                         setActive(lcText);
-                        setListType(listType);
                       }}
                       sx={{
                         backgroundColor:

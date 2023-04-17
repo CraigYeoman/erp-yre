@@ -63,7 +63,8 @@ const workOrderSchema = new Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
+  { timestamps: true }
 );
 
 workOrderSchema.virtual("url").get(function () {

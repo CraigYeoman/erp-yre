@@ -1,24 +1,30 @@
 import { Link as RouterLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { Box, useTheme, Link } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "../Header";
 
 const CustomerList = () => {
-  const { selectCustomerID, listType, formatPhoneNumber, setLoading, loading } =
-    useGlobalContext();
-  const [data, setData] = useState([{}]);
+  // const { selectCustomerID, listType, formatPhoneNumber, setLoading, loading } =
+  //   useGlobalContext();
+
+  const { getData, data, isLoading, formatPhoneNumber } = useAppContext();
+
   const theme = useTheme();
+  const selectCustomerID = "";
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch(`/api/v1/erp/${listType}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setData(data);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`/api/v1/erp/${listType}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      });
+    getData();
   }, []);
 
   if (!data.customers) {
@@ -126,7 +132,7 @@ const CustomerList = () => {
         }}
       >
         <DataGrid
-          loading={loading || !data.customers}
+          loading={isLoading || !data.customers}
           rows={data.customers}
           getRowId={(row) => row._id}
           columns={columns}

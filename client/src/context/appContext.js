@@ -9,12 +9,14 @@ import {
   SETUP_USER_SUCCESS,
   SETUP_USER_ERROR,
   LOGOUT_USER,
-  GET_WORKORDERS_BEGIN,
-  GET_WORKORDERS_SUCCESS,
+  GET_DATA_BEGIN,
+  GET_DATA_SUCCESS,
   TOGGLE_SIDEBAR,
   UPDATE_USER_BEGIN,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
+  CHANGE_PATH,
+  HANDLE_CHANGE,
 } from "./action";
 
 const token = localStorage.getItem("token");
@@ -29,9 +31,12 @@ const initialState = {
   user: user ? JSON.parse(user) : null,
   token: token,
   rootUrl: "http://localhost:5000",
-  setListType: "",
   data: [{}],
   showSideBar: true,
+  url: "/workorders/index",
+  sort: "date_due",
+  complete: "false",
+  jobType: "all",
 };
 
 const AppContext = React.createContext();
@@ -117,14 +122,13 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
-  const getWorkOrders = async () => {
-    let url = `/workorders/index`;
+  const getData = async () => {
+    dispatch({ type: GET_DATA_BEGIN });
 
-    dispatch({ type: GET_WORKORDERS_BEGIN });
     try {
-      const { data } = await authFetch(url);
-      console.log(data);
-      dispatch({ type: GET_WORKORDERS_SUCCESS, payload: { data } });
+      const { data } = await authFetch(state.url);
+
+      dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
       console.log(error.response);
     }
@@ -132,6 +136,17 @@ const AppProvider = ({ children }) => {
 
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
+  };
+
+  const updatePath = (path) => {
+    dispatch({ type: CHANGE_PATH, payload: { path } });
+  };
+
+  const handleChange = ({ name, value }) => {
+    dispatch({
+      type: HANDLE_CHANGE,
+      payload: { name, value },
+    });
   };
 
   const logoutUser = () => {
@@ -162,16 +177,37 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const formatPhoneNumber = (phoneNumberString) => {
+    const cleaned = ("" + phoneNumberString).replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return "(" + match[1] + ") " + match[2] + "-" + match[3];
+    }
+    return null;
+  };
+
+  const sumTotal = (array, name) => {
+    let sum = 0;
+    for (let i = 0; i < array.length; i++) {
+      sum += array[i][name];
+    }
+    return sum;
+  };
+
   return (
     <AppContext.Provider
       value={{
         ...state,
         displayAlert,
         setupUser,
-        getWorkOrders,
+        getData,
         toggleSidebar,
         logoutUser,
         updateUser,
+        formatPhoneNumber,
+        updatePath,
+        sumTotal,
+        handleChange,
       }}
     >
       {children}

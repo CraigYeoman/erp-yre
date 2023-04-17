@@ -1,6 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
 import { useEffect } from "react";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import {
   Box,
   useTheme,
@@ -17,17 +17,32 @@ import FlexBetween from "../FlexBetween";
 const { DateTime } = require("luxon");
 
 const WorkOrderList = () => {
+  // const {
+  //   selectWorkOrderID,
+  //   selectCustomerID,
+  //   sumTotal,
+  //   handleChange,
+  //   values,
+  //   clearFilters,
+  //   data,
+  //   getWorkOrder,
+  //   loading,
+  // } = useGlobalContext();
+
   const {
+    getData,
+    data,
+    isLoading,
+    sumTotal,
     selectWorkOrderID,
     selectCustomerID,
-    sumTotal,
-    handleChange,
-    values,
+
     clearFilters,
-    data,
-    getWorkOrder,
-    loading,
-  } = useGlobalContext();
+    handleChange,
+    sort,
+    complete,
+    jobType,
+  } = useAppContext();
 
   const theme = useTheme();
 
@@ -37,8 +52,8 @@ const WorkOrderList = () => {
   };
 
   useEffect(() => {
-    getWorkOrder();
-  }, [values]);
+    getData();
+  }, [sort, complete, jobType]);
 
   if (!data.workOrders) {
     return (
@@ -175,7 +190,7 @@ const WorkOrderList = () => {
               name="jobType"
               required={true}
               onChange={handleChange}
-              value={values.jobType}
+              value={jobType}
             >
               {(data.jobTypeList || [])
                 .sort((a, b) => {
@@ -201,7 +216,7 @@ const WorkOrderList = () => {
               name="sort"
               required={true}
               onChange={handleChange}
-              value={values.sort}
+              value={sort}
             >
               <option value="date_due">Due Date</option>
               <option value="date_received">Date Recieved</option>
@@ -223,7 +238,7 @@ const WorkOrderList = () => {
               name="complete"
               required={true}
               onChange={handleChange}
-              value={values.complete}
+              value={complete}
             >
               <option value="all">All</option>
               <option value="false">Incomplete</option>
@@ -235,7 +250,7 @@ const WorkOrderList = () => {
           </Button>
         </FlexBetween>
         <DataGrid
-          loading={loading || !data.workOrders}
+          loading={isLoading || !data.workOrders}
           rows={data.workOrders}
           getRowId={(row) => row._id}
           columns={columns}

@@ -1,25 +1,30 @@
 import { Link as RouterLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { Box, useTheme, Link } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "../Header";
 
 const PartsList = () => {
-  const { listType, selectPartID, selectVendorID, setLoading, loading } =
-    useGlobalContext();
-  const [data, setData] = useState([{}]);
+  // const { listType, selectPartID, selectVendorID, setLoading, loading } =
+  //   useGlobalContext();
+  const { getData, data, selectPartID, selectVendorID, isLoading } =
+    useAppContext();
+
   const theme = useTheme();
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`/api/v1/erp/${listType}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      });
+    getData();
   }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch(`/api/v1/erp/${listType}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setData(data);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   if (!data.parts) {
     return (
@@ -125,7 +130,7 @@ const PartsList = () => {
         }}
       >
         <DataGrid
-          loading={loading || !data.parts}
+          loading={isLoading || !data.parts}
           rows={data.parts}
           getRowId={(row) => row._id}
           columns={columns}

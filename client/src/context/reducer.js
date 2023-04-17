@@ -1,3 +1,4 @@
+import { gridDensityValueSelector } from "@mui/x-data-grid";
 import {
   CLEAR_ALERT,
   DISPLAY_ALERT,
@@ -5,12 +6,14 @@ import {
   SETUP_USER_SUCCESS,
   SETUP_USER_ERROR,
   LOGOUT_USER,
-  GET_WORKORDERS_BEGIN,
-  GET_WORKORDERS_SUCCESS,
+  GET_DATA_BEGIN,
+  GET_DATA_SUCCESS,
+  CHANGE_PATH,
   TOGGLE_SIDEBAR,
   UPDATE_USER_BEGIN,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
+  HANDLE_CHANGE,
 } from "./action";
 import { initialState } from "./appContext";
 
@@ -62,12 +65,20 @@ const reducer = (state, action) => {
     };
   }
 
-  if (action.type === GET_WORKORDERS_BEGIN) {
-    return { ...state, isLoading: true, showAlert: false };
+  if (action.type === GET_DATA_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+      showAlert: false,
+    };
   }
 
-  if (action.type === GET_WORKORDERS_SUCCESS) {
+  if (action.type === GET_DATA_SUCCESS) {
     return { ...state, isLoading: false, data: action.payload.data };
+  }
+
+  if (action.type === CHANGE_PATH) {
+    return { ...state, url: action.payload.path };
   }
 
   if (action.type === TOGGLE_SIDEBAR) {
@@ -100,6 +111,13 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: "danger",
       alertText: action.payload.msg,
+    };
+  }
+
+  if (action.type === HANDLE_CHANGE) {
+    return {
+      ...state,
+      [action.payload.name]: action.payload.value,
     };
   }
 

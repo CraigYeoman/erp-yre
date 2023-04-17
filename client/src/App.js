@@ -7,7 +7,7 @@ import {
   CustomerEditForm,
   CustomerForm,
   CustomerList,
-} from "./components/customer/";
+} from "./components/customer";
 import {
   JobTypeDetail,
   JobTypeEditForm,

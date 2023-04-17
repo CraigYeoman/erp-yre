@@ -1,23 +1,19 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
 import { Box, useTheme, Link, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const PartCategory = () => {
   const theme = useTheme();
-  const { selectPartCategoryID, listType } = useGlobalContext();
-  const [data, setData] = useState([{}]);
+  // const { selectPartCategoryID, listType } = useGlobalContext();
+  const { getData, data, selectPartCategoryID, isLoading } = useAppContext();
 
   useEffect(() => {
-    fetch(`/api/v1/erp/${listType}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      });
+    getData();
   }, []);
 
-  if (!data.partCategories) {
+  if (!data.partCategories || isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}

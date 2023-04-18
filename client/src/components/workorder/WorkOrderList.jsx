@@ -30,13 +30,13 @@ const WorkOrderList = () => {
   // } = useGlobalContext();
 
   const {
-    getData,
+    getWorkOrders,
     data,
     isLoading,
     sumTotal,
     selectWorkOrderID,
     selectCustomerID,
-
+    getDetail,
     clearFilters,
     handleChange,
     sort,
@@ -52,7 +52,7 @@ const WorkOrderList = () => {
   };
 
   useEffect(() => {
-    getData();
+    getWorkOrders();
   }, [sort, complete, jobType]);
 
   if (!data.workOrders) {
@@ -72,7 +72,7 @@ const WorkOrderList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectWorkOrderID(params.row._id)}
+          onClick={() => getDetail(params.row._id, "workorders")}
           to={`/workorderdetail/${params.row._id}`}
         >
           {params.row._id}
@@ -100,7 +100,7 @@ const WorkOrderList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectCustomerID(params.row.customer._id)}
+          onClick={() => getDetail(params.row.customer._id, "customers")}
           to={`/customerdetail/${params.row.customer._id}`}
         >
           {params.row.customer.first_name} {params.row.customer.last_name}

@@ -17,6 +17,7 @@ import {
   UPDATE_USER_ERROR,
   CHANGE_PATH,
   HANDLE_CHANGE,
+  CLEAR_FILTERS,
 } from "./action";
 
 const token = localStorage.getItem("token");
@@ -122,6 +123,21 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const toggleSidebar = () => {
+    dispatch({ type: TOGGLE_SIDEBAR });
+  };
+
+  const updatePath = (path) => {
+    dispatch({ type: CHANGE_PATH, payload: { path } });
+  };
+
+  const handleChange = (e) => {
+    dispatch({
+      type: HANDLE_CHANGE,
+      payload: { name: e.target.name, value: e.target.value },
+    });
+  };
+
   const getData = async () => {
     dispatch({ type: GET_DATA_BEGIN });
 
@@ -134,19 +150,36 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const toggleSidebar = () => {
-    dispatch({ type: TOGGLE_SIDEBAR });
+  const getWorkOrders = async () => {
+    dispatch({ type: GET_DATA_BEGIN });
+
+    const { jobType, complete, sort } = state;
+    const url = `/workorders?jobType=${jobType}&complete=${complete}&sort=${sort}`;
+    try {
+      const { data } = await authFetch(url);
+
+      dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
-  const updatePath = (path) => {
-    dispatch({ type: CHANGE_PATH, payload: { path } });
+  const getDetail = async (id, schema) => {
+    dispatch({ type: GET_DATA_BEGIN });
+
+    const url = `/${schema}/${id}`;
+
+    try {
+      const { data } = await authFetch(url);
+
+      dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
-  const handleChange = ({ name, value }) => {
-    dispatch({
-      type: HANDLE_CHANGE,
-      payload: { name, value },
-    });
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
   };
 
   const logoutUser = () => {
@@ -208,6 +241,9 @@ const AppProvider = ({ children }) => {
         updatePath,
         sumTotal,
         handleChange,
+        getWorkOrders,
+        clearFilters,
+        getDetail,
       }}
     >
       {children}

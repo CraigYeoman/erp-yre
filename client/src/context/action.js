@@ -14,5 +14,6 @@ export const GET_DATA_BEGIN = "GET_DATA_BEGIN";
 export const GET_DATA_SUCCESS = "GET_DATA_SUCCESS";
 export const CHANGE_PATH = "CHANGE_PATH";
 export const HANDLE_CHANGE = "HANDLE_CHANGE";
+export const CLEAR_FILTERS = "CLEAR_FILTERS";
 
 export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR";

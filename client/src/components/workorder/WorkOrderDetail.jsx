@@ -1,13 +1,26 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
 import { Box, useTheme, Link, Button, Typography } from "@mui/material";
 const { DateTime } = require("luxon");
 
 const WorkOrderDetail = () => {
+  // const {
+  //   workOrderDetail,
+  //   loading,
+  //   selectCustomerID,
+  //   onSubmitGet,
+  //   onSubmitPost,
+  //   response,
+  //   responseText,
+  //   selectID,
+  //   sumTotal,
+  //   formatPhoneNumber,
+  // } = useGlobalContext();
+
   const {
-    workOrderDetail,
-    loading,
+    data,
+    isLoading,
     selectCustomerID,
     onSubmitGet,
     onSubmitPost,
@@ -16,10 +29,10 @@ const WorkOrderDetail = () => {
     selectID,
     sumTotal,
     formatPhoneNumber,
-  } = useGlobalContext();
-  const { work_order } = workOrderDetail;
+  } = useAppContext();
+  const { work_order } = data;
   const theme = useTheme();
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}

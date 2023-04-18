@@ -1,4 +1,3 @@
-import { gridDensityValueSelector } from "@mui/x-data-grid";
 import {
   CLEAR_ALERT,
   DISPLAY_ALERT,
@@ -14,6 +13,7 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
+  CLEAR_FILTERS,
 } from "./action";
 import { initialState } from "./appContext";
 
@@ -118,6 +118,15 @@ const reducer = (state, action) => {
     return {
       ...state,
       [action.payload.name]: action.payload.value,
+    };
+  }
+
+  if (action.type === CLEAR_FILTERS) {
+    return {
+      ...state,
+      sort: "date_due",
+      complete: "false",
+      jobType: "all",
     };
   }
 

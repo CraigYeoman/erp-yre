@@ -1,9 +1,7 @@
-import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import {
   Box,
-  useTheme,
   Button,
   TextField,
   InputLabel,
@@ -13,18 +11,26 @@ import {
 } from "@mui/material";
 import Header from "../Header";
 import Response from "../Response";
-const rootUrl = "http://localhost:5000";
 
 const PartForm = () => {
   useEffect(() => {
-    fetch("/api/v1/erp/parts/create")
-      .then((response) => response.json())
-      .then((data) => {
-        setPartInfo(data);
-      });
+    editFormLoad();
+    getFormData("parts");
   }, []);
 
-  const { loading, selectPartID } = useGlobalContext();
+  const {
+    isLoading,
+    getDetail,
+    onSubmitPost,
+    formData,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+    getFormData,
+  } = useAppContext();
+
   const [values, setValues] = useState({
     name: "",
     customer_price: "",
@@ -35,21 +41,15 @@ const PartForm = () => {
     manufacture: "",
   });
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
-  const [partInfo, setPartInfo] = useState("");
-  const theme = useTheme();
-
+  const partInfo = formData;
+  console.log(partInfo);
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
+
     const {
       name,
       customer_price,
@@ -69,37 +69,20 @@ const PartForm = () => {
       manufacture,
     };
 
-    try {
-      const url = `${rootUrl}/api/v1/erp/parts/create`;
-      console.log(partData);
-      axios
-        .post(url, partData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
+    onSubmitPost(partData, "parts", "", "create");
 
-      setValues({
-        name: "",
-        customer_price: "",
-        cost: "",
-        part_number: "",
-        vendor: "",
-        partCategory: "",
-        manufacture: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    setValues({
+      name: "",
+      customer_price: "",
+      cost: "",
+      part_number: "",
+      vendor: "",
+      partCategory: "",
+      manufacture: "",
+    });
   };
-  if (loading) {
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -225,11 +208,12 @@ const PartForm = () => {
       <Response
         response={response}
         responseText={responseText}
-        selectFunction={selectPartID}
+        selectFunction={getDetail}
         item="part"
         path={"partdetail"}
         responseError={responseError}
         responseTextError={responseTextError}
+        schema={"parts"}
       />
     </Box>
   );

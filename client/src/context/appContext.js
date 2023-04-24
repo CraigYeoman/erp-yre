@@ -224,9 +224,9 @@ const AppProvider = ({ children }) => {
         const url = `/${schema}/${id}/${action}`;
         const { data } = await authFetch.post(url, post);
         dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
-      } else {
+      } else if (action === "create") {
         const url = `/${schema}/${action}`;
-        const { data } = await authFetch(url, post).post;
+        const { data } = await authFetch.post(url, post);
         dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
       }
     } catch (error) {

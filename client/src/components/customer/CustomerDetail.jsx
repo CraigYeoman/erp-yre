@@ -44,6 +44,7 @@ const CustomerDetail = () => {
   console.log(response.text);
   const { customer, customer_workorders } = data;
 
+  console.log(customer_workorders);
   const {
     _id,
     first_name,
@@ -90,11 +91,7 @@ const CustomerDetail = () => {
         </Button>
         {deleteCustomer && (
           <Box>
-            {customer_workorders ? (
-              <Box mt="10px">
-                Please do not delete customers with work orders.
-              </Box>
-            ) : (
+            {customer_workorders.length === 0 ? (
               <Box mt="15px">
                 Are you sure you want to delete?
                 <Button
@@ -106,6 +103,10 @@ const CustomerDetail = () => {
                 >
                   Delete
                 </Button>
+              </Box>
+            ) : (
+              <Box mt="10px">
+                Please do not delete customers with work orders.
               </Box>
             )}
           </Box>

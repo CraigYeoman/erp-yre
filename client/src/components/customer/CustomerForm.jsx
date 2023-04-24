@@ -1,13 +1,20 @@
-import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import Header from "../Header";
 import Response from "../Response";
-const rootUrl = "http://localhost:5000";
 
 const CustomerForm = () => {
-  const { loading, selectCustomerID } = useGlobalContext();
+  const {
+    isLoading,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+  } = useAppContext();
+
   const [values, setValues] = useState({
     first_name: "",
     last_name: "",
@@ -20,18 +27,12 @@ const CustomerForm = () => {
     zip_code: "",
   });
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
     const {
       first_name,
       last_name,
@@ -54,38 +55,22 @@ const CustomerForm = () => {
       state,
       zip_code,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/customers/create`;
-      axios
-        .post(url, customerData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
+    onSubmitPost(customerData, "customers", "", "create");
 
-      setValues({
-        first_name: "",
-        last_name: "",
-        phone_number: "",
-        email: "",
-        address_line_1: "",
-        address_line_2: "",
-        city: "",
-        state: "",
-        zip_code: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    setValues({
+      first_name: "",
+      last_name: "",
+      phone_number: "",
+      email: "",
+      address_line_1: "",
+      address_line_2: "",
+      city: "",
+      state: "",
+      zip_code: "",
+    });
   };
-  if (loading) {
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -194,11 +179,12 @@ const CustomerForm = () => {
       <Response
         response={response}
         responseText={responseText}
-        selectFunction={selectCustomerID}
+        selectFunction={getDetail}
         item="customer"
         path={"customerdetail"}
         responseError={responseError}
         responseTextError={responseTextError}
+        schema={"customers"}
       />
     </Box>
   );

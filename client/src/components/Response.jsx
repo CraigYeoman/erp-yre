@@ -9,6 +9,7 @@ const Response = ({
   path,
   responseError,
   responseTextError,
+  schema,
 }) => {
   const theme = useTheme();
 
@@ -26,7 +27,7 @@ const Response = ({
             <Link
               component={RouterLink}
               color="inherit"
-              onClick={() => selectFunction(responseText[item]._id)}
+              onClick={() => selectFunction(responseText[item]._id, schema)}
               to={`/${path}/${responseText[item]._id}`}
             >
               {responseText[item].name ||

@@ -1,7 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
-import { useState } from "react";
+import { useAppContext } from "../../context/appContext";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,11 +10,26 @@ import {
   Link,
 } from "@mui/material";
 import Header from "../Header";
-const rootUrl = "http://localhost:5000";
 
 const VendorEditForm = () => {
-  const { loading, selectVendorID, vendorDetail, formatPhoneNumber } =
-    useGlobalContext();
+  const {
+    isLoading,
+    data,
+    getDetail,
+    formatPhoneNumber,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+  } = useAppContext();
+
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const vendorDetail = data;
   const [values, setValues] = useState({
     name: vendorDetail.vendor.name,
     main_contact: vendorDetail.vendor.main_contact,
@@ -30,18 +44,13 @@ const VendorEditForm = () => {
     _id: vendorDetail.vendor._id,
   });
   const theme = useTheme();
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
     const {
       name,
       main_contact,
@@ -68,39 +77,11 @@ const VendorEditForm = () => {
       customer_number,
       _id,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/vendors/${_id}/edit`;
-      axios
-        .post(url, vendorData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
 
-      setValues({
-        name: "",
-        main_contact: "",
-        phone_number: "",
-        email: "",
-        address_line_1: "",
-        address_line_2: "",
-        city: "",
-        state: "",
-        zip_code: "",
-        customer_number: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(vendorData, "vendors", _id, "edit");
   };
-  if (loading) {
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -289,7 +270,7 @@ const VendorEditForm = () => {
                 <Link
                   component={RouterLink}
                   color="inherit"
-                  onClick={() => selectVendorID(responseText.vendor._id)}
+                  onClick={() => getDetail(responseText.vendor._id, "vendors")}
                   to={`/vendordetail/${responseText.vendor._id}`}
                 >
                   <p>{responseText.vendor.name}</p>
@@ -310,7 +291,7 @@ const VendorEditForm = () => {
       )}
       {responseError && (
         <div>
-          <p>{responseTextError.vendor.name} not created</p>
+          <p>{responseTextError.vendor.name} not updated</p>
           {responseTextError.errors.map((error) => {
             const { msg, param, value } = error;
             return (

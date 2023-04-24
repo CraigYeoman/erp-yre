@@ -1,6 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
@@ -34,67 +34,85 @@ const { DateTime } = require("luxon");
 
 const WorkOrderForm = () => {
   useEffect(() => {
+    editFormLoad();
     setCustomerParts([]);
     setCustomerLabor([]);
-    setLoading(true);
-    fetch(`/api/v1/erp/workorders/${id}/edit`)
-      .then((response) => response.json())
-      .then((data) => {
-        setWorkOrderDetail(data);
-        setValues({
-          customer: data.work_order.customer._id,
-          date_received: DateTime.fromISO(
-            data.work_order.date_received
-          ).toISODate(),
-          date_due: DateTime.fromISO(data.work_order.date_due).toISODate(),
-          part_number: data.work_order.part_number,
-          jobtype: data.work_order.jobType._id,
-          parts: data.work_order.parts,
-          labor: data.work_order.labor,
-          notes: data.work_order.notes,
-          work_order_number: data.work_order.work_order_number,
-          _id: data.work_order._id,
-        });
-        setCustomerParts(data.work_order.parts);
-        setCustomerLabor(data.work_order.labor);
-        checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
-        console.log(customerAccessories);
-        setLoading(false);
-      });
+    // setLoading(true);
+    // fetch(`/api/v1/erp/workorders/${id}/edit`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setWorkOrderDetail(data);
+    //     setValues({
+    //       customer: data.work_order.customer._id,
+    //       date_received: DateTime.fromISO(
+    //         data.work_order.date_received
+    //       ).toISODate(),
+    //       date_due: DateTime.fromISO(data.work_order.date_due).toISODate(),
+    //       part_number: data.work_order.part_number,
+    //       jobtype: data.work_order.jobType._id,
+    //       parts: data.work_order.parts,
+    //       labor: data.work_order.labor,
+    //       notes: data.work_order.notes,
+    //       work_order_number: data.work_order.work_order_number,
+    //       _id: data.work_order._id,
+    //     });
+    setCustomerParts(data.work_order.parts);
+    setCustomerLabor(data.work_order.labor);
+    checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
+    console.log(customerAccessories);
+    // setLoading(false);
+    // });
   }, []);
 
+  const {
+    isLoading,
+    data,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+    formData,
+    sumTotal,
+  } = useAppContext();
+
   const [customerAccessories, setCustomerAccessories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [customerParts, setCustomerParts] = useState([]);
+  const [customerLabor, setCustomerLabor] = useState([]);
+
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState("");
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
-  const [workOrderDetail, setWorkOrderDetail] = useState("");
-  const {
-    selectWorkOrderID,
-    id,
-    deleteItem,
-    sumTotal,
-    customerParts,
-    setCustomerParts,
-    customerLabor,
-    setCustomerLabor,
-    handleChangeArray,
-  } = useGlobalContext();
+
+  const workOrderDetail = data;
+  const workOrderInfo = formData;
+  // const {
+  //   selectWorkOrderID,
+  //   id,
+  //   deleteItem,
+  //   sumTotal,
+  //   customerParts,
+  //   setCustomerParts,
+  //   customerLabor,
+  //   setCustomerLabor,
+  //   handleChangeArray,
+  // } = useGlobalContext();
+
   const [values, setValues] = useState({
-    customer: "",
-    date_received: "",
-    date_due: "",
-    part_number: "",
-    jobtype: "",
-    parts: "",
-    labor: "",
-    notes: "",
-    work_order_number: "",
-    _id: "",
+    customer: workOrderDetail.work_order.customer._id,
+    date_received: DateTime.fromISO(
+      workOrderDetail.work_order.date_received
+    ).toISODate(),
+    date_due: DateTime.fromISO(workOrderDetail.work_order.date_due).toISODate(),
+    part_number: workOrderDetail.work_order.part_number,
+    jobtype: workOrderDetail.work_order.jobType._id,
+    parts: workOrderDetail.work_order.parts,
+    labor: workOrderDetail.work_order.labor,
+    notes: workOrderDetail.work_order.notes,
+    work_order_number: workOrderDetail.work_order.work_order_number,
+    _id: workOrderDetail.work_order._id,
   });
 
   const handleChange = (e) => {
@@ -109,6 +127,17 @@ const WorkOrderForm = () => {
       const updatedValues = array.filter((a) => a !== info);
       func(updatedValues);
     }
+  };
+
+  const deleteItem = (id, array, func) => {
+    const updatedValues = array.filter((a) => a._id !== id);
+    func(updatedValues);
+  };
+
+  const handleChangeArray = (array, func, info) => {
+    const updatedValues = [...array, info];
+    func(updatedValues);
+    console.log(updatedValues);
   };
 
   const handleClick = (index) => {
@@ -126,8 +155,7 @@ const WorkOrderForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
+
     const {
       customer,
       date_received,
@@ -152,28 +180,28 @@ const WorkOrderForm = () => {
       notes,
       _id,
     };
-
-    try {
-      const url = `${rootUrl}/api/v1/erp/workorders/${_id}/edit`;
-      axios
-        .post(url, workOrderData)
-        .then((response) => {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch((error) => {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(workOrderData, "workorders", _id, "edit");
+    // try {
+    //   const url = `${rootUrl}/api/v1/erp/workorders/${_id}/edit`;
+    //   axios
+    //     .post(url, workOrderData)
+    //     .then((response) => {
+    //       setResponseText(response.data);
+    //       setResponse(true);
+    //     })
+    //     .catch((error) => {
+    //       setResponseTextError(error.response.data);
+    //       console.log(error.response.data);
+    //       setResponseError(true);
+    //     });
+    // } catch (error) {
+    //   setResponseTextError(error);
+    //   console.log(error);
+    //   setResponseError(true);
+    // }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -271,7 +299,7 @@ const WorkOrderForm = () => {
               <option value={workOrderDetail.work_order.jobType._id}>
                 {workOrderDetail.work_order.jobType.name}
               </option>
-              {(workOrderDetail.jobtypes || [])
+              {(workOrderInfo.jobtypes || [])
                 .sort((a, b) => {
                   let textA = a.name.toUpperCase();
                   let textB = b.name.toUpperCase();
@@ -289,7 +317,7 @@ const WorkOrderForm = () => {
                 })}
             </NativeSelect>
           </FormControl>
-          {workOrderDetail.partsCategory && (
+          {workOrderInfo.partsCategory && (
             <List
               sx={{
                 width: "100%",
@@ -314,7 +342,7 @@ const WorkOrderForm = () => {
                 </ListSubheader>
               }
             >
-              {workOrderDetail.partsCategory.map((category) => {
+              {workOrderInfo.partsCategory.map((category) => {
                 return (
                   <>
                     <ListItemButton
@@ -333,7 +361,7 @@ const WorkOrderForm = () => {
                       unmountOnExit
                     >
                       <List component="div" disablePadding>
-                        {workOrderDetail.parts
+                        {workOrderInfo.parts
                           .filter(
                             ({ partCategory }) => partCategory === category._id
                           )
@@ -438,7 +466,7 @@ const WorkOrderForm = () => {
             </Typography>
           </Box>
 
-          {workOrderDetail.laborCategory && (
+          {workOrderInfo.laborCategory && (
             <List
               sx={{
                 width: "100%",
@@ -463,7 +491,7 @@ const WorkOrderForm = () => {
                 </ListSubheader>
               }
             >
-              {workOrderDetail.laborCategory.map((category) => {
+              {workOrderInfo.laborCategory.map((category) => {
                 return (
                   <>
                     <ListItemButton
@@ -482,7 +510,7 @@ const WorkOrderForm = () => {
                       unmountOnExit
                     >
                       <List component="div" disablePadding>
-                        {workOrderDetail.labors
+                        {workOrderInfo.labors
                           .filter(
                             ({ laborCategory }) =>
                               laborCategory === category._id
@@ -563,7 +591,7 @@ const WorkOrderForm = () => {
           >
             <FormLabel component="legend">Customer Accessories</FormLabel>
             <FormGroup>
-              {(workOrderDetail.accessories || [])
+              {(workOrderInfo.accessories || [])
                 .sort((a, b) => {
                   let textA = a.name.toUpperCase();
                   let textB = b.name.toUpperCase();
@@ -615,7 +643,7 @@ const WorkOrderForm = () => {
           <Link
             component={RouterLink}
             color="inherit"
-            onClick={() => selectWorkOrderID(responseText.workOrder._id)}
+            onClick={() => getDetail(responseText.workOrder._id, "workorders")}
             to={`/workorderdetail/${responseText.workOrder._id}`}
           >
             {responseText.workOrder.work_order_number}

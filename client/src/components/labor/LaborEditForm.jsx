@@ -1,6 +1,5 @@
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -14,29 +13,35 @@ import {
   NativeSelect,
 } from "@mui/material";
 import Header from "../Header";
-const rootUrl = "http://localhost:5000";
 
 const LaborEditForm = () => {
   useEffect(() => {
-    fetch("/api/v1/erp/labor/create")
-      .then((response) => response.json())
-      .then((data) => {
-        setLaborInfo(data);
-      });
+    editFormLoad();
   }, []);
 
+  const {
+    isLoading,
+    data,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+    formData,
+  } = useAppContext();
+
   const theme = useTheme();
-  const { loading, selectLaborID, laborDetail } = useGlobalContext();
+  const laborDetail = data.labor_detail;
+  const laborInfo = formData;
+
   const [values, setValues] = useState({
     name: laborDetail.name,
     price: laborDetail.price,
     _id: laborDetail._id,
     laborCategory: laborDetail.laborCategory._id,
   });
-  const [laborInfo, setLaborInfo] = useState("");
-
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -44,26 +49,25 @@ const LaborEditForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
     const { name, price, _id, laborCategory } = values;
     const laborData = { name, price, _id, laborCategory };
-
-    try {
-      const url = `${rootUrl}/api/v1/erp/labor/${laborDetail._id}/edit`;
-      axios
-        .post(url, laborData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseText(error.response.data.msg.message);
-        });
-    } catch (error) {
-      loading(false);
-    }
+    onSubmitPost(laborData, "labor", _id, "edit");
+    //   try {
+    //     const url = `${rootUrl}/api/v1/erp/labor/${laborDetail._id}/edit`;
+    //     axios
+    //       .post(url, laborData)
+    //       .then(function (response) {
+    //         setResponseText(response.data);
+    //         setResponse(true);
+    //       })
+    //       .catch(function (error) {
+    //         setResponseText(error.response.data.msg.message);
+    //       });
+    //   } catch (error) {
+    //     loading(false);
+    //   }
   };
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -208,7 +212,7 @@ const LaborEditForm = () => {
                   <Link
                     component={RouterLink}
                     color="inherit"
-                    onClick={() => selectLaborID(responseText.labor._id)}
+                    onClick={() => getDetail(responseText.labor._id, "labor")}
                     to={`/labordetail/${responseText.labor._id}`}
                   >
                     {responseText.labor.name}
@@ -219,6 +223,19 @@ const LaborEditForm = () => {
               </Box>
             </Box>
           </Box>
+        </Box>
+      )}
+      {responseError && (
+        <Box>
+          <p>{responseTextError.labor.name} not updated</p>
+          {responseTextError.errors.map((error) => {
+            const { msg, param, value } = error;
+            return (
+              <p key={error.value}>
+                {msg} in {param} value {value}
+              </p>
+            );
+          })}
         </Box>
       )}
     </Box>

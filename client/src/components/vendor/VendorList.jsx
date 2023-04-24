@@ -11,7 +11,7 @@ const VendorList = () => {
 
   const theme = useTheme();
 
-  const { getData, data, isLoading, formatPhoneNumber, selectVendorID } =
+  const { getData, data, isLoading, formatPhoneNumber, getDetail } =
     useAppContext();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const VendorList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectVendorID(params.row._id)}
+          onClick={() => getDetail(params.row._id, "vendors")}
           to={`/vendordetail/${params.row._id}`}
         >
           {params.row._id}

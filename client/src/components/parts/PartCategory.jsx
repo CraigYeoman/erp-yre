@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 const PartCategory = () => {
   const theme = useTheme();
   // const { selectPartCategoryID, listType } = useGlobalContext();
-  const { getData, data, selectPartCategoryID, isLoading } = useAppContext();
+  const { getData, data, selectPartCategoryID, isLoading, getDetail } =
+    useAppContext();
 
   useEffect(() => {
     getData();
@@ -43,7 +44,7 @@ const PartCategory = () => {
                 component={RouterLink}
                 color="inherit"
                 underline="none"
-                onClick={() => selectPartCategoryID(_id)}
+                onClick={() => getDetail(_id, "partcategory")}
                 to={`/partcategorydetail/${_id}`}
               >
                 {name}

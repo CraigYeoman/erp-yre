@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 const LaborCategory = () => {
   const theme = useTheme();
 
-  const { getData, data, isLoading, selectLaborCategoryID } = useAppContext();
+  const { getData, data, isLoading, getDetail } = useAppContext();
 
   useEffect(() => {
     getData();
@@ -43,7 +43,7 @@ const LaborCategory = () => {
                 component={RouterLink}
                 color="inherit"
                 underline="none"
-                onClick={() => selectLaborCategoryID(_id)}
+                onClick={() => getDetail(_id, "laborcategory")}
                 to={`/laborcategorydetail/${_id}`}
               >
                 {name}

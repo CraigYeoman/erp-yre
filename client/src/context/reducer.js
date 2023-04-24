@@ -14,6 +14,12 @@ import {
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
   CLEAR_FILTERS,
+  POST_DATA_BEGIN,
+  POST_DATA_SUCCESS,
+  POST_DATA_ERROR,
+  EDIT_FORM_LOAD,
+  GET_FORM_DATA_BEGIN,
+  GET_FORM_DATA_SUCCESS,
 } from "./action";
 import { initialState } from "./appContext";
 
@@ -77,8 +83,38 @@ const reducer = (state, action) => {
     return { ...state, isLoading: false, data: action.payload.data };
   }
 
+  if (action.type === POST_DATA_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+      showAlert: false,
+      response: false,
+      responseText: "",
+      responseError: false,
+      responseTextError: "",
+    };
+  }
+
+  if (action.type === POST_DATA_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      responseText: action.payload.data,
+      response: true,
+    };
+  }
+
+  if (action.type === POST_DATA_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      responseTextError: action.payload.data,
+      responseError: true,
+    };
+  }
+
   if (action.type === CHANGE_PATH) {
-    return { ...state, url: action.payload.path };
+    return { ...state, path: action.payload.path };
   }
 
   if (action.type === TOGGLE_SIDEBAR) {
@@ -127,6 +163,32 @@ const reducer = (state, action) => {
       sort: "date_due",
       complete: "false",
       jobType: "all",
+    };
+  }
+
+  if (action.type === EDIT_FORM_LOAD) {
+    return {
+      ...state,
+      showAlert: false,
+      response: false,
+      responseText: "",
+      responseError: false,
+      responseTextError: "",
+    };
+  }
+
+  if (action.type === GET_FORM_DATA_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+      formData: "",
+    };
+  }
+  if (action.type === GET_FORM_DATA_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      formData: action.payload.data,
     };
   }
 

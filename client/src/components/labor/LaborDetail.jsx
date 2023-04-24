@@ -1,6 +1,7 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
+import { useEffect, useState } from "react";
 import {
   Box,
   useTheme,
@@ -12,20 +13,28 @@ import {
 } from "@mui/material";
 
 const LaborDetail = () => {
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const [deleteLabor, setDeleteLabor] = useState(false);
+
   const theme = useTheme();
 
   const {
-    laborDetail,
-    loading,
-    selectWorkOrderID,
-    onSubmitGet,
+    data,
+    isLoading,
     onSubmitPost,
     response,
     responseText,
-    selectLaborID,
-  } = useGlobalContext();
+    getDetail,
+    getFormData,
+    editFormLoad,
+    responseError,
+    responseErrorText,
+  } = useAppContext();
 
-  if (loading) {
+  if (isLoading || !data) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
@@ -33,12 +42,12 @@ const LaborDetail = () => {
     );
   }
 
-  const { name, price, _id, laborCategory } = laborDetail;
+  const { name, price, _id, laborCategory } = data.labor_detail;
 
   return (
     <Box m="1.5rem 2.5rem">
       <Header title={"Labor Detail"} subtitle={""} />
-      <Box component="span" Cx={{ display: "inline-block", mx: "2px" }}>
+      <Box component="span" sx={{ display: "inline-block", mx: "2px" }}>
         <Card
           variant="outlined"
           sx={{
@@ -47,7 +56,7 @@ const LaborDetail = () => {
             marginBottom: "15px",
           }}
         >
-          <CardContent display>
+          <CardContent>
             <Typography
               sx={{ marginBottom: "5px" }}
               variant="h5"
@@ -80,7 +89,10 @@ const LaborDetail = () => {
             component={RouterLink}
             color="inherit"
             underline="none"
-            onClick={() => selectLaborID(_id)}
+            onClick={() => {
+              getDetail(_id, "labor");
+              getFormData("parts");
+            }}
             to={`/laboredit/${_id}`}
           >
             Edit
@@ -88,45 +100,27 @@ const LaborDetail = () => {
         </Button>
         <Button
           variant="contained"
-          onClick={() => onSubmitGet(_id, "labor")}
+          onClick={() => setDeleteLabor(true)}
           sx={{ marginLeft: "15px" }}
         >
           Delete
         </Button>
       </Box>
 
-      {response && typeof responseText.labor_work_orders === "undefined" ? (
+      {deleteLabor && (
         <Box mt="15px">
           Are you sure you want to delete?
           <Button
             variant="contained"
-            onClick={() => onSubmitPost(_id, "labor")}
+            onClick={() => onSubmitPost("", "labor", _id, "delete-post")}
             sx={{ marginLeft: "15px" }}
           >
             Delete
           </Button>
         </Box>
-      ) : (
-        <div>
-          {response &&
-            responseText.labor_work_orders.map((workOrder) => {
-              return (
-                <Box mt="15px">
-                  Please edit the following work order before deleting
-                  <Link
-                    component={RouterLink}
-                    onClick={() => selectWorkOrderID(workOrder._id)}
-                    to={`/workorderdetail/${workOrder._id}`}
-                    key={workOrder._id}
-                  >
-                    {workOrder.work_order_number}
-                  </Link>
-                </Box>
-              );
-            })}
-        </div>
       )}
-      {responseText === "Complete" && "Deleted"}
+      {response && <Box>{responseText.msg}</Box>}
+      {responseError && <Box>{responseErrorText.msg}</Box>}
     </Box>
   );
 };

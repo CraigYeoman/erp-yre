@@ -7,12 +7,7 @@ import FlexBetween from "./FlexBetween";
 const { DateTime } = require("luxon");
 
 const IndexGrid = ({ name, data }) => {
-  const {
-    selectWorkOrderID,
-    selectCustomerID,
-    // sumTotal,
-    loading,
-  } = useAppContext();
+  const { loading, getDetail } = useAppContext();
 
   const theme = useTheme();
 
@@ -33,7 +28,7 @@ const IndexGrid = ({ name, data }) => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectWorkOrderID(params.row._id)}
+          onClick={() => getDetail(params.row._id, "workorders")}
           to={`/workorderdetail/${params.row._id}`}
         >
           {params.row.work_order_number}
@@ -72,7 +67,7 @@ const IndexGrid = ({ name, data }) => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectCustomerID(params.row.customer._id)}
+          onClick={() => getDetail(params.row.customer._id, "customers")}
           to={`/customerdetail/${params.row.customer._id}`}
         >
           {params.row.customer.first_name} {params.row.customer.last_name}

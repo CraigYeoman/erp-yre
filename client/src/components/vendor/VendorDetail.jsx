@@ -1,6 +1,7 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
+import { useEffect, useState } from "react";
 import {
   Box,
   useTheme,
@@ -12,26 +13,34 @@ import {
 } from "@mui/material";
 
 const VendorDetail = () => {
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const [deleteVendor, setDeleteVendor] = useState(false);
+
   const theme = useTheme();
   const {
-    vendorDetail,
-    loading,
-    selectPartID,
-    onSubmitGet,
+    data,
+    isLoading,
+    getDetail,
     onSubmitPost,
     response,
     responseText,
-    selectVendorID,
     formatPhoneNumber,
-  } = useGlobalContext();
-  if (loading) {
+    editFormLoad,
+    responseError,
+    responseErrorText,
+  } = useAppContext();
+
+  if (isLoading || !data.vendor) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
       </section>
     );
   }
-
+  console.log(data);
   const {
     _id,
     main_contact,
@@ -44,7 +53,7 @@ const VendorDetail = () => {
     state,
     zip_code,
     customer_number,
-  } = vendorDetail.vendor;
+  } = data.vendor;
   return (
     <Box m="1.5rem 2.5rem">
       <Header title={"Vendor"} subtitle={name} />
@@ -64,8 +73,8 @@ const VendorDetail = () => {
             component={RouterLink}
             color="inherit"
             underline="none"
-            onClick={() => selectVendorID(_id)}
-            to={`/vendoredit/${_id}`}
+            onClick={() => getDetail(_id, "vendors")}
+            to={`/vendoreditform/${_id}`}
           >
             Edit
           </Link>
@@ -73,31 +82,33 @@ const VendorDetail = () => {
         <Button
           variant="contained"
           component={RouterLink}
-          onClick={() => onSubmitGet(_id, "vendors")}
+          onClick={() => setDeleteVendor(true)}
           sx={{ marginLeft: "15px" }}
         >
           Delete
         </Button>
-        {response && typeof responseText.vendor_parts === "undefined" ? (
-          <Box mt="15px">
-            Are you sure you want to delete?
-            <Button
-              variant="contained"
-              component={RouterLink}
-              onClick={() => onSubmitPost(_id, "vendors")}
-              sx={{ marginLeft: "15px" }}
-            >
-              Delete
-            </Button>
-          </Box>
-        ) : (
+        {deleteVendor && (
           <Box>
-            {response && (
-              <Box mt="10px"> Please edit the parts below before deleting</Box>
+            {data.vendor_parts ? (
+              <Box mt="10px">Please do not delete vendors with parts.</Box>
+            ) : (
+              <Box mt="15px">
+                Are you sure you want to delete?
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    onSubmitPost("", "vendors", _id, "delete-post")
+                  }
+                  sx={{ marginLeft: "15px" }}
+                >
+                  Delete
+                </Button>
+              </Box>
             )}
           </Box>
         )}
-        {responseText === "Complete" && "Deleted"}
+        {response && <Box>{responseText.msg}</Box>}
+        {responseError && <Box>{responseErrorText.msg}</Box>}
       </Box>
       <Box mt="15px">
         <Typography
@@ -107,7 +118,7 @@ const VendorDetail = () => {
         >
           Parts
         </Typography>
-        {vendorDetail.vendor_parts.map((part) => {
+        {data.vendor_parts.map((part) => {
           const { _id, name, customer_price, cost, part_number, manufacture } =
             part;
           return (
@@ -123,7 +134,7 @@ const VendorDetail = () => {
                 <Link
                   component={RouterLink}
                   color="inherit"
-                  onClick={() => selectPartID(_id)}
+                  onClick={() => getDetail(_id, "parts")}
                   to={`/partdetail/${_id}`}
                 >
                   {name}

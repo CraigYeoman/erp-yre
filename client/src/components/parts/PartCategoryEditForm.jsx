@@ -1,7 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
-import { useState } from "react";
+import { useAppContext } from "../../context/appContext";
+import { useEffect, useState } from "react";
 import Header from "../Header";
 import {
   Box,
@@ -11,20 +10,34 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-const rootUrl = "http://localhost:5000";
 
 const PartCategoryEditForm = () => {
-  const { loading, selectPartCategoryID, partCategoryDetail } =
-    useGlobalContext();
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const {
+    isLoading,
+    data,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+  } = useAppContext();
+
+  // const { loading, selectPartCategoryID, partCategoryDetail } =
+  //   useGlobalContext();
+  const partCategoryDetail = data.part_category_detail;
+
   const [values, setValues] = useState({
     name: partCategoryDetail.name,
     _id: partCategoryDetail._id,
   });
+
   const theme = useTheme();
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -32,39 +45,17 @@ const PartCategoryEditForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
 
     const { name, _id } = values;
     const partCategoryData = {
       name,
       _id,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/partcategory/${partCategoryDetail._id}/edit`;
-      axios
-        .post(url, partCategoryData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
 
-      setValues({
-        name: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(partCategoryData, "partcategory", _id, "edit");
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -160,7 +151,7 @@ const PartCategoryEditForm = () => {
                     component={RouterLink}
                     color="inherit"
                     onClick={() =>
-                      selectPartCategoryID(responseText.partcategory._id)
+                      getDetail(responseText.partcategory._id, "partcategory")
                     }
                     to={`/partcategorydetail/${responseText.partcategory._id}`}
                   >

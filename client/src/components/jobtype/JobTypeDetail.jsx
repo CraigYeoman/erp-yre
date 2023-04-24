@@ -1,23 +1,32 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
+import { useEffect, useState } from "react";
 import { Box, useTheme, Link, Button, Typography } from "@mui/material";
+import IndexGrid from "../IndexGrid";
 
 const JobTypeDetail = () => {
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
   const theme = useTheme();
 
+  const [deleteJobType, setDeleteJobType] = useState(false);
+
   const {
-    jobTypeDetail,
-    loading,
-    onSubmitGet,
+    data,
+    isLoading,
     onSubmitPost,
     response,
     responseText,
-    selectWorkOrderID,
-    selectJobTypeID,
-  } = useGlobalContext();
+    editFormLoad,
+    getDetail,
+    responseError,
+    responseErrorText,
+  } = useAppContext();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
@@ -25,73 +34,68 @@ const JobTypeDetail = () => {
     );
   }
 
-  const { name, _id } = jobTypeDetail;
+  const { name, _id } = data.job_type_detail;
 
   return (
-    <Box m="1.5rem 2.5rem">
-      <Header title={"Job Type"} subtitle={"Detail"} />
-      <Box mt="15px">
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          color={theme.palette.secondary[100]}
-        >
-          {name}
-        </Typography>
-      </Box>
-      <Box mt="15px">
-        <Button variant="contained">
-          <Link
-            component={RouterLink}
-            color="inherit"
-            underline="none"
-            onClick={() => selectJobTypeID(_id)}
-            to={`/jobtypeedit/${_id}`}
-          >
-            Edit
-          </Link>
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => onSubmitGet(_id, "customers")}
-          sx={{ marginLeft: "15px" }}
-        >
-          Delete
-        </Button>
-      </Box>
-
-      {response && typeof responseText.job_type_work_orders === "undefined" ? (
+    <Box>
+      <Box m="1.5rem 2.5rem">
+        <Header title={"Job Type"} subtitle={"Detail"} />
         <Box mt="15px">
-          Are you sure you want to delete?
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            color={theme.palette.secondary[100]}
+          >
+            {name}
+          </Typography>
+        </Box>
+        <Box mt="15px">
+          <Button variant="contained">
+            <Link
+              component={RouterLink}
+              color="inherit"
+              underline="none"
+              onClick={() => getDetail(_id, "jobtypes")}
+              to={`/jobtypeeditform/${_id}`}
+            >
+              Edit
+            </Link>
+          </Button>
           <Button
             variant="contained"
-            onClick={() => onSubmitGet(_id, "jobtypes")}
+            onClick={() => setDeleteJobType(true)}
             sx={{ marginLeft: "15px" }}
           >
             Delete
           </Button>
         </Box>
-      ) : (
-        <div>
-          {response &&
-            responseText.job_type_work_orders.map((workOrder) => {
-              return (
-                <Box mt="15px">
-                  Please edit the following work order before deleting{" "}
-                  <Link
-                    component={RouterLink}
-                    onClick={() => selectWorkOrderID(workOrder._id)}
-                    to={`/workorderdetail/${workOrder._id}`}
-                    key={workOrder._id}
-                  >
-                    {workOrder.work_order_number}
-                  </Link>
-                </Box>
-              );
-            })}
-        </div>
-      )}
-      {responseText === "Complete" && "Deleted"}
+
+        {deleteJobType && (
+          <Box>
+            {data.job_type_workorders ? (
+              <Box mt="10px">
+                Please do not delete job type with work orders.
+              </Box>
+            ) : (
+              <Box mt="15px">
+                Are you sure you want to delete?
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    onSubmitPost("", "jobtypes", _id, "delete-post")
+                  }
+                  sx={{ marginLeft: "15px" }}
+                >
+                  Delete
+                </Button>
+              </Box>
+            )}
+          </Box>
+        )}
+        {response && <Box>{responseText.msg}</Box>}
+        {responseError && <Box>{responseErrorText.msg}</Box>}
+      </Box>
+      <IndexGrid name={""} data={data.job_type_workorders} />
     </Box>
   );
 };

@@ -11,6 +11,8 @@ import {
   LOGOUT_USER,
   GET_DATA_BEGIN,
   GET_DATA_SUCCESS,
+  POST_DATA_BEGIN,
+  POST_DATA_SUCCESS,
   TOGGLE_SIDEBAR,
   UPDATE_USER_BEGIN,
   UPDATE_USER_SUCCESS,
@@ -18,10 +20,14 @@ import {
   CHANGE_PATH,
   HANDLE_CHANGE,
   CLEAR_FILTERS,
+  EDIT_FORM_LOAD,
+  GET_FORM_DATA_BEGIN,
+  GET_FORM_DATA_SUCCESS,
 } from "./action";
 
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
+const path = localStorage.getItem("path");
 
 const initialState = {
   isLoading: false,
@@ -34,10 +40,14 @@ const initialState = {
   rootUrl: "http://localhost:5000",
   data: [{}],
   showSideBar: true,
-  url: "/workorders/index",
+  path: path ? JSON.parse(path) : "/workorders/index",
   sort: "date_due",
   complete: "false",
   jobType: "all",
+  response: false,
+  responseText: "",
+  responseError: false,
+  responseTextError: "",
 };
 
 const AppContext = React.createContext();
@@ -94,6 +104,7 @@ const AppProvider = ({ children }) => {
   const removeUserFromLocalStorage = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("path");
   };
 
   const setupUser = async ({ currentUser, endPoint, alertText }) => {
@@ -129,6 +140,7 @@ const AppProvider = ({ children }) => {
 
   const updatePath = (path) => {
     dispatch({ type: CHANGE_PATH, payload: { path } });
+    localStorage.setItem("path", JSON.stringify(path));
   };
 
   const handleChange = (e) => {
@@ -142,7 +154,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: GET_DATA_BEGIN });
 
     try {
-      const { data } = await authFetch(state.url);
+      const { data } = await authFetch(state.path);
 
       dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
@@ -178,8 +190,48 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const getFormData = async (schema) => {
+    dispatch({ type: GET_FORM_DATA_BEGIN });
+
+    const url = `/${schema}/create`;
+
+    try {
+      const { data } = await authFetch(url);
+
+      dispatch({ type: GET_FORM_DATA_SUCCESS, payload: { data } });
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   const clearFilters = () => {
     dispatch({ type: CLEAR_FILTERS });
+  };
+
+  const onSubmitPost = async (post, schema, id, action) => {
+    dispatch({ type: POST_DATA_BEGIN });
+
+    try {
+      if (action === "delete-get") {
+        const url = `/${schema}/${id}/delete`;
+        const { data } = await authFetch(url);
+        dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
+      } else if (action === "delete-post") {
+        const url = `/${schema}/${id}/delete`;
+        const { data } = await authFetch.post(url);
+        dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
+      } else if (action === "edit") {
+        const url = `/${schema}/${id}/${action}`;
+        const { data } = await authFetch.post(url, post);
+        dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
+      } else {
+        const url = `/${schema}/${action}`;
+        const { data } = await authFetch(url, post).post;
+        dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   const logoutUser = () => {
@@ -227,6 +279,10 @@ const AppProvider = ({ children }) => {
     return sum;
   };
 
+  const editFormLoad = () => {
+    dispatch({ type: EDIT_FORM_LOAD });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -244,6 +300,9 @@ const AppProvider = ({ children }) => {
         getWorkOrders,
         clearFilters,
         getDetail,
+        onSubmitPost,
+        editFormLoad,
+        getFormData,
       }}
     >
       {children}

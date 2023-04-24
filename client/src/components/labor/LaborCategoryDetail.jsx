@@ -1,28 +1,47 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
+import { useEffect, useState } from "react";
 import Header from "../Header";
 import { Box, Link, Button } from "@mui/material";
 
 const LaborCategoryDetail = () => {
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
   const {
-    laborCategoryDetail,
-    loading,
-    onSubmitGet,
+    data,
+    isLoading,
     onSubmitPost,
     response,
     responseText,
-    selectLaborCategoryID,
-  } = useGlobalContext();
+    getDetail,
+    editFormLoad,
+    responseError,
+    responseErrorText,
+  } = useAppContext();
 
-  if (loading) {
+  // const {
+  //   laborCategoryDetail,
+  //   loading,
+  //   onSubmitGet,
+  //   onSubmitPost,
+  //   response,
+  //   responseText,
+  //   selectLaborCategoryID,
+  // } = useGlobalContext();
+
+  const [deleteCategory, setDeleteCategory] = useState(false);
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
       </section>
     );
   }
-
-  const { name, _id } = laborCategoryDetail;
+  console.log(data);
+  const { name, _id } = data.labor_category_detail;
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -34,7 +53,7 @@ const LaborCategoryDetail = () => {
             component={RouterLink}
             color="inherit"
             underline="none"
-            onClick={() => selectLaborCategoryID(_id)}
+            onClick={() => getDetail(_id, "laborcategory")}
             to={`/laborcategoryedit/${_id}`}
           >
             Edit
@@ -42,18 +61,20 @@ const LaborCategoryDetail = () => {
         </Button>
         <Button
           variant="contained"
-          onClick={() => onSubmitGet(_id, "laborcategory")}
+          onClick={() => setDeleteCategory(true)}
           sx={{ marginLeft: "15px" }}
         >
           Delete
         </Button>
 
-        {response && (
+        {deleteCategory && (
           <Box mt="15px">
             Are you sure you want to delete?
             <Button
               variant="contained"
-              onClick={() => onSubmitPost(_id, "laborcategory")}
+              onClick={() =>
+                onSubmitPost("", "laborcategory", _id, "delete-post")
+              }
               sx={{ marginLeft: "15px" }}
             >
               Delete
@@ -61,7 +82,8 @@ const LaborCategoryDetail = () => {
           </Box>
         )}
       </Box>
-      {responseText === "Complete" && "Deleted"}
+      {response && <Box>{responseText.msg}</Box>}
+      {responseError && <Box>{responseErrorText.msg}</Box>}
     </Box>
   );
 };

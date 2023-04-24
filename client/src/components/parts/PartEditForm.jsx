@@ -1,6 +1,5 @@
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -14,19 +13,30 @@ import {
   Link,
 } from "@mui/material";
 import Header from "../Header";
-const rootUrl = "http://localhost:5000";
 
 const PartEditForm = () => {
   useEffect(() => {
-    fetch("/api/v1/erp/parts/create")
-      .then((response) => response.json())
-      .then((data) => {
-        setPartInfo(data);
-      });
+    editFormLoad();
   }, []);
 
+  const {
+    isLoading,
+    data,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+    formData,
+  } = useAppContext();
+
+  const partDetail = data.part;
+  const partInfo = formData;
+
   const theme = useTheme();
-  const { loading, selectPartID, partDetail } = useGlobalContext();
+
   const [values, setValues] = useState({
     name: partDetail.name,
     customer_price: partDetail.customer_price,
@@ -38,20 +48,13 @@ const PartEditForm = () => {
     _id: partDetail._id,
   });
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
-  const [partInfo, setPartInfo] = useState("");
-
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
+
     const {
       name,
       customer_price,
@@ -73,26 +76,10 @@ const PartEditForm = () => {
       partCategory,
     };
 
-    try {
-      const url = `${rootUrl}/api/v1/erp/parts/${partDetail._id}/edit`;
-      axios
-        .post(url, partData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(partData, "parts", _id, "edit");
   };
-  if (loading) {
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -295,7 +282,7 @@ const PartEditForm = () => {
                   <Link
                     component={RouterLink}
                     color="inherit"
-                    onClick={() => selectPartID(responseText.part._id)}
+                    onClick={() => getDetail(responseText.part._id, "parts")}
                     to={`/partdetail/${responseText.part._id}`}
                   >
                     {responseText.part.name}

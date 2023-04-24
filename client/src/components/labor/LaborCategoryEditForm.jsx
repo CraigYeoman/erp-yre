@@ -1,7 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
-import { useState } from "react";
+import { useAppContext } from "../../context/appContext";
+import { useEffect, useState } from "react";
 import Header from "../Header";
 import {
   Box,
@@ -11,20 +10,32 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-const rootUrl = "http://localhost:5000";
 
 const LaborCategoryEditForm = () => {
-  const { loading, selectLaborCategoryID, laborCategoryDetail } =
-    useGlobalContext();
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const {
+    isLoading,
+    data,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+  } = useAppContext();
+
+  const laborCategoryDetail = data.labor_category_detail;
+
   const [values, setValues] = useState({
     name: laborCategoryDetail.name,
     _id: laborCategoryDetail._id,
   });
+
   const theme = useTheme();
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -32,39 +43,17 @@ const LaborCategoryEditForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
 
     const { name, _id } = values;
     const laborCategoryData = {
       name,
       _id,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/laborcategory/${laborCategoryDetail._id}/edit`;
-      axios
-        .post(url, laborCategoryData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
 
-      setValues({
-        name: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(laborCategoryData, "laborcategory", _id, "edit");
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -160,7 +149,7 @@ const LaborCategoryEditForm = () => {
                     component={RouterLink}
                     color="inherit"
                     onClick={() =>
-                      selectLaborCategoryID(responseText.laborcategory._id)
+                      getDetail(responseText.laborcategory._id, "laborcategory")
                     }
                     to={`/laborcategorydetail/${responseText.laborcategory._id}`}
                   >

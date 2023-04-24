@@ -34,8 +34,6 @@ const WorkOrderList = () => {
     data,
     isLoading,
     sumTotal,
-    selectWorkOrderID,
-    selectCustomerID,
     getDetail,
     clearFilters,
     handleChange,

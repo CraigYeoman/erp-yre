@@ -40,22 +40,36 @@ const getAllJobTypes = async (req, res) => {
 };
 
 const job_type_detail = (req, res, next) => {
-  JobType.findById(req.params.id).exec(function (err, results) {
-    if (err) {
-      // Error in API usage.
-      return next(err);
+  async.parallel(
+    {
+      job_type_detail(callback) {
+        JobType.findById(req.params.id).exec(callback);
+      },
+      job_type_workorders(callback) {
+        WorkOrder.find({ jobType: req.params.id })
+          .populate("jobType")
+          .populate("customer")
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        // Error in API usage.
+        return next(err);
+      }
+      if (results.job_type_detail == null) {
+        // No results.
+        const err = new Error("Job Type not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      res.status(200).json({
+        job_type_detail: results.job_type_detail,
+        job_type_workorders: results.job_type_workorders,
+      });
     }
-    if (results == null) {
-      // No results.
-      const err = new Error("Job type not found");
-      err.status = 404;
-      return next(err);
-    }
-    // Successful, so render.
-    res.status(200).json({
-      job_type_detail: results,
-    });
-  });
+  );
 };
 
 const jobtype_create_post = [

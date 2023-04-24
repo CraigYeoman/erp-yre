@@ -1,21 +1,29 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
+import { useEffect, useState } from "react";
 import { Box, Link, Button } from "@mui/material";
 
 const PartCategoryDetail = () => {
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
   const {
-    partCategoryDetail,
-    loading,
-    onSubmitGet,
+    data,
+    isLoading,
     onSubmitPost,
     response,
     responseText,
-    selectPartID,
-    selectPartCategoryID,
-  } = useGlobalContext();
+    getDetail,
+    editFormLoad,
+    responseError,
+    responseErrorText,
+  } = useAppContext();
 
-  if (loading) {
+  const [deletePart, setDeletePart] = useState(false);
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
@@ -23,7 +31,7 @@ const PartCategoryDetail = () => {
     );
   }
 
-  const { name, _id } = partCategoryDetail;
+  const { name, _id } = data.part_category_detail;
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -34,34 +42,37 @@ const PartCategoryDetail = () => {
             component={RouterLink}
             color="inherit"
             underline="none"
-            onClick={() => selectPartCategoryID(_id)}
-            to={`/partcategoryedit/${_id}`}
+            onClick={() => getDetail(_id, "partcategory")}
+            to={`/partcategoryeditform/${_id}`}
           >
             Edit
           </Link>
         </Button>
         <Button
           variant="contained"
-          onClick={() => onSubmitGet(_id, "partcategory")}
+          onClick={() => setDeletePart(true)}
           sx={{ marginLeft: "15px" }}
         >
           Delete
         </Button>
 
-        {response && (
+        {deletePart && (
           <Box mt="15px">
             Are you sure you want to delete?
             <Button
               variant="contained"
-              onClick={() => onSubmitPost(_id, "partcategory")}
+              onClick={() =>
+                onSubmitPost("", "partcategory", _id, "delete-post")
+              }
               sx={{ marginLeft: "15px" }}
             >
               Delete
             </Button>
           </Box>
         )}
+        {response && <Box>{responseText.msg}</Box>}
+        {responseError && <Box>{responseErrorText.msg}</Box>}
       </Box>
-      {responseText === "Complete" && "Deleted"}
     </Box>
   );
 };

@@ -1,6 +1,7 @@
 import { Link as RouterLink } from "react-router-dom";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
+import { useEffect, useState } from "react";
 import {
   Box,
   useTheme,
@@ -13,26 +14,35 @@ import {
 const { DateTime } = require("luxon");
 
 const CustomerDetail = () => {
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
   const theme = useTheme();
+
+  const [deleteCustomer, setDeleteCustomer] = useState(false);
   const {
-    customerDetail,
-    loading,
-    selectWorkOrderID,
-    onSubmitGet,
+    data,
+    isLoading,
+    getDetail,
     onSubmitPost,
     response,
     responseText,
-    selectCustomerID,
     formatPhoneNumber,
-  } = useGlobalContext();
+    editFormLoad,
+    responseError,
+    responseErrorText,
+  } = useAppContext();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>{" "}
       </section>
     );
   }
+  console.log(response.text);
+  const { customer, customer_workorders } = data;
 
   const {
     _id,
@@ -45,7 +55,7 @@ const CustomerDetail = () => {
     city,
     state,
     zip_code,
-  } = customerDetail.customer;
+  } = customer;
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -65,7 +75,7 @@ const CustomerDetail = () => {
             component={RouterLink}
             color="inherit"
             underline="none"
-            onClick={() => selectCustomerID(_id)}
+            onClick={() => getDetail(_id, "customers")}
             to={`/customeredit/${_id}`}
           >
             Edit
@@ -73,24 +83,35 @@ const CustomerDetail = () => {
         </Button>
         <Button
           variant="contained"
-          onClick={() => onSubmitGet(_id, "customers")}
+          onClick={() => setDeleteCustomer(true)}
           sx={{ marginLeft: "15px" }}
         >
           Delete
         </Button>
-        {response && (
-          <Box mt="15px">
-            Are you sure you want to delete?
-            <Button
-              variant="contained"
-              onClick={() => onSubmitPost(_id, "customers")}
-              sx={{ marginLeft: "15px" }}
-            >
-              Delete
-            </Button>
+        {deleteCustomer && (
+          <Box>
+            {customer_workorders ? (
+              <Box mt="10px">
+                Please do not delete customers with work orders.
+              </Box>
+            ) : (
+              <Box mt="15px">
+                Are you sure you want to delete?
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    onSubmitPost("", "customers", _id, "delete-post")
+                  }
+                  sx={{ marginLeft: "15px" }}
+                >
+                  Delete
+                </Button>
+              </Box>
+            )}
           </Box>
         )}
-        {responseText === "Complete" && "Deleted"}
+        {response && <Box>{responseText.msg}</Box>}
+        {responseError && <Box>{responseErrorText.msg}</Box>}
       </Box>
       <Box mt="15px">
         <Typography
@@ -100,8 +121,7 @@ const CustomerDetail = () => {
         >
           Work Orders
         </Typography>
-        {customerDetail.customer_workorders.map((workOrder) => {
-          console.log(workOrder);
+        {customer_workorders.map((workOrder) => {
           const {
             _id,
             date_received,
@@ -125,7 +145,7 @@ const CustomerDetail = () => {
                 <Link
                   component={RouterLink}
                   color="inherit"
-                  onClick={() => selectWorkOrderID(_id)}
+                  onClick={() => getDetail(_id, "workorders")}
                   to={`/workorderdetail/${_id}`}
                 >
                   {work_order_number}

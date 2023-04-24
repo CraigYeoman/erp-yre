@@ -7,7 +7,7 @@ import Header from "../Header";
 
 const JobTypeList = () => {
   // const { selectJobTypeID, listType, setLoading, loading } = useGlobalContext();
-  const { getData, data, isLoading, selectJobTypeID } = useAppContext();
+  const { getData, data, isLoading, getDetail } = useAppContext();
   const theme = useTheme();
 
   // useEffect(() => {
@@ -41,7 +41,7 @@ const JobTypeList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectJobTypeID(params.row._id)}
+          onClick={() => getDetail(params.row._id, "jobtypes")}
           to={`/jobtypedetail/${params.row._id}`}
         >
           {params.row._id}

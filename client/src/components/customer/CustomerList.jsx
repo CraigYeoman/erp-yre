@@ -9,10 +9,10 @@ const CustomerList = () => {
   // const { selectCustomerID, listType, formatPhoneNumber, setLoading, loading } =
   //   useGlobalContext();
 
-  const { getData, data, isLoading, formatPhoneNumber } = useAppContext();
+  const { getData, data, isLoading, formatPhoneNumber, getDetail } =
+    useAppContext();
 
   const theme = useTheme();
-  const selectCustomerID = "";
   // useEffect(() => {
   //   setLoading(true);
   //   fetch(`/api/v1/erp/${listType}`)
@@ -44,7 +44,7 @@ const CustomerList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectCustomerID(params.row._id)}
+          onClick={() => getDetail(params.row._id, "customers")}
           to={`/customerdetail/${params.row._id}`}
         >
           {params.row._id}

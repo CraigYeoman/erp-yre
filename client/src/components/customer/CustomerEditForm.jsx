@@ -1,7 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
-import { useState } from "react";
+import { useAppContext } from "../../context/appContext";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,11 +10,27 @@ import {
   useTheme,
 } from "@mui/material";
 import Header from "../Header";
-const rootUrl = "http://localhost:5000";
 
 const CustomerEditForm = () => {
-  const { loading, selectCustomerID, customerDetail, formatPhoneNumber } =
-    useGlobalContext();
+  const {
+    isLoading,
+    data,
+    getDetail,
+    formatPhoneNumber,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+  } = useAppContext();
+
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const customerDetail = data;
+
   const [values, setValues] = useState({
     first_name: customerDetail.customer.first_name,
     last_name: customerDetail.customer.last_name,
@@ -29,10 +44,6 @@ const CustomerEditForm = () => {
     _id: customerDetail.customer._id,
   });
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
   const theme = useTheme();
 
   const handleChange = (e) => {
@@ -41,8 +52,6 @@ const CustomerEditForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
     const {
       first_name,
       last_name,
@@ -67,27 +76,11 @@ const CustomerEditForm = () => {
       zip_code,
       _id,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/customers/${_id}/edit`;
-      axios
-        .post(url, customerData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+
+    onSubmitPost(customerData, "customers", _id, "edit");
   };
 
-  if (loading) {
+  if (isLoading || !customerDetail) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -267,7 +260,9 @@ const CustomerEditForm = () => {
                   <Link
                     component={RouterLink}
                     color="inherit"
-                    onClick={() => selectCustomerID(responseText.customer._id)}
+                    onClick={() =>
+                      getDetail(responseText.customer._id, "customers")
+                    }
                     to={`/customerdetail/${responseText.customer._id}`}
                   >
                     {responseText.customer.first_name}{" "}

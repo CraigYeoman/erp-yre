@@ -8,8 +8,7 @@ import Header from "../Header";
 const PartsList = () => {
   // const { listType, selectPartID, selectVendorID, setLoading, loading } =
   //   useGlobalContext();
-  const { getData, data, selectPartID, selectVendorID, isLoading } =
-    useAppContext();
+  const { getData, data, getDetail, isLoading } = useAppContext();
 
   const theme = useTheme();
 
@@ -43,7 +42,7 @@ const PartsList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectPartID(params.row._id)}
+          onClick={() => getDetail(params.row._id, "parts")}
           to={`/partdetail/${params.row._id}`}
         >
           {params.row._id}
@@ -89,7 +88,7 @@ const PartsList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectVendorID(params.row.vendor._id)}
+          onClick={() => getDetail(params.row.vendor._id, "vendors")}
           to={`/vendordetail/${params.row.vendor._id}`}
         >
           {params.row.vendor.name}

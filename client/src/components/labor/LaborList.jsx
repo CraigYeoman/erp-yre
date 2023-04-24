@@ -9,7 +9,7 @@ const LaborList = () => {
   // const { listType, selectLaborID, setLoading, loading } = useGlobalContext();
 
   const theme = useTheme();
-  const { getData, data, isLoading, selectLaborID } = useAppContext();
+  const { getData, data, isLoading, getDetail } = useAppContext();
   // useEffect(() => {
   //   setLoading(true);
   //   fetch(`/api/v1/erp/${listType}`)
@@ -41,7 +41,7 @@ const LaborList = () => {
         <Link
           component={RouterLink}
           color="inherit"
-          onClick={() => selectLaborID(params.row._id)}
+          onClick={() => getDetail(params.row._id, "labor")}
           to={`/labordetail/${params.row._id}`}
         >
           {params.row._id}

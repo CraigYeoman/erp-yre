@@ -110,6 +110,7 @@ const VendorEditForm = () => {
             value={values.name}
             onChange={handleChange}
             name="name"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Main Contact"
@@ -119,6 +120,7 @@ const VendorEditForm = () => {
             value={values.main_contact}
             onChange={handleChange}
             name="main_contact"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Phone Number"
@@ -128,6 +130,7 @@ const VendorEditForm = () => {
             value={values.phone_number}
             onChange={handleChange}
             name="phone_number"
+            inputProps={{ minLength: 10, maxLength: 10 }}
           />
           <TextField
             label="Email"
@@ -137,6 +140,7 @@ const VendorEditForm = () => {
             value={values.email}
             onChange={handleChange}
             name="email"
+            type="email"
           />
           <TextField
             label="Address Line 1"
@@ -146,6 +150,7 @@ const VendorEditForm = () => {
             value={values.address_line_1}
             onChange={handleChange}
             name="address_line_1"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Address Line 2"
@@ -163,6 +168,7 @@ const VendorEditForm = () => {
             value={values.city}
             onChange={handleChange}
             name="city"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="State Abbreviation"
@@ -172,6 +178,7 @@ const VendorEditForm = () => {
             value={values.state}
             onChange={handleChange}
             name="state"
+            inputProps={{ minLength: 2, maxLength: 2 }}
           />
           <TextField
             label="Zip Code"
@@ -181,6 +188,7 @@ const VendorEditForm = () => {
             value={values.zip_code}
             onChange={handleChange}
             name="zip_code"
+            inputProps={{ minLength: 5, maxLength: 5 }}
           />
           <TextField
             label="Customer Number"
@@ -190,6 +198,7 @@ const VendorEditForm = () => {
             value={values.customer_number}
             onChange={handleChange}
             name="customer_number"
+            inputProps={{ minLength: 3 }}
           />
         </Box>
         <Button variant="contained" type="submit">

@@ -1,5 +1,4 @@
 import { Link as RouterLink } from "react-router-dom";
-import axios from "axios";
 import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
@@ -29,7 +28,6 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import Header from "../Header";
-const rootUrl = "http://localhost:5000";
 const { DateTime } = require("luxon");
 
 const WorkOrderForm = () => {
@@ -37,31 +35,9 @@ const WorkOrderForm = () => {
     editFormLoad();
     setCustomerParts([]);
     setCustomerLabor([]);
-    // setLoading(true);
-    // fetch(`/api/v1/erp/workorders/${id}/edit`)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setWorkOrderDetail(data);
-    //     setValues({
-    //       customer: data.work_order.customer._id,
-    //       date_received: DateTime.fromISO(
-    //         data.work_order.date_received
-    //       ).toISODate(),
-    //       date_due: DateTime.fromISO(data.work_order.date_due).toISODate(),
-    //       part_number: data.work_order.part_number,
-    //       jobtype: data.work_order.jobType._id,
-    //       parts: data.work_order.parts,
-    //       labor: data.work_order.labor,
-    //       notes: data.work_order.notes,
-    //       work_order_number: data.work_order.work_order_number,
-    //       _id: data.work_order._id,
-    //     });
     setCustomerParts(data.work_order.parts);
     setCustomerLabor(data.work_order.labor);
     checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
-    console.log(customerAccessories);
-    // setLoading(false);
-    // });
   }, []);
 
   const {
@@ -88,17 +64,6 @@ const WorkOrderForm = () => {
 
   const workOrderDetail = data;
   const workOrderInfo = formData;
-  // const {
-  //   selectWorkOrderID,
-  //   id,
-  //   deleteItem,
-  //   sumTotal,
-  //   customerParts,
-  //   setCustomerParts,
-  //   customerLabor,
-  //   setCustomerLabor,
-  //   handleChangeArray,
-  // } = useGlobalContext();
 
   const [values, setValues] = useState({
     customer: workOrderDetail.work_order.customer._id,
@@ -181,24 +146,6 @@ const WorkOrderForm = () => {
       _id,
     };
     onSubmitPost(workOrderData, "workorders", _id, "edit");
-    // try {
-    //   const url = `${rootUrl}/api/v1/erp/workorders/${_id}/edit`;
-    //   axios
-    //     .post(url, workOrderData)
-    //     .then((response) => {
-    //       setResponseText(response.data);
-    //       setResponse(true);
-    //     })
-    //     .catch((error) => {
-    //       setResponseTextError(error.response.data);
-    //       console.log(error.response.data);
-    //       setResponseError(true);
-    //     });
-    // } catch (error) {
-    //   setResponseTextError(error);
-    //   console.log(error);
-    //   setResponseError(true);
-    // }
   };
 
   if (isLoading) {
@@ -246,7 +193,7 @@ const WorkOrderForm = () => {
                 {workOrderDetail.work_order.customer.first_name}{" "}
                 {workOrderDetail.work_order.customer.last_name}
               </option>
-              {(workOrderDetail.customers || [])
+              {(workOrderInfo.customers || [])
                 .sort((a, b) => {
                   let textA = a.first_name.toUpperCase();
                   let textB = b.first_name.toUpperCase();

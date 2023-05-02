@@ -35,13 +35,13 @@ const login = async (req, res) => {
 
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
-    throw new UnAuthenticatedError("Invaled Credentials");
+    throw new UnAuthenticatedError("Invalid Credentials");
   }
 
   const isPasswordCorrect = await user.comparePassword(password);
 
   if (!isPasswordCorrect) {
-    throw new UnAuthenticatedError("Invaled Credentials");
+    throw new UnAuthenticatedError("Invalid Credentials");
   }
   const token = user.createJWT();
   res.status(StatusCodes.OK).json({

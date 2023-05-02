@@ -52,20 +52,6 @@ const LaborEditForm = () => {
     const { name, price, _id, laborCategory } = values;
     const laborData = { name, price, _id, laborCategory };
     onSubmitPost(laborData, "labor", _id, "edit");
-    //   try {
-    //     const url = `${rootUrl}/api/v1/erp/labor/${laborDetail._id}/edit`;
-    //     axios
-    //       .post(url, laborData)
-    //       .then(function (response) {
-    //         setResponseText(response.data);
-    //         setResponse(true);
-    //       })
-    //       .catch(function (error) {
-    //         setResponseText(error.response.data.msg.message);
-    //       });
-    //   } catch (error) {
-    //     loading(false);
-    //   }
   };
   if (isLoading) {
     return (

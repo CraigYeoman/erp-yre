@@ -1,10 +1,7 @@
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import {
   Box,
-  useTheme,
   Button,
   TextField,
   InputLabel,
@@ -14,58 +11,45 @@ import {
 } from "@mui/material";
 import Header from "../Header";
 import Response from "../Response";
-const rootUrl = "http://localhost:5000";
 
 const LaborForm = () => {
   useEffect(() => {
-    fetch("/api/v1/erp/labor/create")
-      .then((response) => response.json())
-      .then((data) => {
-        setLaborInfo(data);
-      });
+    editFormLoad();
+    getFormData("labor");
   }, []);
 
-  const { loading, selectLaborID } = useGlobalContext();
+  const {
+    isLoading,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+    formData,
+    getFormData,
+  } = useAppContext();
+
+  const laborInfo = formData;
+
   const [values, setValues] = useState({
     name: "",
     price: "",
     laborCategory: "",
   });
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
-  const [laborInfo, setLaborInfo] = useState("");
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
     const { name, price, laborCategory } = values;
     const laborData = { name, price, laborCategory };
-    try {
-      const url = `${rootUrl}/api/v1/erp/labor/create`;
-      axios
-        .post(url, laborData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseError(true);
-          setResponseTextError(error.response.data);
-        });
-
-      setValues({ name: "", price: "", laborCategory: "" });
-    } catch (error) {
-      loading(false);
-    }
+    onSubmitPost(laborData, "labor", "", "create");
   };
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -138,11 +122,12 @@ const LaborForm = () => {
       <Response
         response={response}
         responseText={responseText}
-        selectFunction={selectLaborID}
+        selectFunction={getDetail}
         item="labor"
         path={"labordetail"}
         responseError={responseError}
         responseTextError={responseTextError}
+        schema={"labor"}
       />
     </Box>
   );

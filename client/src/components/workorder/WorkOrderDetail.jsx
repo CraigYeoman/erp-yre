@@ -28,7 +28,7 @@ const WorkOrderDetail = () => {
   } = useAppContext();
 
   const { work_order } = data;
-
+  console.log(data);
   const theme = useTheme();
 
   if (isLoading) {
@@ -52,8 +52,9 @@ const WorkOrderDetail = () => {
     parts,
     deposit,
     _id,
+    img,
   } = work_order;
-
+  console.log(img);
   let laborPrice = sumTotal(labor, "price");
   let partsPrice = sumTotal(parts, "customer_price");
   let total = laborPrice + partsPrice;
@@ -270,6 +271,15 @@ const WorkOrderDetail = () => {
           </Typography>
           {accessories.map((accessory) => {
             return <p key={accessory._id}>{accessory.name}</p>;
+          })}
+        </Box>
+      )}
+      {img.length === 0 ? (
+        <option></option>
+      ) : (
+        <Box>
+          {img.map((pic) => {
+            return <img src={img} alt="img" />;
           })}
         </Box>
       )}

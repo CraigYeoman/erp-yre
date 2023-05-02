@@ -1,57 +1,37 @@
-import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState } from "react";
 import Header from "../Header";
 import Response from "../Response";
 import { Box, Button, TextField } from "@mui/material";
-const rootUrl = "http://localhost:5000";
 
 const JobTypeForm = () => {
-  const { loading, selectJobTypeID } = useGlobalContext();
+  const {
+    isLoading,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+  } = useAppContext();
+
   const [values, setValues] = useState({
     name: "",
   });
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
     const { name } = values;
     const jobtypeData = {
       name,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/jobtypes/create`;
-      axios
-        .post(url, jobtypeData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
-
-      setValues({
-        name: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(jobtypeData, "jobtypes", "", "create");
   };
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -86,11 +66,12 @@ const JobTypeForm = () => {
       <Response
         response={response}
         responseText={responseText}
-        selectFunction={selectJobTypeID}
+        selectFunction={getDetail}
         item="jobtype"
         path={"jobtypedetail"}
         responseError={responseError}
         responseTextError={responseTextError}
+        schema={"jobtypes"}
       />
     </Box>
   );

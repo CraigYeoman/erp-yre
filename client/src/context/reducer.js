@@ -108,7 +108,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      responseTextError: action.payload.data,
+      responseTextError: action.payload.error,
       responseError: true,
     };
   }

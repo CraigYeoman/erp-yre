@@ -51,12 +51,10 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { themeSettings } from "./components/theme";
-// import { useGlobalContext } from "./context";
 import { useAppContext } from "./context/appContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  // const { mode } = useGlobalContext();
   const { mode } = useAppContext();
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (

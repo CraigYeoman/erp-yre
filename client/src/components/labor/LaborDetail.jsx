@@ -91,7 +91,7 @@ const LaborDetail = () => {
             underline="none"
             onClick={() => {
               getDetail(_id, "labor");
-              getFormData("parts");
+              getFormData("labor");
             }}
             to={`/laboredit/${_id}`}
           >

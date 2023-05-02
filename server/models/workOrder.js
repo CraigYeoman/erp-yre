@@ -59,6 +59,10 @@ const workOrderSchema = new Schema(
       type: Number,
       require: true,
     },
+    img: {
+      data: Buffer,
+      contentType: String,
+    },
   },
   {
     toJSON: { virtuals: true },

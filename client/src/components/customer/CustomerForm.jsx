@@ -99,6 +99,7 @@ const CustomerForm = () => {
             value={values.first_name}
             onChange={handleChange}
             name="first_name"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Last Name"
@@ -108,6 +109,7 @@ const CustomerForm = () => {
             value={values.last_name}
             onChange={handleChange}
             name="last_name"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Phone Number"
@@ -117,6 +119,7 @@ const CustomerForm = () => {
             value={values.phone_number}
             onChange={handleChange}
             name="phone_number"
+            inputProps={{ minLength: 10, maxLength: 10 }}
           />
           <TextField
             label="Email"
@@ -126,6 +129,7 @@ const CustomerForm = () => {
             value={values.email}
             onChange={handleChange}
             name="email"
+            type="email"
           />
           <TextField
             label="Address Line 1"
@@ -135,6 +139,7 @@ const CustomerForm = () => {
             value={values.address_line_1}
             onChange={handleChange}
             name="address_line_1"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Address Line 2"
@@ -152,6 +157,7 @@ const CustomerForm = () => {
             value={values.city}
             onChange={handleChange}
             name="city"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="State Abbreviation"
@@ -161,6 +167,7 @@ const CustomerForm = () => {
             value={values.state}
             onChange={handleChange}
             name="state"
+            inputProps={{ minLength: 2, maxLength: 2 }}
           />
           <TextField
             label="Zip Code"
@@ -170,6 +177,7 @@ const CustomerForm = () => {
             value={values.zip_code}
             onChange={handleChange}
             name="zip_code"
+            inputProps={{ minLength: 5, maxLength: 5 }}
           />
         </Box>
         <Button variant="contained" type="submit">

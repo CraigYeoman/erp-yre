@@ -1,14 +1,25 @@
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { useGlobalContext } from "../../context";
-import { useState } from "react";
-import { Box, useTheme, Button, TextField } from "@mui/material";
+import { useAppContext } from "../../context/appContext";
+import { useState, useEffect } from "react";
+import { Box, Button, TextField } from "@mui/material";
 import Header from "../Header";
 import Response from "../Response";
-const rootUrl = "http://localhost:5000";
 
 const VendorForm = () => {
-  const { loading, selectVendorID } = useGlobalContext();
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const {
+    isLoading,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+  } = useAppContext();
+
   const [values, setValues] = useState({
     name: "",
     main_contact: "",
@@ -22,19 +33,13 @@ const VendorForm = () => {
     customer_number: "",
   });
 
-  const theme = useTheme();
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
+
     const {
       name,
       main_contact,
@@ -59,39 +64,10 @@ const VendorForm = () => {
       zip_code,
       customer_number,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/vendors/create`;
-      axios
-        .post(url, vendorData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
-
-      setValues({
-        name: "",
-        main_contact: "",
-        phone_number: "",
-        email: "",
-        address_line_1: "",
-        address_line_2: "",
-        city: "",
-        state: "",
-        zip_code: "",
-        customer_number: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(vendorData, "vendors", "", "create");
   };
-  if (loading) {
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -120,6 +96,7 @@ const VendorForm = () => {
             value={values.name}
             onChange={handleChange}
             name="name"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Main Contact"
@@ -129,6 +106,7 @@ const VendorForm = () => {
             value={values.main_contact}
             onChange={handleChange}
             name="main_contact"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Phone Number"
@@ -138,6 +116,7 @@ const VendorForm = () => {
             value={values.phone_number}
             onChange={handleChange}
             name="phone_number"
+            inputProps={{ minLength: 10, maxLength: 10 }}
           />
           <TextField
             label="Email"
@@ -147,6 +126,7 @@ const VendorForm = () => {
             value={values.email}
             onChange={handleChange}
             name="email"
+            type="email"
           />
           <TextField
             label="Address Line 1"
@@ -156,6 +136,7 @@ const VendorForm = () => {
             value={values.address_line_1}
             onChange={handleChange}
             name="address_line_1"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Address Line 2"
@@ -173,6 +154,7 @@ const VendorForm = () => {
             value={values.city}
             onChange={handleChange}
             name="city"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="State Abbreviation"
@@ -182,6 +164,7 @@ const VendorForm = () => {
             value={values.state}
             onChange={handleChange}
             name="state"
+            inputProps={{ minLength: 2, maxLength: 2 }}
           />
           <TextField
             label="Zip Code"
@@ -191,6 +174,7 @@ const VendorForm = () => {
             value={values.zip_code}
             onChange={handleChange}
             name="zip_code"
+            inputProps={{ minLength: 5, maxLength: 5 }}
           />
           <TextField
             label="Customer Number"
@@ -200,6 +184,7 @@ const VendorForm = () => {
             value={values.customer_number}
             onChange={handleChange}
             name="customer_number"
+            inputProps={{ minLength: 3 }}
           />
         </Box>
         <Button variant="contained" type="submit">
@@ -209,11 +194,12 @@ const VendorForm = () => {
       <Response
         response={response}
         responseText={responseText}
-        selectFunction={selectVendorID}
+        selectFunction={getDetail}
         item="vendor"
         path={"vendordetail"}
         responseError={responseError}
         responseTextError={responseTextError}
+        schema={"vendors"}
       />
     </Box>
   );

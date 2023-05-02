@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator");
+const fs = require("fs");
 const WorkOrder = require("../models/workOrder");
 const Customer = require("../models/customer");
 const JobType = require("../models/jobType");
@@ -320,7 +321,9 @@ const work_order_create_post = [
     const errors = validationResult(req);
 
     // Create a part object with escaped and trimmed data.
-
+    console.log(req.body);
+    console.log(req.files);
+    console.log(req);
     const workOrder = new WorkOrder({
       customer: req.body.customer,
       date_received: req.body.date_received,

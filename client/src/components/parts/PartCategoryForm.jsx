@@ -1,58 +1,43 @@
-import axios from "axios";
-import { useGlobalContext } from "../../context";
-import { useState } from "react";
+import { useAppContext } from "../../context/appContext";
+import { useEffect, useState } from "react";
 import Header from "../Header";
 import Response from "../Response";
 import { Box, Button, TextField } from "@mui/material";
 
-const rootUrl = "http://localhost:5000";
-
 const PartCategoryForm = () => {
-  const { loading, selectPartCategoryID } = useGlobalContext();
+  useEffect(() => {
+    editFormLoad();
+  }, []);
+
+  const {
+    isLoading,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+  } = useAppContext();
+
   const [values, setValues] = useState({
     name: "",
   });
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
     const { name } = values;
-    const partcategoryData = {
+    const partCategoryData = {
       name,
     };
-    try {
-      const url = `${rootUrl}/api/v1/erp/partcategory/create`;
-      axios
-        .post(url, partcategoryData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
-
-      setValues({
-        name: "",
-      });
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    onSubmitPost(partCategoryData, "partcategory", "", "create");
   };
-  if (loading) {
+
+  if (isLoading) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -88,11 +73,12 @@ const PartCategoryForm = () => {
       <Response
         response={response}
         responseText={responseText}
-        selectFunction={selectPartCategoryID}
+        selectFunction={getDetail}
         item="partcategory"
         path={"partcategorydetail"}
         responseError={responseError}
         responseTextError={responseTextError}
+        schema={"partcategory"}
       />
     </Box>
   );

@@ -109,6 +109,7 @@ const CustomerEditForm = () => {
             value={values.first_name}
             onChange={handleChange}
             name="first_name"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Last Name"
@@ -118,6 +119,7 @@ const CustomerEditForm = () => {
             value={values.last_name}
             onChange={handleChange}
             name="last_name"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Phone Number"
@@ -127,6 +129,7 @@ const CustomerEditForm = () => {
             value={values.phone_number}
             onChange={handleChange}
             name="phone_number"
+            inputProps={{ minLength: 10, maxLength: 10 }}
           />
           <TextField
             label="Email"
@@ -136,6 +139,7 @@ const CustomerEditForm = () => {
             value={values.email}
             onChange={handleChange}
             name="email"
+            type="email"
           />
           <TextField
             label="Address Line 1"
@@ -145,6 +149,7 @@ const CustomerEditForm = () => {
             value={values.address_line_1}
             onChange={handleChange}
             name="address_line_1"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="Address Line 2"
@@ -162,6 +167,7 @@ const CustomerEditForm = () => {
             value={values.city}
             onChange={handleChange}
             name="city"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             label="State Abbreviation"
@@ -171,6 +177,7 @@ const CustomerEditForm = () => {
             value={values.state}
             onChange={handleChange}
             name="state"
+            inputProps={{ minLength: 2, maxLength: 2 }}
           />
           <TextField
             label="Zip Code"
@@ -180,6 +187,7 @@ const CustomerEditForm = () => {
             value={values.zip_code}
             onChange={handleChange}
             name="zip_code"
+            inputProps={{ minLength: 5, maxLength: 5 }}
           />
         </Box>
         <Button variant="contained" type="submit">

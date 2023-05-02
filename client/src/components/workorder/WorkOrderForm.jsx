@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useGlobalContext } from "../../context";
+import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import {
@@ -29,30 +28,28 @@ import TextareaAutosize from "@mui/base/TextareaAutosize";
 import Header from "../Header";
 import Response from "../Response";
 import { MdDeleteOutline } from "react-icons/md";
-const rootUrl = "http://localhost:5000";
+import Compress from "compress.js";
 
 const WorkOrderForm = () => {
   useEffect(() => {
-    fetch("/api/v1/erp/workorders/create")
-      .then((response) => response.json())
-      .then((data) => {
-        setWorkOrderInfo(data);
-      });
-    setCustomerParts([]);
-    setCustomerLabor([]);
+    editFormLoad();
+    getFormData("workorders");
   }, []);
 
   const {
-    loading,
-    selectWorkOrderID,
-    customerParts,
-    setCustomerParts,
-    handleChangeArray,
-    customerLabor,
-    deleteItem,
-    setCustomerLabor,
+    isLoading,
+    getDetail,
+    onSubmitPost,
+    response,
+    responseText,
+    responseError,
+    responseTextError,
+    editFormLoad,
+    formData,
     sumTotal,
-  } = useGlobalContext();
+    getFormData,
+  } = useAppContext();
+
   const [values, setValues] = useState({
     customer: "",
     date_received: "",
@@ -63,16 +60,15 @@ const WorkOrderForm = () => {
     work_order_number: "",
     notes: "",
   });
-
+  const compress = new Compress();
+  const [customerParts, setCustomerParts] = useState([]);
+  const [customerLabor, setCustomerLabor] = useState([]);
   const [customerAccessories, setCustomerAccessories] = useState([]);
+  const [customerImg, setCustomerImg] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState("");
 
-  const [response, setResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-  const [responseError, setResponseError] = useState(false);
-  const [responseTextError, setResponseTextError] = useState("");
-  const [workOrderInfo, setWorkOrderInfo] = useState("");
+  const workOrderInfo = formData;
   const theme = useTheme();
 
   const handleClick = (index) => {
@@ -97,10 +93,53 @@ const WorkOrderForm = () => {
     }
   };
 
+  const handleChangeArray = (array, func, info) => {
+    const updatedValues = [...array, info];
+    console.log(info);
+    console.log(updatedValues);
+    func(updatedValues);
+  };
+
+  const fileSelect = (array, func, info) => {
+    let updatedValues = [];
+    console.log(info.length);
+    for (let i = 0; i < info.length; i++) {
+      let file = info[i];
+      updatedValues = [...array, file];
+    }
+
+    func(updatedValues);
+  };
+
+  const fileRemove = (array, func, info) => {
+    const updatedValues = array.filter((a) => a.name !== info.name);
+
+    func(updatedValues);
+  };
+
+  const deleteItem = (id, array, func) => {
+    const updatedValues = array.filter((a) => a._id !== id);
+    func(updatedValues);
+  };
+
+  const resizeImg = (file) => {
+    const resizedImage = compress.compress([file], {
+      size: 1, // the max size in MB, defaults to 2MB
+      quality: 1, // the quality of the image, max is 1,
+      maxWidth: 300, // the max width of the output image, defaults to 1920px
+      maxHeight: 300, // the max height of the output image, defaults to 1920px
+      resize: true, // defaults to true, set false if you do not want to resize the image width and height
+    });
+    const img = resizedImage[0];
+    const base64str = img.data;
+    const imgExt = img.ext;
+    const resizedFiile = Compress.convertBase64ToFile(base64str, imgExt);
+    return resizedFiile;
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    setResponse(false);
-    setResponseError(false);
+
     const {
       customer,
       date_received,
@@ -112,6 +151,8 @@ const WorkOrderForm = () => {
     let accessories = customerAccessories;
     let parts = customerParts;
     let labor = customerLabor;
+    let img = new FormData();
+    img.append("customerFile", customerImg, customerImg.name);
     const workOrderData = {
       customer,
       date_received,
@@ -122,43 +163,13 @@ const WorkOrderForm = () => {
       labor,
       work_order_number,
       notes,
+      img,
     };
-
-    try {
-      const url = `${rootUrl}/api/v1/erp/workorders/create`;
-      axios
-        .post(url, workOrderData)
-        .then(function (response) {
-          setResponseText(response.data);
-          setResponse(true);
-        })
-        .catch(function (error) {
-          setResponseTextError(error.response.data);
-          console.log(error.response.data);
-          setResponseError(true);
-        });
-
-      setValues({
-        customer: "",
-        date_received: "",
-        date_due: "",
-        part_number: "",
-        jobtype: "",
-        parts: "",
-        labor: "",
-        notes: "",
-        work_order_number: "",
-      });
-      setCustomerAccessories([]);
-      setCustomerParts([]);
-      setCustomerLabor([]);
-    } catch (error) {
-      setResponseTextError(error);
-      console.log(error);
-      setResponseError(true);
-    }
+    console.log(workOrderData.img);
+    onSubmitPost(workOrderData, "workorders", "", "create");
   };
-  if (loading) {
+
+  if (isLoading || !workOrderInfo) {
     return (
       <section className="section">
         <h4>Loading...</h4>
@@ -576,6 +587,37 @@ const WorkOrderForm = () => {
             onChange={handleChange}
           />
         </Box>
+        <Box mb="15px">
+          <Button variant="contained" component="label">
+            Upload
+            <input
+              hidden
+              accept="image/*"
+              multiple
+              type="file"
+              onChange={(event) => {
+                fileSelect(customerImg, setCustomerImg, event.target.files);
+                console.log(customerImg);
+              }}
+            />
+          </Button>
+          {(customerImg || []).map((img) => {
+            return (
+              <Box mt="15px">
+                <img
+                  alt="not found"
+                  width={"250px"}
+                  src={URL.createObjectURL(img)}
+                />
+                <Button
+                  onClick={() => fileRemove(customerImg, setCustomerImg, img)}
+                >
+                  Remove
+                </Button>
+              </Box>
+            );
+          })}
+        </Box>
         <Button variant="contained" type="submit">
           Submit
         </Button>
@@ -583,11 +625,12 @@ const WorkOrderForm = () => {
       <Response
         response={response}
         responseText={responseText}
-        selectFunction={selectWorkOrderID}
+        selectFunction={getDetail}
         item="workOrder"
         path={"workorderdetail"}
         responseError={responseError}
         responseTextError={responseTextError}
+        schema={"workorders"}
       />
     </Box>
   );

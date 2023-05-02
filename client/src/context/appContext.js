@@ -12,6 +12,7 @@ import {
   GET_DATA_BEGIN,
   GET_DATA_SUCCESS,
   POST_DATA_BEGIN,
+  POST_DATA_ERROR,
   POST_DATA_SUCCESS,
   TOGGLE_SIDEBAR,
   UPDATE_USER_BEGIN,
@@ -98,7 +99,7 @@ const AppProvider = ({ children }) => {
 
   const addUserToLocalStorage = ({ user, token }) => {
     localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("token", JSON.stringify(token));
+    localStorage.setItem("token", token);
   };
 
   const removeUserFromLocalStorage = () => {
@@ -158,7 +159,8 @@ const AppProvider = ({ children }) => {
 
       dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
-      console.log(error.response);
+      if (error.response.data.msg === "Authentication Invalid") logoutUser();
+      console.log(error.response.data);
     }
   };
 
@@ -172,7 +174,8 @@ const AppProvider = ({ children }) => {
 
       dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
-      console.log(error.response);
+      if (error.response.data.msg === "Authentication Invalid") logoutUser();
+      console.log(error.response.data);
     }
   };
 
@@ -186,7 +189,8 @@ const AppProvider = ({ children }) => {
 
       dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
-      console.log(error.response);
+      if (error.response.data.msg === "Authentication Invalid") logoutUser();
+      console.log(error.response.data);
     }
   };
 
@@ -200,7 +204,8 @@ const AppProvider = ({ children }) => {
 
       dispatch({ type: GET_FORM_DATA_SUCCESS, payload: { data } });
     } catch (error) {
-      console.log(error.response);
+      if (error.response.data.msg === "Authentication Invalid") logoutUser();
+      console.log(error.response.data);
     }
   };
 
@@ -230,6 +235,7 @@ const AppProvider = ({ children }) => {
         dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
       }
     } catch (error) {
+      dispatch({ type: POST_DATA_ERROR, payload: error.response });
       console.log(error.response);
     }
   };

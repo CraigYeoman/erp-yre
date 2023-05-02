@@ -28,8 +28,6 @@ const PartCategoryEditForm = () => {
     editFormLoad,
   } = useAppContext();
 
-  // const { loading, selectPartCategoryID, partCategoryDetail } =
-  //   useGlobalContext();
   const partCategoryDetail = data.part_category_detail;
 
   const [values, setValues] = useState({

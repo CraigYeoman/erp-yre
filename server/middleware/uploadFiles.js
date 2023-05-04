@@ -21,3 +21,10 @@ const uploadFiles = (req, res, next) => {
 module.exports = uploadFiles;
 
 // https://openjavascript.info/2023/01/09/handle-a-file-upload-in-node-js-and-express-with-multer/
+
+//stackoverflow.com/questions/43692479/how-to-upload-an-image-in-react-js
+// https://www.npmjs.com/package/compress.js
+
+// https://www.youtube.com/watch?v=TZvMLWFVVhE
+
+// https://www.youtube.com/watch?v=4pmkQjsKJ-U

@@ -11,6 +11,7 @@ const LaborCategory = require("../models/laborCategory");
 const async = require("async");
 const endOfWeek = require("date-fns/endOfWeek");
 const startOfWeek = require("date-fns/startOfWeek");
+const fileUpload = require("express-fileupload");
 
 // Display list of all Work orders.
 const getAllWorkOrdersStatic = async (req, res) => {
@@ -321,9 +322,7 @@ const work_order_create_post = [
     const errors = validationResult(req);
 
     // Create a part object with escaped and trimmed data.
-    console.log(req.body);
-    console.log(req.files);
-    console.log(req);
+
     const workOrder = new WorkOrder({
       customer: req.body.customer,
       date_received: req.body.date_received,
@@ -496,6 +495,23 @@ const work_order_edit_post = [
   },
 ];
 
+work_order_img = (req, res, next) => {
+  const files = req.files;
+  console.log(files);
+
+  Object.keys(files).forEach((key) => {
+    const filepath = path.join(__dirname, "files", files[key].name);
+    files[key].mv(filepath, (err) => {
+      if (err) return res.status(500).json({ status: "error", message: err });
+    });
+  });
+
+  return res.json({
+    status: "success",
+    message: Object.keys(files).toString(),
+  });
+};
+
 module.exports = {
   getAllWorkOrdersStatic,
   getAllWorkOrders,
@@ -507,4 +523,5 @@ module.exports = {
   work_order_edit_get,
   work_order_edit_post,
   index,
+  work_order_img,
 };

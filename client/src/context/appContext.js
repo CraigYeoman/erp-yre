@@ -24,6 +24,7 @@ import {
   EDIT_FORM_LOAD,
   GET_FORM_DATA_BEGIN,
   GET_FORM_DATA_SUCCESS,
+  POST_IMG,
 } from "./action";
 
 const token = localStorage.getItem("token");
@@ -233,6 +234,10 @@ const AppProvider = ({ children }) => {
         const url = `/${schema}/${action}`;
         const { data } = await authFetch.post(url, post);
         dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
+      } else if (action === "img") {
+        const url = `/${schema}/${action}`;
+        const { data } = await authFetch.post(url, post);
+        dispatch({ type: POST_IMG, payload: { data } });
       }
     } catch (error) {
       dispatch({ type: POST_DATA_ERROR, payload: error.response });

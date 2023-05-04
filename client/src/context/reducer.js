@@ -20,6 +20,7 @@ import {
   EDIT_FORM_LOAD,
   GET_FORM_DATA_BEGIN,
   GET_FORM_DATA_SUCCESS,
+  POST_IMG,
 } from "./action";
 import { initialState } from "./appContext";
 
@@ -101,6 +102,12 @@ const reducer = (state, action) => {
       isLoading: false,
       responseText: action.payload.data,
       response: true,
+    };
+  }
+
+  if ((action.type = POST_IMG)) {
+    return {
+      data: action.payload.data,
     };
   }
 

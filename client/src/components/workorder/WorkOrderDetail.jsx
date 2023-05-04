@@ -274,7 +274,7 @@ const WorkOrderDetail = () => {
           })}
         </Box>
       )}
-      {img.length === 0 ? (
+      {/* {img.length === 0 ? (
         <option></option>
       ) : (
         <Box>
@@ -282,7 +282,7 @@ const WorkOrderDetail = () => {
             return <img src={img} alt="img" />;
           })}
         </Box>
-      )}
+      )} */}
     </Box>
   );
 };

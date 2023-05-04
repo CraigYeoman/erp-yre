@@ -48,6 +48,7 @@ const WorkOrderForm = () => {
     formData,
     sumTotal,
     getFormData,
+    data,
   } = useAppContext();
 
   const [values, setValues] = useState({
@@ -102,6 +103,7 @@ const WorkOrderForm = () => {
 
   const fileSelect = (array, func, info) => {
     let updatedValues = [];
+    console.log(info);
     console.log(info.length);
     for (let i = 0; i < info.length; i++) {
       let file = info[i];
@@ -109,6 +111,7 @@ const WorkOrderForm = () => {
     }
 
     func(updatedValues);
+    console.log(array);
   };
 
   const fileRemove = (array, func, info) => {
@@ -151,22 +154,44 @@ const WorkOrderForm = () => {
     let accessories = customerAccessories;
     let parts = customerParts;
     let labor = customerLabor;
-    let img = new FormData();
-    img.append("customerFile", customerImg, customerImg.name);
-    const workOrderData = {
-      customer,
-      date_received,
-      date_due,
-      jobtype,
-      accessories,
-      parts,
-      labor,
-      work_order_number,
-      notes,
-      img,
-    };
-    console.log(workOrderData.img);
-    onSubmitPost(workOrderData, "workorders", "", "create");
+    const files = document.getElementById("files").files;
+    let images = new FormData();
+
+    Object.keys(files).forEach((key) => {
+      images.append(files.item(key).name, files.item(key));
+    });
+
+    if (customerImg) {
+      onSubmitPost(images, "workorders", "", "img");
+      let img = data;
+      const workOrderData = {
+        customer,
+        date_received,
+        date_due,
+        jobtype,
+        accessories,
+        parts,
+        labor,
+        work_order_number,
+        notes,
+        img,
+      };
+
+      onSubmitPost(workOrderData, "workorders", "", "create");
+    } else {
+      const workOrderData = {
+        customer,
+        date_received,
+        date_due,
+        jobtype,
+        accessories,
+        parts,
+        labor,
+        work_order_number,
+        notes,
+      };
+      onSubmitPost(workOrderData, "workorders", "", "create");
+    }
   };
 
   if (isLoading || !workOrderInfo) {
@@ -591,6 +616,7 @@ const WorkOrderForm = () => {
           <Button variant="contained" component="label">
             Upload
             <input
+              id="files"
               hidden
               accept="image/*"
               multiple

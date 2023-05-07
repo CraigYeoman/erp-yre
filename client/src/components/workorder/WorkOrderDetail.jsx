@@ -52,11 +52,19 @@ const WorkOrderDetail = () => {
     parts,
     deposit,
     _id,
-    img,
+    images,
   } = work_order;
-  console.log(img);
+  console.log(labor);
+  labor.forEach((value) => {
+    value.price = Number(value.price);
+  });
+  parts.forEach((value) => {
+    value.customer_price = Number(value.customer_price);
+  });
+  console.log(labor);
   let laborPrice = sumTotal(labor, "price");
   let partsPrice = sumTotal(parts, "customer_price");
+  console.log(laborPrice);
   let total = laborPrice + partsPrice;
   let tax = total * 0.09;
   let grandTotal = total + tax;
@@ -176,15 +184,7 @@ const WorkOrderDetail = () => {
         <p>Deposit - ${deposit.toFixed(2)}</p>
         <p>Est. Due - ${(grandTotal - deposit).toFixed(2)}</p>
       </Box>
-      <Box
-        mt="15px"
-        sx={{
-          borderRadius: "5px",
-          border: 1,
-          padding: "8px",
-          bgcolor: theme.palette.background.alt,
-        }}
-      >
+      <Box mt="15px">
         <Typography
           variant="h5"
           fontWeight="bold"
@@ -274,15 +274,30 @@ const WorkOrderDetail = () => {
           })}
         </Box>
       )}
-      {/* {img.length === 0 ? (
+      {images.length === 0 ? (
         <option></option>
       ) : (
-        <Box>
-          {img.map((pic) => {
-            return <img src={img} alt="img" />;
+        <Box
+          mt="15px"
+          mb="15px"
+          sx={{
+            display: "flex",
+            gap: "15px",
+          }}
+        >
+          {images.map((pic) => {
+            console.log(pic);
+            console.log(`localhost:5000/${pic}`);
+            return (
+              <img
+                src={`http://localhost:5000/${pic}`}
+                alt="img"
+                width="250px"
+              />
+            );
           })}
         </Box>
-      )} */}
+      )}
     </Box>
   );
 };

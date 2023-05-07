@@ -43,7 +43,8 @@ if (process.env.NODE_ENV !== "production") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.send('<h1>Erp API</h1><a href="/api/v1/erp">erp route</a>');

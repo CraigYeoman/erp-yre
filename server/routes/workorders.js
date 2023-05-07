@@ -12,7 +12,6 @@ const {
   work_order_delete_post,
   work_order_edit_get,
   work_order_edit_post,
-  work_order_img,
   index,
 } = require("../controllers/workOrderController");
 
@@ -47,8 +46,7 @@ router.route("/index").get(index);
 router.route("/create").get(work_order_create_get);
 // POST request for creating a work order.
 router.route("/create").post(upload.array("images"), work_order_create_post);
-// POST request for creating a imgs.
-router.route("/img").post(work_order_img);
+
 // GET request to delete work order.
 router.route("/:id/delete").get(work_order_delete_get);
 // POST request to delete work order.

@@ -151,12 +151,9 @@ const getAllWorkOrders = async (req, res) => {
   }
 
   let result = WorkOrder.find(queryObject)
-    // .populate("url")
+
     .populate("customer")
-    .populate("jobType")
-    .populate("parts")
-    .populate("labor")
-    .populate("accessories");
+    .populate("jobType");
 
   if (sort === "date_due") {
     result = result.sort("date_due");
@@ -245,9 +242,6 @@ const work_order_detail = (req, res, next) => {
         WorkOrder.findById(req.params.id)
           .populate("customer")
           .populate("jobType")
-          .populate("parts")
-          .populate("labor")
-          .populate("accessories")
           .exec(callback);
       },
     },
@@ -422,9 +416,6 @@ const work_order_edit_get = (req, res, next) => {
         WorkOrder.findById(req.params.id)
           .populate("customer")
           .populate("jobType")
-          .populate("parts")
-          .populate("labor")
-          .populate("accessories")
           .exec(callback);
       },
       customer(callback) {
@@ -541,5 +532,4 @@ module.exports = {
   work_order_edit_get,
   work_order_edit_post,
   index,
-  work_order_img,
 };

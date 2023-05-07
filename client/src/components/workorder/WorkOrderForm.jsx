@@ -65,7 +65,7 @@ const WorkOrderForm = () => {
   const [customerParts, setCustomerParts] = useState([]);
   const [customerLabor, setCustomerLabor] = useState([]);
   const [customerAccessories, setCustomerAccessories] = useState([]);
-  const [customerImg, setCustomerImg] = useState([]);
+  const [customerImg, setCustomerImg] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState("");
 
@@ -101,17 +101,21 @@ const WorkOrderForm = () => {
     func(updatedValues);
   };
 
-  const fileSelect = (array, func, info) => {
-    let updatedValues = [];
-    console.log(info);
-    console.log(info.length);
-    for (let i = 0; i < info.length; i++) {
-      let file = info[i];
-      updatedValues = [...array, file];
-    }
+  // const fileSelect = (array, func, info) => {
+  //   let updatedValues = [];
+  //   console.log(info);
+  //   console.log(info.length);
+  //   for (let i = 0; i < info.length; i++) {
+  //     let file = info[i];
+  //     updatedValues = [...array, file];
+  //   }
 
-    func(updatedValues);
-    console.log(array);
+  //   func(updatedValues);
+  //   console.log(array);
+  // };
+
+  const fileSelect = (event, func) => {
+    func(Array.from(event.target.files));
   };
 
   const fileRemove = (array, func, info) => {
@@ -155,43 +159,90 @@ const WorkOrderForm = () => {
     let parts = customerParts;
     let labor = customerLabor;
     const files = document.getElementById("files").files;
-    let images = new FormData();
-
-    Object.keys(files).forEach((key) => {
-      images.append(files.item(key).name, files.item(key));
-    });
+    console.log(customerImg);
+    let formData = new FormData();
 
     if (customerImg) {
-      onSubmitPost(images, "workorders", "", "img");
-      let img = data;
-      const workOrderData = {
-        customer,
-        date_received,
-        date_due,
-        jobtype,
-        accessories,
-        parts,
-        labor,
-        work_order_number,
-        notes,
-        img,
-      };
-
-      onSubmitPost(workOrderData, "workorders", "", "create");
-    } else {
-      const workOrderData = {
-        customer,
-        date_received,
-        date_due,
-        jobtype,
-        accessories,
-        parts,
-        labor,
-        work_order_number,
-        notes,
-      };
-      onSubmitPost(workOrderData, "workorders", "", "create");
+      customerImg.forEach((file) => {
+        formData.append("images", file);
+      });
     }
+
+    formData.append("customer", customer);
+    formData.append("date_received", date_received);
+    formData.append("date_due", date_due);
+    formData.append("jobtype", jobtype);
+    formData.append("work_order_number", work_order_number);
+    if (accessories.length > 0) {
+      accessories.forEach((obj, index) => {
+        Object.entries(obj).forEach(([key, value]) => {
+          formData.append(`accessories[${index}][${key}]`, value);
+        });
+      });
+      // formData.append("accessories", JSON.stringify(accessories));
+    }
+    console.log(parts);
+    if (parts.length > 0) {
+      parts.forEach((obj, index) => {
+        Object.entries(obj).forEach(([key, value]) => {
+          formData.append(`parts[${index}][${key}]`, value);
+        });
+      });
+      // formData.append("parts", JSON.stringify(parts));
+    }
+    if (labor.length > 0) {
+      labor.forEach((obj, index) => {
+        Object.entries(obj).forEach(([key, value]) => {
+          formData.append(`labor[${index}][${key}]`, value);
+        });
+      });
+
+      // formData.append("labor", JSON.stringify(labor));
+    }
+
+    if (notes) {
+      formData.append("notes", notes);
+    }
+
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+    // Object.keys(files).forEach((key) => {
+    //   images.append(files.item(key).name, files.item(key));
+    // });
+    // console.log(customerImg.length > 0);
+    // // if (customerImg.length > 0) {
+    // onSubmitPost(images, "workorders", "", "img");
+    // let img = data;
+    const workOrderData = {
+      customer,
+      date_received,
+      date_due,
+      jobtype,
+      accessories,
+      parts,
+      labor,
+      work_order_number,
+      notes,
+      customerImg,
+    };
+
+    console.log(workOrderData);
+    onSubmitPost(formData, "workorders", "", "create");
+    // } else {
+    //   const workOrderData = {
+    //     customer,
+    //     date_received,
+    //     date_due,
+    //     jobtype,
+    //     accessories,
+    //     parts,
+    //     labor,
+    //     work_order_number,
+    //     notes,
+    //   };
+    //   onSubmitPost(workOrderData, "workorders", "", "create");
+    // }
   };
 
   if (isLoading || !workOrderInfo) {
@@ -622,7 +673,7 @@ const WorkOrderForm = () => {
               multiple
               type="file"
               onChange={(event) => {
-                fileSelect(customerImg, setCustomerImg, event.target.files);
+                fileSelect(event, setCustomerImg);
                 console.log(customerImg);
               }}
             />

@@ -34,24 +34,16 @@ const workOrderSchema = new Schema(
       ref: "JobType",
       required: [true, "Job type must be provided"],
     },
-    accessories: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Accessories",
-      },
-    ],
-    parts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Parts",
-      },
-    ],
-    labor: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Labor",
-      },
-    ],
+    accessories: {
+      type: Array,
+    },
+    parts: {
+      type: Array,
+    },
+
+    labor: {
+      type: Array,
+    },
     notes: {
       type: String,
     },
@@ -59,9 +51,8 @@ const workOrderSchema = new Schema(
       type: Number,
       require: true,
     },
-    img: {
-      data: Buffer,
-      contentType: String,
+    images: {
+      type: Array,
     },
   },
   {

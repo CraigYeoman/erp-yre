@@ -1,5 +1,4 @@
 const { body, validationResult } = require("express-validator");
-const fs = require("fs");
 const WorkOrder = require("../models/workOrder");
 const Customer = require("../models/customer");
 const JobType = require("../models/jobType");
@@ -11,7 +10,8 @@ const LaborCategory = require("../models/laborCategory");
 const async = require("async");
 const endOfWeek = require("date-fns/endOfWeek");
 const startOfWeek = require("date-fns/startOfWeek");
-const fileUpload = require("express-fileupload");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 // Display list of all Work orders.
 const getAllWorkOrdersStatic = async (req, res) => {
@@ -313,52 +313,87 @@ const work_order_create_get = (req, res, next) => {
   );
 };
 
-const work_order_create_post = [
-  // Validate and sanitize fields.
+const work_order_create_post = (req, res, next) => {
+  const errors = validationResult(req);
+  const formData = req.body;
+  imagePath = [];
 
-  // Process request after validation and sanitization.
-  (req, res, next) => {
-    // Extract the validation errors from a request.
-    const errors = validationResult(req);
-
-    // Create a part object with escaped and trimmed data.
-
-    const workOrder = new WorkOrder({
-      customer: req.body.customer,
-      date_received: req.body.date_received,
-      date_due: req.body.date_due,
-      date_finished: req.body.date_finished,
-      complete: req.body.complete,
-      jobType: req.body.jobtype,
-      accessories: req.body.accessories,
-      parts: req.body.parts,
-      labor: req.body.labor,
-      notes: req.body.notes,
-      work_order_number: req.body.work_order_number,
+  if (req.files) {
+    req.files.forEach((file) => {
+      imagePath.push(file.path);
     });
+  }
 
-    if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/errors messages.
-      res.status(500).json({
-        workOrder: req.body,
-        errors: errors.array(),
-      });
+  const parts = [];
+  const labor = [];
+  const accessories = [];
 
-      return;
+  for (let i = 0; i < formData.parts.length; i++) {
+    const obj = {};
+
+    for (const key in formData.parts[i]) {
+      obj[key] = formData.parts[i][key];
     }
 
-    workOrder.save((err) => {
-      if (err) {
-        return next(err);
-      }
-      // workOrder saved.
-      res.status(200).json({
-        msg: "Work order created",
-        workOrder: workOrder,
-      });
+    parts.push(obj);
+  }
+
+  for (let i = 0; i < formData.labor.length; i++) {
+    const obj = {};
+
+    for (const key in formData.labor[i]) {
+      obj[key] = formData.labor[i][key];
+    }
+
+    labor.push(obj);
+  }
+
+  for (let i = 0; i < formData.accessories.length; i++) {
+    const obj = {};
+
+    for (const key in formData.accessories[i]) {
+      obj[key] = formData.accessories[i][key];
+    }
+
+    accessories.push(obj);
+  }
+
+  const workOrder = new WorkOrder({
+    customer: req.body.customer,
+    date_received: req.body.date_received,
+    date_due: req.body.date_due,
+    date_finished: req.body.date_finished,
+    complete: req.body.complete,
+    jobType: req.body.jobtype,
+    accessories: accessories,
+    parts: parts,
+    labor: labor,
+    notes: req.body.notes,
+    work_order_number: req.body.work_order_number,
+    images: imagePath,
+  });
+
+  if (!errors.isEmpty()) {
+    // There are errors. Render form again with sanitized values/errors messages.
+    res.status(500).json({
+      workOrder: req.body,
+      errors: errors.array(),
     });
-  },
-];
+
+    return;
+  }
+
+  workOrder.save((err) => {
+    if (err) {
+      return next(err);
+    }
+    // workOrder saved.
+    res.status(200).json({
+      msg: "Work order created",
+      workOrder: workOrder,
+    });
+  });
+};
 
 // Handle Work Order delete on GET.
 const work_order_delete_get = async (req, res) => {
@@ -494,23 +529,6 @@ const work_order_edit_post = [
     );
   },
 ];
-
-work_order_img = (req, res, next) => {
-  const files = req.files;
-  console.log(files);
-
-  Object.keys(files).forEach((key) => {
-    const filepath = path.join(__dirname, "files", files[key].name);
-    files[key].mv(filepath, (err) => {
-      if (err) return res.status(500).json({ status: "error", message: err });
-    });
-  });
-
-  return res.json({
-    status: "success",
-    message: Object.keys(files).toString(),
-  });
-};
 
 module.exports = {
   getAllWorkOrdersStatic,

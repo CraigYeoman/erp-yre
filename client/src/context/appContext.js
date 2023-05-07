@@ -236,8 +236,22 @@ const AppProvider = ({ children }) => {
         dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
       } else if (action === "img") {
         const url = `/${schema}/${action}`;
-        const { data } = await authFetch.post(url, post);
-        dispatch({ type: POST_IMG, payload: { data } });
+        console.log(url);
+
+        const { data } = await authFetch.axios.post(url, post, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        });
+
+        // const { data } = await authFetch.axios({
+        //   method: "post",
+        //   url: url,
+        //   data: post,
+        //   headers: { "Content-Type": "multipart/form-data" },
+        // });
+
+        dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
       }
     } catch (error) {
       dispatch({ type: POST_DATA_ERROR, payload: error.response });

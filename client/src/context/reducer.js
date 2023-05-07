@@ -105,7 +105,7 @@ const reducer = (state, action) => {
     };
   }
 
-  if ((action.type = POST_IMG)) {
+  if (action.type === POST_IMG) {
     return {
       data: action.payload.data,
     };
@@ -115,7 +115,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      responseTextError: action.payload.error,
+      responseTextError: action.payload,
       responseError: true,
     };
   }

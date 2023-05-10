@@ -54,7 +54,7 @@ router.route("/:id/delete").post(work_order_delete_post);
 // GET request to update work order.
 router.route("/:id/edit").get(work_order_edit_get);
 // POST request to update work order.
-router.route("/:id/edit").post(work_order_edit_post);
+router.route("/:id/edit").post(upload.array("images"), work_order_edit_post);
 // GET request for one work order.
 router.route("/:id").get(work_order_detail);
 // GET request for list of all work order

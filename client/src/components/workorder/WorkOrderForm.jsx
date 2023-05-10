@@ -65,7 +65,7 @@ const WorkOrderForm = () => {
   const [customerParts, setCustomerParts] = useState([]);
   const [customerLabor, setCustomerLabor] = useState([]);
   const [customerAccessories, setCustomerAccessories] = useState([]);
-  const [customerImg, setCustomerImg] = useState(null);
+  const [customerImg, setCustomerImg] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState("");
 
@@ -96,26 +96,14 @@ const WorkOrderForm = () => {
 
   const handleChangeArray = (array, func, info) => {
     const updatedValues = [...array, info];
-    console.log(info);
-    console.log(updatedValues);
     func(updatedValues);
   };
 
-  // const fileSelect = (array, func, info) => {
-  //   let updatedValues = [];
-  //   console.log(info);
-  //   console.log(info.length);
-  //   for (let i = 0; i < info.length; i++) {
-  //     let file = info[i];
-  //     updatedValues = [...array, file];
-  //   }
-
-  //   func(updatedValues);
-  //   console.log(array);
-  // };
-
-  const fileSelect = (event, func) => {
-    func(Array.from(event.target.files));
+  const fileSelect = (array, func, event) => {
+    let files = Array.from(event.target.files);
+    const updatedValues = [...array, ...files];
+    func(updatedValues);
+    event.target.value = "";
   };
 
   const fileRemove = (array, func, info) => {
@@ -155,11 +143,11 @@ const WorkOrderForm = () => {
       work_order_number,
       notes,
     } = values;
+
     let accessories = customerAccessories;
     let parts = customerParts;
     let labor = customerLabor;
-    const files = document.getElementById("files").files;
-    console.log(customerImg);
+
     let formData = new FormData();
 
     if (customerImg) {
@@ -179,16 +167,14 @@ const WorkOrderForm = () => {
           formData.append(`accessories[${index}][${key}]`, value);
         });
       });
-      // formData.append("accessories", JSON.stringify(accessories));
     }
-    console.log(parts);
+
     if (parts.length > 0) {
       parts.forEach((obj, index) => {
         Object.entries(obj).forEach(([key, value]) => {
           formData.append(`parts[${index}][${key}]`, value);
         });
       });
-      // formData.append("parts", JSON.stringify(parts));
     }
     if (labor.length > 0) {
       labor.forEach((obj, index) => {
@@ -196,53 +182,17 @@ const WorkOrderForm = () => {
           formData.append(`labor[${index}][${key}]`, value);
         });
       });
-
-      // formData.append("labor", JSON.stringify(labor));
     }
 
     if (notes) {
       formData.append("notes", notes);
     }
 
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
-    // Object.keys(files).forEach((key) => {
-    //   images.append(files.item(key).name, files.item(key));
-    // });
-    // console.log(customerImg.length > 0);
-    // // if (customerImg.length > 0) {
-    // onSubmitPost(images, "workorders", "", "img");
-    // let img = data;
-    const workOrderData = {
-      customer,
-      date_received,
-      date_due,
-      jobtype,
-      accessories,
-      parts,
-      labor,
-      work_order_number,
-      notes,
-      customerImg,
-    };
-
-    console.log(workOrderData);
-    onSubmitPost(formData, "workorders", "", "create");
-    // } else {
-    //   const workOrderData = {
-    //     customer,
-    //     date_received,
-    //     date_due,
-    //     jobtype,
-    //     accessories,
-    //     parts,
-    //     labor,
-    //     work_order_number,
-    //     notes,
-    //   };
-    //   onSubmitPost(workOrderData, "workorders", "", "create");
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}: ${pair[1]}`);
     // }
+
+    onSubmitPost(formData, "workorders", "", "create");
   };
 
   if (isLoading || !workOrderInfo) {
@@ -673,8 +623,7 @@ const WorkOrderForm = () => {
               multiple
               type="file"
               onChange={(event) => {
-                fileSelect(event, setCustomerImg);
-                console.log(customerImg);
+                fileSelect(customerImg, setCustomerImg, event);
               }}
             />
           </Button>

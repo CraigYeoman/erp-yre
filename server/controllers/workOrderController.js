@@ -322,34 +322,40 @@ const work_order_create_post = (req, res, next) => {
   const labor = [];
   const accessories = [];
 
-  for (let i = 0; i < formData.parts.length; i++) {
-    const obj = {};
+  if (formData.parts) {
+    for (let i = 0; i < formData.parts.length; i++) {
+      const obj = {};
 
-    for (const key in formData.parts[i]) {
-      obj[key] = formData.parts[i][key];
+      for (const key in formData.parts[i]) {
+        obj[key] = formData.parts[i][key];
+      }
+
+      parts.push(obj);
     }
-
-    parts.push(obj);
   }
 
-  for (let i = 0; i < formData.labor.length; i++) {
-    const obj = {};
+  if (formData.labor) {
+    for (let i = 0; i < formData.labor.length; i++) {
+      const obj = {};
 
-    for (const key in formData.labor[i]) {
-      obj[key] = formData.labor[i][key];
+      for (const key in formData.labor[i]) {
+        obj[key] = formData.labor[i][key];
+      }
+
+      labor.push(obj);
     }
-
-    labor.push(obj);
   }
 
-  for (let i = 0; i < formData.accessories.length; i++) {
-    const obj = {};
+  if (formData.accessories) {
+    for (let i = 0; i < formData.accessories.length; i++) {
+      const obj = {};
 
-    for (const key in formData.accessories[i]) {
-      obj[key] = formData.accessories[i][key];
+      for (const key in formData.accessories[i]) {
+        obj[key] = formData.accessories[i][key];
+      }
+
+      accessories.push(obj);
     }
-
-    accessories.push(obj);
   }
 
   const workOrder = new WorkOrder({
@@ -467,59 +473,103 @@ const work_order_edit_get = (req, res, next) => {
   );
 };
 
-const work_order_edit_post = [
-  // Validate and sanitize fields.
+const work_order_edit_post = (req, res, next) => {
+  // Extract the validation errors from a request.
+  const errors = validationResult(req);
 
-  // Process request after validation and sanitization.
-  (req, res, next) => {
-    // Extract the validation errors from a request.
-    const errors = validationResult(req);
+  const formData = req.body;
+  imagePath = [];
 
-    // Create a part object with escaped and trimmed data.
+  if (req.files) {
+    req.files.forEach((file) => {
+      imagePath.push(file.path);
+    });
+  }
 
-    const workOrder = new WorkOrder({
-      customer: req.body.customer,
-      date_received: req.body.date_received,
-      date_due: req.body.date_due,
-      date_finished: req.body.date_finished,
-      complete: req.body.complete,
-      jobType: req.body.jobtype,
-      accessories: req.body.accessories,
-      parts: req.body.parts,
-      labor: req.body.labor,
-      notes: req.body.notes,
-      work_order_number: req.body.work_order_number,
-      _id: req.params.id,
+  const parts = [];
+  const labor = [];
+  const accessories = [];
+
+  if (formData.parts) {
+    for (let i = 0; i < formData.parts.length; i++) {
+      const obj = {};
+
+      for (const key in formData.parts[i]) {
+        obj[key] = formData.parts[i][key];
+      }
+
+      parts.push(obj);
+    }
+  }
+
+  if (formData.labor) {
+    for (let i = 0; i < formData.labor.length; i++) {
+      const obj = {};
+
+      for (const key in formData.labor[i]) {
+        obj[key] = formData.labor[i][key];
+      }
+
+      labor.push(obj);
+    }
+  }
+
+  if (formData.accessories) {
+    for (let i = 0; i < formData.accessories.length; i++) {
+      const obj = {};
+
+      for (const key in formData.accessories[i]) {
+        obj[key] = formData.accessories[i][key];
+      }
+
+      accessories.push(obj);
+    }
+  }
+
+  const workOrder = new WorkOrder({
+    customer: req.body.customer,
+    date_received: req.body.date_received,
+    date_due: req.body.date_due,
+    date_finished: req.body.date_finished,
+    complete: req.body.complete,
+    jobType: req.body.jobtype,
+    accessories: accessories,
+    parts: parts,
+    labor: labor,
+    notes: req.body.notes,
+    work_order_number: req.body.work_order_number,
+    images: imagePath,
+  });
+
+  // Create a part object with escaped and trimmed data.
+
+  if (!errors.isEmpty()) {
+    // There are errors. Render form again with sanitized values/errors messages.
+    res.status(500).json({
+      workOrder: req.body,
+      errors: errors.array(),
     });
 
-    if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/errors messages.
-      res.status(500).json({
-        workOrder: req.body,
-        errors: errors.array(),
-      });
+    return;
+  }
 
-      return;
-    }
-
-    WorkOrder.findByIdAndUpdate(
-      req.params.id,
-      workOrder,
-      {},
-      (err, updatedWorkOrder) => {
-        if (err) {
-          return next(err);
-        }
-        // workOrder updated.
-        res.status(200).json({
-          msg: "Work order edited",
-          workOrder: workOrder,
-          updatedWorkOrder: updatedWorkOrder,
-        });
+  WorkOrder.findByIdAndUpdate(
+    req.params.id,
+    workOrder,
+    {},
+    (err, updatedWorkOrder) => {
+      if (err) {
+        return next(err);
       }
-    );
-  },
-];
+      // workOrder updated.
+      res.status(200).json({
+        msg: "Work order edited",
+        workOrder: workOrder,
+        updatedWorkOrder: updatedWorkOrder,
+      });
+    }
+  );
+};
 
 module.exports = {
   getAllWorkOrdersStatic,

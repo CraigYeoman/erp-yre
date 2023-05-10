@@ -38,6 +38,7 @@ const WorkOrderForm = () => {
     setCustomerParts(data.work_order.parts);
     setCustomerLabor(data.work_order.labor);
     checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
+    setCurrentImgs(data.work_order.images);
   }, []);
 
   const {
@@ -57,7 +58,9 @@ const WorkOrderForm = () => {
   const [customerAccessories, setCustomerAccessories] = useState([]);
   const [customerParts, setCustomerParts] = useState([]);
   const [customerLabor, setCustomerLabor] = useState([]);
-
+  const [customerImg, setCustomerImg] = useState([]);
+  const [currentImgs, setCurrentImgs] = useState();
+  console.log(currentImgs);
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState("");
@@ -99,7 +102,14 @@ const WorkOrderForm = () => {
     func(updatedValues);
   };
 
+  const deletePath = (path, array, func) => {
+    const updatedValues = array.filter((a) => a !== path);
+    func(updatedValues);
+  };
+
   const handleChangeArray = (array, func, info) => {
+    console.log(array);
+    console.log(info);
     const updatedValues = [...array, info];
     func(updatedValues);
     console.log(updatedValues);
@@ -116,6 +126,19 @@ const WorkOrderForm = () => {
   const checkBoxLoad = (array, func) => {
     const items = array.map((x) => x._id);
     func(items);
+  };
+
+  const fileSelect = (array, func, event) => {
+    let files = Array.from(event.target.files);
+    const updatedValues = [...array, ...files];
+    func(updatedValues);
+    event.target.value = "";
+  };
+
+  const fileRemove = (array, func, info) => {
+    const updatedValues = array.filter((a) => a.name !== info.name);
+
+    func(updatedValues);
   };
 
   const onSubmit = async (e) => {
@@ -145,7 +168,50 @@ const WorkOrderForm = () => {
       notes,
       _id,
     };
-    onSubmitPost(workOrderData, "workorders", _id, "edit");
+
+    let formData = new FormData();
+
+    formData.append("customer", customer);
+    formData.append("date_received", date_received);
+    formData.append("date_due", date_due);
+    formData.append("jobtype", jobtype);
+    formData.append("work_order_number", work_order_number);
+    console.log(accessories);
+    if (customerImg) {
+      customerImg.forEach((file) => {
+        formData.append("images", file);
+      });
+    }
+    if (accessories.length > 0) {
+      accessories.forEach((obj, index) => {
+        Object.entries(obj).forEach(([key, value]) => {
+          formData.append(`accessories[${index}][${key}]`, value);
+        });
+      });
+    }
+    if (parts.length > 0) {
+      parts.forEach((obj, index) => {
+        Object.entries(obj).forEach(([key, value]) => {
+          formData.append(`parts[${index}][${key}]`, value);
+        });
+      });
+    }
+    if (labor.length > 0) {
+      labor.forEach((obj, index) => {
+        Object.entries(obj).forEach(([key, value]) => {
+          formData.append(`labor[${index}][${key}]`, value);
+        });
+      });
+    }
+    if (notes) {
+      formData.append("notes", notes);
+    }
+
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+
+    // onSubmitPost(formData, "workorders", _id, "edit");
   };
 
   if (isLoading) {
@@ -580,6 +646,125 @@ const WorkOrderForm = () => {
             onChange={handleChange}
           />
         </Box>
+        <Box mb="15px">
+          <Button variant="contained" component="label">
+            Upload
+            <input
+              id="files"
+              hidden
+              accept="image/*"
+              multiple
+              type="file"
+              onChange={(event) => {
+                fileSelect(customerImg, setCustomerImg, event);
+              }}
+            />
+          </Button>
+          <Box
+            mt="15px"
+            mb="15px"
+            sx={{
+              display: "flex",
+              gap: "15px",
+              flexDirection: "column",
+            }}
+          >
+            <Typography
+              variant="h4"
+              color={theme.palette.secondary[100]}
+              fontWeight="bold"
+              sx={{ mb: "5px" }}
+            >
+              New Images
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: "15px",
+                flexDirection: "row",
+              }}
+            >
+              {(customerImg || []).map((img) => {
+                return (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <img
+                      alt="not found"
+                      width={"250px"}
+                      src={URL.createObjectURL(img)}
+                    />
+                    <Button
+                      onClick={() =>
+                        fileRemove(customerImg, setCustomerImg, img)
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        </Box>
+        {currentImgs.length === 0 ? (
+          <option></option>
+        ) : (
+          <Box
+            mt="15px"
+            mb="15px"
+            sx={{
+              display: "flex",
+              gap: "15px",
+              flexDirection: "column",
+            }}
+          >
+            {" "}
+            <Typography
+              variant="h4"
+              color={theme.palette.secondary[100]}
+              fontWeight="bold"
+              sx={{ mb: "5px" }}
+            >
+              Current Images
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: "15px",
+                flexDirection: "row",
+              }}
+            >
+              {currentImgs.map((pic) => {
+                return (
+                  <Box
+                    sx={{
+                      display: "flex",
+
+                      flexDirection: "column",
+                    }}
+                  >
+                    <img
+                      src={`http://localhost:5000/${pic}`}
+                      alt="img"
+                      width="250px"
+                    />
+                    <Button
+                      onClick={() =>
+                        deletePath(pic, currentImgs, setCurrentImgs)
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        )}
         <Button variant="contained" type="submit">
           Submit
         </Button>

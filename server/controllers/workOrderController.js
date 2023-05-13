@@ -476,10 +476,9 @@ const work_order_edit_get = (req, res, next) => {
 const work_order_edit_post = (req, res, next) => {
   // Extract the validation errors from a request.
   const errors = validationResult(req);
-
   const formData = req.body;
-  imagePath = [];
-
+  imagePath = req.body.imagePath;
+  console.log(formData);
   if (req.files) {
     req.files.forEach((file) => {
       imagePath.push(file.path);
@@ -525,7 +524,9 @@ const work_order_edit_post = (req, res, next) => {
       accessories.push(obj);
     }
   }
-
+  console.log(parts);
+  console.log(labor);
+  console.log(accessories);
   const workOrder = new WorkOrder({
     customer: req.body.customer,
     date_received: req.body.date_received,
@@ -539,9 +540,8 @@ const work_order_edit_post = (req, res, next) => {
     notes: req.body.notes,
     work_order_number: req.body.work_order_number,
     images: imagePath,
+    _id: req.params.id,
   });
-
-  // Create a part object with escaped and trimmed data.
 
   if (!errors.isEmpty()) {
     // There are errors. Render form again with sanitized values/errors messages.

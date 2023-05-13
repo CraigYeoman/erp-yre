@@ -37,7 +37,8 @@ const WorkOrderForm = () => {
     setCustomerLabor([]);
     setCustomerParts(data.work_order.parts);
     setCustomerLabor(data.work_order.labor);
-    checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
+    // checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
+    setCustomerAccessories(data.work_order.accessories);
     setCurrentImgs(data.work_order.images);
   }, []);
 
@@ -60,11 +61,11 @@ const WorkOrderForm = () => {
   const [customerLabor, setCustomerLabor] = useState([]);
   const [customerImg, setCustomerImg] = useState([]);
   const [currentImgs, setCurrentImgs] = useState();
-  console.log(currentImgs);
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState("");
 
+  const imgs = data.work_order.images;
   const workOrderDetail = data;
   const workOrderInfo = formData;
 
@@ -88,11 +89,15 @@ const WorkOrderForm = () => {
   };
 
   const handleChangeCheckBox = (array, func, event, info) => {
+    console.log(info);
+    console.log(event.target.checked);
     if (event.target.checked === true) {
+      console.log(array);
       const updatedValues = [...array, info];
       func(updatedValues);
+      console.log(array);
     } else if (event.target.checked === false) {
-      const updatedValues = array.filter((a) => a !== info);
+      const updatedValues = array.filter((a) => a._id !== info._id);
       func(updatedValues);
     }
   };
@@ -107,12 +112,14 @@ const WorkOrderForm = () => {
     func(updatedValues);
   };
 
+  const addPath = (path, array, func) => {
+    const updatedValues = array.concat(path);
+    func(updatedValues);
+  };
+
   const handleChangeArray = (array, func, info) => {
-    console.log(array);
-    console.log(info);
     const updatedValues = [...array, info];
     func(updatedValues);
-    console.log(updatedValues);
   };
 
   const handleClick = (index) => {
@@ -123,10 +130,10 @@ const WorkOrderForm = () => {
     }
   };
 
-  const checkBoxLoad = (array, func) => {
-    const items = array.map((x) => x._id);
-    func(items);
-  };
+  // const checkBoxLoad = (array, func) => {
+  //   const items = array.map((x) => x._id);
+  //   func(items);
+  // };
 
   const fileSelect = (array, func, event) => {
     let files = Array.from(event.target.files);
@@ -168,7 +175,9 @@ const WorkOrderForm = () => {
       notes,
       _id,
     };
-
+    console.log(accessories);
+    console.log(parts);
+    console.log(labor);
     let formData = new FormData();
 
     formData.append("customer", customer);
@@ -176,6 +185,11 @@ const WorkOrderForm = () => {
     formData.append("date_due", date_due);
     formData.append("jobtype", jobtype);
     formData.append("work_order_number", work_order_number);
+    if (currentImgs) {
+      currentImgs.forEach((path) => {
+        formData.append("imagePath", path);
+      });
+    }
     console.log(accessories);
     if (customerImg) {
       customerImg.forEach((file) => {
@@ -207,11 +221,11 @@ const WorkOrderForm = () => {
       formData.append("notes", notes);
     }
 
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}: ${pair[1]}`);
+    // }
 
-    // onSubmitPost(formData, "workorders", _id, "edit");
+    onSubmitPost(formData, "workorders", _id, "edit");
   };
 
   if (isLoading) {
@@ -611,20 +625,26 @@ const WorkOrderForm = () => {
                   return textA < textB ? -1 : textA > textB ? 1 : 0;
                 })
                 .map((accessory) => {
+                  let info = {
+                    name: accessory.name,
+                    _id: accessory._id,
+                  };
                   return (
                     <FormControlLabel
                       key={accessory._id}
                       control={
                         <Checkbox
                           checked={
-                            !!customerAccessories.includes(accessory._id)
+                            !!customerAccessories
+                              .map((item) => item._id)
+                              .includes(accessory._id)
                           }
                           onChange={(event) =>
                             handleChangeCheckBox(
                               customerAccessories,
                               setCustomerAccessories,
                               event,
-                              accessory._id
+                              info
                             )
                           }
                           name={accessory.name}
@@ -710,7 +730,7 @@ const WorkOrderForm = () => {
             </Box>
           </Box>
         </Box>
-        {currentImgs.length === 0 ? (
+        {imgs.length === 0 ? (
           <option></option>
         ) : (
           <Box
@@ -738,27 +758,53 @@ const WorkOrderForm = () => {
                 flexDirection: "row",
               }}
             >
-              {currentImgs.map((pic) => {
+              {imgs.map((pic) => {
                 return (
-                  <Box
-                    sx={{
-                      display: "flex",
-
-                      flexDirection: "column",
-                    }}
-                  >
-                    <img
-                      src={`http://localhost:5000/${pic}`}
-                      alt="img"
-                      width="250px"
-                    />
-                    <Button
-                      onClick={() =>
-                        deletePath(pic, currentImgs, setCurrentImgs)
-                      }
-                    >
-                      Remove
-                    </Button>
+                  <Box>
+                    {currentImgs.includes(pic) ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <img
+                          src={`http://localhost:5000/${pic}`}
+                          alt="img"
+                          width="250px"
+                        />
+                        <Button
+                          onClick={() => {
+                            deletePath(pic, currentImgs, setCurrentImgs);
+                            console.log(currentImgs);
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </Box>
+                    ) : (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <img
+                          src={`http://localhost:5000/${pic}`}
+                          alt="img"
+                          width="250px"
+                          style={{ opacity: 0.5 }}
+                        />
+                        <Button
+                          onClick={() => {
+                            addPath(pic, currentImgs, setCurrentImgs);
+                            console.log(currentImgs);
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </Box>
+                    )}
                   </Box>
                 );
               })}

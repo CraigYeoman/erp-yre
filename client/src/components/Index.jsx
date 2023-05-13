@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppContext } from "../context/appContext";
 import { Box, useTheme, Typography } from "@mui/material";
 import IndexGrid from "./IndexGrid";
 import Header from "./Header";
-import FlexBetween from "./FlexBetween";
 
 const Index = () => {
-  const { getData, data } = useAppContext();
+  const { getData, data, updatePath } = useAppContext();
   const theme = useTheme();
 
   useEffect(() => {
+    updatePath("/workorders/index");
     getData();
   }, []);
 

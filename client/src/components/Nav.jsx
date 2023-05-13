@@ -18,7 +18,6 @@ import { GoGear } from "react-icons/go";
 import { GiGears } from "react-icons/gi";
 import { RiHomeGearFill, RiCarFill, RiCarWashingFill } from "react-icons/ri";
 import {
-  ChevronLeft,
   ChevronRightOutlined,
   HomeOutlined,
   Groups2Outlined,

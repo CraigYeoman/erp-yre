@@ -48,7 +48,6 @@ const WorkOrderForm = () => {
     formData,
     sumTotal,
     getFormData,
-    data,
   } = useAppContext();
 
   const [values, setValues] = useState({

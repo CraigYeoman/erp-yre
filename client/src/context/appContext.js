@@ -252,7 +252,6 @@ const AppProvider = ({ children }) => {
     try {
       const { data } = await authFetch.patch("/auth/updateUser", currentUser);
 
-      // no token
       const { user, token } = data;
 
       dispatch({

@@ -6,8 +6,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import Header from "../Header";
 
 const PartsList = () => {
-  // const { listType, selectPartID, selectVendorID, setLoading, loading } =
-  //   useGlobalContext();
   const { getData, data, getDetail, isLoading } = useAppContext();
 
   const theme = useTheme();
@@ -15,15 +13,6 @@ const PartsList = () => {
   useEffect(() => {
     getData();
   }, []);
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch(`/api/v1/erp/${listType}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setData(data);
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   if (!data.parts) {
     return (

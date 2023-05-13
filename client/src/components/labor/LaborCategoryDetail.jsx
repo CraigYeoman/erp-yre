@@ -21,16 +21,6 @@ const LaborCategoryDetail = () => {
     responseErrorText,
   } = useAppContext();
 
-  // const {
-  //   laborCategoryDetail,
-  //   loading,
-  //   onSubmitGet,
-  //   onSubmitPost,
-  //   response,
-  //   responseText,
-  //   selectLaborCategoryID,
-  // } = useGlobalContext();
-
   const [deleteCategory, setDeleteCategory] = useState(false);
 
   if (isLoading) {

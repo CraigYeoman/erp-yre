@@ -126,11 +126,6 @@ const WorkOrderForm = () => {
     }
   };
 
-  // const checkBoxLoad = (array, func) => {
-  //   const items = array.map((x) => x._id);
-  //   func(items);
-  // };
-
   const fileSelect = (array, func, event) => {
     let files = Array.from(event.target.files);
     const updatedValues = [...array, ...files];

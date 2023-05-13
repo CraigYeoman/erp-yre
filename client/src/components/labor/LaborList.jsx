@@ -6,19 +6,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import Header from "../Header";
 
 const LaborList = () => {
-  // const { listType, selectLaborID, setLoading, loading } = useGlobalContext();
-
   const theme = useTheme();
   const { getData, data, isLoading, getDetail } = useAppContext();
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch(`/api/v1/erp/${listType}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setData(data);
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   useEffect(() => {
     getData();

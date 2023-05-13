@@ -11,8 +11,6 @@ const {
   labor_category_edit_post,
 } = require("../controllers/laborCategoryController");
 
-// GET request for creating a Job Type.
-
 // POST request for creating Job Type.
 router.route("/create").post(labor_category_create_post);
 // GET request to delete Job Type.

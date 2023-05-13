@@ -17,18 +17,6 @@ import FlexBetween from "../FlexBetween";
 const { DateTime } = require("luxon");
 
 const WorkOrderList = () => {
-  // const {
-  //   selectWorkOrderID,
-  //   selectCustomerID,
-  //   sumTotal,
-  //   handleChange,
-  //   values,
-  //   clearFilters,
-  //   data,
-  //   getWorkOrder,
-  //   loading,
-  // } = useGlobalContext();
-
   const {
     getWorkOrders,
     data,

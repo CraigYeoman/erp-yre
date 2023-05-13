@@ -61,7 +61,6 @@ const AppProvider = ({ children }) => {
     baseURL: "http://localhost:5000/api/v1/erp",
   });
 
-  // response interceptor
   authFetch.interceptors.request.use(
     (config) => {
       config.headers["Authorization"] = `Bearer ${state.token}`;
@@ -71,7 +70,7 @@ const AppProvider = ({ children }) => {
       return Promise.reject(error);
     }
   );
-  // response interceptor
+
   authFetch.interceptors.response.use(
     (response) => {
       return response;
@@ -235,13 +234,6 @@ const AppProvider = ({ children }) => {
             "content-type": "multipart/form-data",
           },
         });
-
-        // const { data } = await authFetch.axios({
-        //   method: "post",
-        //   url: url,
-        //   data: post,
-        //   headers: { "Content-Type": "multipart/form-data" },
-        // });
 
         dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
       }

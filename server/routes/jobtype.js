@@ -11,8 +11,6 @@ const {
   job_type_edit_post,
 } = require("../controllers/jobTypeController");
 
-// GET request for creating a Job Type.
-
 // POST request for creating Job Type.
 router.route("/create").post(jobtype_create_post);
 // GET request to delete Job Type.

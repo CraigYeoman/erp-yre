@@ -6,22 +6,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import Header from "../Header";
 
 const CustomerList = () => {
-  // const { selectCustomerID, listType, formatPhoneNumber, setLoading, loading } =
-  //   useGlobalContext();
-
   const { getData, data, isLoading, formatPhoneNumber, getDetail } =
     useAppContext();
 
   const theme = useTheme();
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch(`/api/v1/erp/${listType}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setData(data);
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   useEffect(() => {
     getData();

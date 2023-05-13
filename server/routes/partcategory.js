@@ -11,8 +11,6 @@ const {
   part_category_edit_post,
 } = require("../controllers/partCategoryController");
 
-// GET request for creating a Job Type.
-
 // POST request for creating Job Type.
 router.route("/create").post(part_category_create_post);
 // GET request to delete Job Type.

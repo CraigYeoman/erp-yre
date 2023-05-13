@@ -11,8 +11,6 @@ const {
   vendor_edit_post,
 } = require("../controllers/vendorController");
 
-// GET request for creating a Vendor.
-
 // POST request for creating Vendor.
 router.route("/create").post(vendor_create_post);
 // GET request to delete Vendor.

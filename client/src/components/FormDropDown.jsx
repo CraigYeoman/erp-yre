@@ -63,12 +63,7 @@ const FormDropDown = ({ name, array, category }) => {
               return textA < textB ? -1 : textA > textB ? 1 : 0;
             })
             .map((option) => (
-              <MenuItem
-                key={option._id}
-                // option={option}
-                // array={array}
-                name={name}
-              >
+              <MenuItem key={option._id} name={name}>
                 {" "}
                 {option.name}{" "}
               </MenuItem>

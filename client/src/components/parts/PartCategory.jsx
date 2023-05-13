@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 const PartCategory = () => {
   const theme = useTheme();
-  // const { selectPartCategoryID, listType } = useGlobalContext();
   const { getData, data, selectPartCategoryID, isLoading, getDetail } =
     useAppContext();
 

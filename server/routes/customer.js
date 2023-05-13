@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  customer_create_get,
   customer_create_post,
   getAllCustomersStatic,
   getAllCustomers,
@@ -12,15 +11,12 @@ const {
   customer_edit_post,
 } = require("../controllers/customerController");
 
-// GET request for creating a Customer - not needed
-
 // POST request for creating Customer.
 router.route("/create").post(customer_create_post);
 // GET request to delete Customer.
 router.route("/:id/delete").get(customer_delete_get);
 // POST request to delete Customer.
 router.route("/:id/delete").post(customer_delete_post);
-// GET request to update Customer.
 // POST request to update Customer.
 router.route("/:id/edit").post(customer_edit_post);
 // GET request for one Customer.

@@ -8,17 +8,6 @@ import FlexBetween from "./FlexBetween";
 const Index = () => {
   const { getData, data } = useAppContext();
   const theme = useTheme();
-  // const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch(`${rootUrl}/api/v1/erp/workorders/index`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setData(data);
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   useEffect(() => {
     getData();

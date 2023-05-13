@@ -42,7 +42,7 @@ const PartForm = () => {
   });
 
   const partInfo = formData;
-  console.log(partInfo);
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };

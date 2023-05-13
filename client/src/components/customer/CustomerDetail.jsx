@@ -41,10 +41,9 @@ const CustomerDetail = () => {
       </section>
     );
   }
-  console.log(response.text);
+
   const { customer, customer_workorders } = data;
 
-  console.log(customer_workorders);
   const {
     _id,
     first_name,

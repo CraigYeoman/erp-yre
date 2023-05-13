@@ -28,7 +28,7 @@ const WorkOrderDetail = () => {
   } = useAppContext();
 
   const { work_order } = data;
-  console.log(data);
+
   const theme = useTheme();
 
   if (isLoading) {
@@ -54,17 +54,14 @@ const WorkOrderDetail = () => {
     _id,
     images,
   } = work_order;
-  console.log(labor);
   labor.forEach((value) => {
     value.price = Number(value.price);
   });
   parts.forEach((value) => {
     value.customer_price = Number(value.customer_price);
   });
-  console.log(labor);
   let laborPrice = sumTotal(labor, "price");
   let partsPrice = sumTotal(parts, "customer_price");
-  console.log(laborPrice);
   let total = laborPrice + partsPrice;
   let tax = total * 0.09;
   let grandTotal = total + tax;
@@ -286,8 +283,6 @@ const WorkOrderDetail = () => {
           }}
         >
           {images.map((pic) => {
-            console.log(pic);
-            console.log(`localhost:5000/${pic}`);
             return (
               <img
                 src={`http://localhost:5000/${pic}`}

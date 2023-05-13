@@ -40,7 +40,7 @@ const LaborCategoryDetail = () => {
       </section>
     );
   }
-  console.log(data);
+
   const { name, _id } = data.labor_category_detail;
 
   return (

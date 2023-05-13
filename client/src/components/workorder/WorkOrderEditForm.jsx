@@ -89,13 +89,9 @@ const WorkOrderForm = () => {
   };
 
   const handleChangeCheckBox = (array, func, event, info) => {
-    console.log(info);
-    console.log(event.target.checked);
     if (event.target.checked === true) {
-      console.log(array);
       const updatedValues = [...array, info];
       func(updatedValues);
-      console.log(array);
     } else if (event.target.checked === false) {
       const updatedValues = array.filter((a) => a._id !== info._id);
       func(updatedValues);
@@ -175,9 +171,7 @@ const WorkOrderForm = () => {
       notes,
       _id,
     };
-    console.log(accessories);
-    console.log(parts);
-    console.log(labor);
+
     let formData = new FormData();
 
     formData.append("customer", customer);
@@ -190,7 +184,7 @@ const WorkOrderForm = () => {
         formData.append("imagePath", path);
       });
     }
-    console.log(accessories);
+
     if (customerImg) {
       customerImg.forEach((file) => {
         formData.append("images", file);
@@ -220,10 +214,6 @@ const WorkOrderForm = () => {
     if (notes) {
       formData.append("notes", notes);
     }
-
-    // for (const pair of formData.entries()) {
-    //   console.log(`${pair[0]}: ${pair[1]}`);
-    // }
 
     onSubmitPost(formData, "workorders", _id, "edit");
   };
@@ -776,7 +766,6 @@ const WorkOrderForm = () => {
                         <Button
                           onClick={() => {
                             deletePath(pic, currentImgs, setCurrentImgs);
-                            console.log(currentImgs);
                           }}
                         >
                           Remove
@@ -798,7 +787,6 @@ const WorkOrderForm = () => {
                         <Button
                           onClick={() => {
                             addPath(pic, currentImgs, setCurrentImgs);
-                            console.log(currentImgs);
                           }}
                         >
                           Add

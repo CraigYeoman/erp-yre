@@ -188,10 +188,6 @@ const WorkOrderForm = () => {
       formData.append("notes", notes);
     }
 
-    // for (const pair of formData.entries()) {
-    //   console.log(`${pair[0]}: ${pair[1]}`);
-    // }
-
     onSubmitPost(formData, "workorders", "", "create");
   };
 

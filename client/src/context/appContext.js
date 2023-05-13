@@ -77,9 +77,7 @@ const AppProvider = ({ children }) => {
       return response;
     },
     (error) => {
-      console.log(error.response);
       if (error.response.status === 401) {
-        console.log(error.response);
       }
       return Promise.reject(error);
     }
@@ -127,7 +125,6 @@ const AppProvider = ({ children }) => {
       });
       addUserToLocalStorage({ user, token });
     } catch (error) {
-      console.log(error.response);
       dispatch({
         type: SETUP_USER_ERROR,
         payload: { msg: error.response.data.msg },
@@ -161,7 +158,6 @@ const AppProvider = ({ children }) => {
       dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
       if (error.response.data.msg === "Authentication Invalid") logoutUser();
-      console.log(error.response.data);
     }
   };
 
@@ -176,7 +172,6 @@ const AppProvider = ({ children }) => {
       dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
       if (error.response.data.msg === "Authentication Invalid") logoutUser();
-      console.log(error.response.data);
     }
   };
 
@@ -191,7 +186,6 @@ const AppProvider = ({ children }) => {
       dispatch({ type: GET_DATA_SUCCESS, payload: { data } });
     } catch (error) {
       if (error.response.data.msg === "Authentication Invalid") logoutUser();
-      console.log(error.response.data);
     }
   };
 
@@ -206,7 +200,6 @@ const AppProvider = ({ children }) => {
       dispatch({ type: GET_FORM_DATA_SUCCESS, payload: { data } });
     } catch (error) {
       if (error.response.data.msg === "Authentication Invalid") logoutUser();
-      console.log(error.response.data);
     }
   };
 
@@ -236,7 +229,6 @@ const AppProvider = ({ children }) => {
         dispatch({ type: POST_DATA_SUCCESS, payload: { data } });
       } else if (action === "img") {
         const url = `/${schema}/${action}`;
-        console.log(url);
 
         const { data } = await authFetch.axios.post(url, post, {
           headers: {
@@ -255,7 +247,6 @@ const AppProvider = ({ children }) => {
       }
     } catch (error) {
       dispatch({ type: POST_DATA_ERROR, payload: error.response });
-      console.log(error.response);
     }
   };
 

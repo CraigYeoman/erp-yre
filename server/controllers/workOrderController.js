@@ -478,7 +478,6 @@ const work_order_edit_post = (req, res, next) => {
   const errors = validationResult(req);
   const formData = req.body;
   imagePath = req.body.imagePath;
-  console.log(formData);
   if (req.files) {
     req.files.forEach((file) => {
       imagePath.push(file.path);
@@ -524,9 +523,7 @@ const work_order_edit_post = (req, res, next) => {
       accessories.push(obj);
     }
   }
-  console.log(parts);
-  console.log(labor);
-  console.log(accessories);
+
   const workOrder = new WorkOrder({
     customer: req.body.customer,
     date_received: req.body.date_received,

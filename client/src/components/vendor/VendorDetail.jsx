@@ -40,7 +40,7 @@ const VendorDetail = () => {
       </section>
     );
   }
-  console.log(data);
+
   const {
     _id,
     main_contact,

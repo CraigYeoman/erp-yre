@@ -165,7 +165,6 @@ const LaborEditForm = () => {
                   border: 1,
                 }}
               >
-                {console.log(responseText)}
                 <Typography
                   variant="h3"
                   color={theme.palette.secondary[100]}

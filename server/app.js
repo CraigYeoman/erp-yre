@@ -6,6 +6,9 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 require("dotenv").config();
 const cors = require("cors");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const mongoSanitize = require("express-mongo-sanitize");
 
 const vendorsRouter = require("./routes/vendors");
 const jobTypeRouter = require("./routes/jobtype");
@@ -41,6 +44,10 @@ if (process.env.NODE_ENV !== "production") {
   app.use(logger("dev"));
 }
 app.use(express.json());
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/uploads", express.static("uploads"));

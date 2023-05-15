@@ -2,7 +2,6 @@ const { body, validationResult } = require("express-validator");
 const Accessories = require("../models/accessories");
 const async = require("async");
 
-// Display list of all job types.
 const getAllAccessoriesStatic = async (req, res) => {
   const accessories = await Accessories.find().sort("type");
   res.status(200).json({ accessories, nbHits: accessories.length });
@@ -16,7 +15,7 @@ const getAllAccessories = async (req, res) => {
   }
 
   let result = Accessories.find(queryObject);
-  // sort
+
   if (sort) {
     const sortList = sort.split(",").join(" ");
     result = result.sort(sortList);

@@ -3,6 +3,7 @@ import { useAppContext } from "../../context/appContext";
 import { useState, useEffect } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
+import Compress from "compress.js";
 import {
   Box,
   useTheme,
@@ -64,7 +65,7 @@ const WorkOrderForm = () => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState("");
-
+  const compress = new Compress();
   const imgs = data.work_order.images;
   const workOrderDetail = data;
   const workOrderInfo = formData;
@@ -128,8 +129,31 @@ const WorkOrderForm = () => {
 
   const fileSelect = (array, func, event) => {
     let files = Array.from(event.target.files);
-    const updatedValues = [...array, ...files];
-    func(updatedValues);
+    compress
+      .compress(files, {
+        size: 0.25, // the max size in MB, defaults to 2MB
+        quality: 1, // the quality of the image, max is 1,
+        maxWidth: 1920, // the max width of the output image, defaults to 1920px
+        maxHeight: 1920, // the max height of the output image, defaults to 1920px
+        resize: true, // defaults to true, set false if you do not want to resize the image width and height
+        rotate: false, // See the rotation section below
+      })
+      .then((data) => {
+        let files = [];
+        data.forEach((img) => {
+          const base64str = img.data;
+          const imgExt = img.ext;
+          const name = img.alt;
+          const resizedBlob = Compress.convertBase64ToFile(base64str, imgExt);
+          const resizedFile = new File([resizedBlob], name, {
+            type: imgExt,
+          });
+          files.push(resizedFile);
+        });
+        const updatedValues = [...array, ...files];
+        func(updatedValues);
+      });
+
     event.target.value = "";
   };
 
@@ -154,18 +178,6 @@ const WorkOrderForm = () => {
     let accessories = customerAccessories;
     let parts = customerParts;
     let labor = customerLabor;
-    const workOrderData = {
-      customer,
-      date_received,
-      date_due,
-      jobtype,
-      accessories,
-      parts,
-      labor,
-      work_order_number,
-      notes,
-      _id,
-    };
 
     let formData = new FormData();
 

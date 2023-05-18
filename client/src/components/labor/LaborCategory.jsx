@@ -1,8 +1,8 @@
 import { Link as RouterLink } from "react-router-dom";
 import { useAppContext } from "../../context/appContext";
 import Header from "../Header";
-import { Box, useTheme, Link, Button, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, useTheme, Link, Typography } from "@mui/material";
+import { useEffect } from "react";
 
 const LaborCategory = () => {
   const theme = useTheme();

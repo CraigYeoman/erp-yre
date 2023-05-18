@@ -38,7 +38,6 @@ const WorkOrderForm = () => {
     setCustomerLabor([]);
     setCustomerParts(data.work_order.parts);
     setCustomerLabor(data.work_order.labor);
-    // checkBoxLoad(data.work_order.accessories, setCustomerAccessories);
     setCustomerAccessories(data.work_order.accessories);
     setCurrentImgs(data.work_order.images);
   }, []);
@@ -62,6 +61,7 @@ const WorkOrderForm = () => {
   const [customerLabor, setCustomerLabor] = useState([]);
   const [customerImg, setCustomerImg] = useState([]);
   const [currentImgs, setCurrentImgs] = useState();
+  // eslint-disable-next-line
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState("");

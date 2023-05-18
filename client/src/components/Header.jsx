@@ -1,5 +1,5 @@
 import { Typography, Box, useTheme, Button } from "@mui/material";
-import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
+import { FaAlignLeft, FaUserCircle } from "react-icons/fa";
 import { useAppContext } from "../context/appContext";
 import { useState } from "react";
 

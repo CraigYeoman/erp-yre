@@ -11,6 +11,7 @@ const Index = () => {
   useEffect(() => {
     updatePath("/workorders/index");
     getData();
+    // eslint-disable-next-line
   }, []);
 
   if (data.countArray == null) {

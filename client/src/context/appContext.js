@@ -24,7 +24,6 @@ import {
   EDIT_FORM_LOAD,
   GET_FORM_DATA_BEGIN,
   GET_FORM_DATA_SUCCESS,
-  POST_IMG,
 } from "./action";
 
 const token = localStorage.getItem("token");

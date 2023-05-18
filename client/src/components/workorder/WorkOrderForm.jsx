@@ -65,6 +65,7 @@ const WorkOrderForm = () => {
   const [customerLabor, setCustomerLabor] = useState([]);
   const [customerAccessories, setCustomerAccessories] = useState([]);
   const [customerImg, setCustomerImg] = useState([]);
+  // eslint-disable-next-line
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState("");
 

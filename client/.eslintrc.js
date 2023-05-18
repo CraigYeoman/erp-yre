@@ -1,4 +1,6 @@
 module.exports = {
   extends: ["react-app", "prettier"],
-  rules: {},
+  rules: {
+    "react-hooks/exhaustive-deps": 0,
+  },
 };

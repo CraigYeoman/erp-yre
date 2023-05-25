@@ -10,9 +10,9 @@ The demo is on render.com on the free tier.  Please give time for the app to spi
 
 ## Objectives & Outcomes
 
-The projects main objectives was to reduce time spent searching through paper work orders and the ability to better visualize the volume and types of work orders.  
+The main objectives were to reduce time spent searching through paper work orders and the ability to better visualize the volume and types of work orders.  
 
-- Easily see how the volume and type of work orders
+- Easily see the volume and type of work orders
 - Filter through work orders by date, customer name, job type, price
 - Store customer, parts, vendors, and labor information in one location  
 - Styled Components

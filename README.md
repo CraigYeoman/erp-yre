@@ -57,7 +57,7 @@ To clone and run this application, you'll need Git and Node.js (which comes with
 
 ```bash
 # Clone this repository
-$ git clone git@github.com:pklepa/cat-wiki.git
+$ git clone git@github.com:CraigYeoman/erp-yre.git
 
 # Enter the created folder
 $ cd yre-erp

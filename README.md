@@ -38,11 +38,11 @@ The main objectives were to reduce time spent searching through paper work order
 
 ![Diagram](/diagram.png?raw=true)
 
-<img src="https://github.com/CraigYeoman/erp-yre/blob/main/diagram.png" width="450" height="450"/>
+<img src="https://github.com/CraigYeoman/erp-yre/blob/main/diagram.png" width="90%" height="90%"/>
 
 ### Screenshots
 
-<img src="https://res.cloudinary.com/ddcqxstsp/video/upload/v1685453235/erp-app_wavdic.gif" width="800" height="800"/>
+<img src="https://res.cloudinary.com/ddcqxstsp/video/upload/v1685453235/erp-app_wavdic.gif" width="90%" height="90%"/>
 
 ## Getting Started
 

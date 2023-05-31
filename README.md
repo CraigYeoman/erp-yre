@@ -36,11 +36,11 @@ The main objectives were to reduce time spent searching through paper work order
 - [ESLint](https://eslint.org/) - A linter tool to standardize code
 - [Prettier](https://prettier.io/) - Code formatter
 
-![Diagram](/diagram.png?raw=true=250x250)
+![Diagram](/diagram.png?raw=true)
 
 ### Screenshots
 
-![Gif](https://res.cloudinary.com/ddcqxstsp/video/upload/v1685453235/erp-app_wavdic.gif=250x250)
+<img src="https://res.cloudinary.com/ddcqxstsp/video/upload/v1685453235/erp-app_wavdic.gif" width="150" height="280">
 
 ## Getting Started
 

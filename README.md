@@ -40,17 +40,7 @@ The main objectives were to reduce time spent searching through paper work order
 
 ### Screenshots
 
-#### home page
-
-![image](png)
-
-#### dash board
-
-![image](png)
-
-#### work order page
-
-![image](png)
+![Gif](https://res.cloudinary.com/ddcqxstsp/video/upload/v1685453235/erp-app_wavdic.gif)
 
 ## Getting Started
 

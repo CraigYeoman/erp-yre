@@ -36,7 +36,7 @@ The main objectives were to reduce time spent searching through paper work order
 - [ESLint](https://eslint.org/) - A linter tool to standardize code
 - [Prettier](https://prettier.io/) - Code formatter
 
-![Diagram](/diagram.png?raw=true =250x250)
+![Diagram](/diagram.png?raw=true=250x250)
 
 ### Screenshots
 

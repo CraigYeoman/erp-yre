@@ -40,7 +40,7 @@ The main objectives were to reduce time spent searching through paper work order
 
 ### Screenshots
 
-![Gif](https://res.cloudinary.com/ddcqxstsp/video/upload/v1685453235/erp-app_wavdic.gif =250x250)
+![Gif](https://res.cloudinary.com/ddcqxstsp/video/upload/v1685453235/erp-app_wavdic.gif=250x250)
 
 ## Getting Started
 

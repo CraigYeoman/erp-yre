@@ -15,7 +15,7 @@ The main objectives were to reduce time spent searching through paper work order
 - Easily see the volume and type of work orders
 - Filter through work orders by date, customer name, job type, price
 - Store customer, parts, vendors, and labor information in one location  
-- Styled Components
+- See which work orders are past due
 
 ## Development
 

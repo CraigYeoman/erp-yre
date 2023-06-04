@@ -39,9 +39,9 @@ The main objectives were to reduce time spent searching through paper work order
 <img src="https://github.com/CraigYeoman/erp-yre/blob/main/diagram.png" width="90%" height="90%"/>
 
 ### Screenshots
-![](https://github.com/Your_Repository_Name/Your_GIF_Name.gif)
-![](https://res.cloudinary.com/ddcqxstsp/video/upload/v1685898893/login_gcltu6.gif)
-<img src="https://res.cloudinary.com/ddcqxstsp/video/upload/v1685898893/login_gcltu6.gif" />
+![login_AdobeExpress_c6g1vg](https://github.com/CraigYeoman/erp-yre/assets/25626421/99dcd1f1-8934-4e55-8c91-28baf1b3ef35)
+
+![newworkorder_AdobeExpress_cqaw1h](https://github.com/CraigYeoman/erp-yre/assets/25626421/5ac0c61d-b806-4458-8137-e0751f0150c2)
 
 ## Getting Started
 

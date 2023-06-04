@@ -36,8 +36,13 @@ The main objectives were to reduce time spent searching through paper work order
 - [ESLint](https://eslint.org/) - A linter tool to standardize code
 - [Prettier](https://prettier.io/) - Code formatter
 
+
 ### Screenshots
+![Screenshot_2023-06-04_12-43-22](https://github.com/CraigYeoman/erp-yre/assets/25626421/0f7a2bcf-3011-477f-a5f3-421dee8b6809)
+
 ![login_AdobeExpress_1_gqwxof](https://github.com/CraigYeoman/erp-yre/assets/25626421/f104cc4e-171e-44b8-92ef-9366252feffb)
+
+![Screenshot_2023-06-04_12-43-58](https://github.com/CraigYeoman/erp-yre/assets/25626421/ef90fd1a-3674-429a-b421-6a4d7866d0bc)
 
 ![newworkorder_AdobeExpress_1_pbsa9c](https://github.com/CraigYeoman/erp-yre/assets/25626421/fbe942e1-0ca0-4568-961d-0df7a219eba4)
 

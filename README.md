@@ -39,7 +39,8 @@ The main objectives were to reduce time spent searching through paper work order
 <img src="https://github.com/CraigYeoman/erp-yre/blob/main/diagram.png" width="90%" height="90%"/>
 
 ### Screenshots
-
+![](https://github.com/Your_Repository_Name/Your_GIF_Name.gif)
+![](https://res.cloudinary.com/ddcqxstsp/video/upload/v1685898893/login_gcltu6.gif)
 <img src="https://res.cloudinary.com/ddcqxstsp/video/upload/v1685898893/login_gcltu6.gif" />
 
 ## Getting Started

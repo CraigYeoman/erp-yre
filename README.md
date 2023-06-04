@@ -36,6 +36,7 @@ The main objectives were to reduce time spent searching through paper work order
 - [ESLint](https://eslint.org/) - A linter tool to standardize code
 - [Prettier](https://prettier.io/) - Code formatter
 
+<img src="https://github.com/CraigYeoman/erp-yre/blob/main/diagram.png" width="90%" height="90%"/>
 
 ### Screenshots
 ![Screenshot_2023-06-04_12-43-22](https://github.com/CraigYeoman/erp-yre/assets/25626421/0f7a2bcf-3011-477f-a5f3-421dee8b6809)

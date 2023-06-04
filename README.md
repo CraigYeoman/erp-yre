@@ -37,7 +37,7 @@ The main objectives were to reduce time spent searching through paper work order
 - [Prettier](https://prettier.io/) - Code formatter
 
 <img src="https://github.com/CraigYeoman/erp-yre/blob/main/diagram.png" width="90%" height="90%"/>
-
+<img src="https://github.com/CraigYeoman/erp-yre/assets/25626421/99dcd1f1-8934-4e55-8c91-28baf1b3ef35" width="250" height="250"/>
 ### Screenshots
 ![login_AdobeExpress_c6g1vg](https://github.com/CraigYeoman/erp-yre/assets/25626421/99dcd1f1-8934-4e55-8c91-28baf1b3ef35)
 
